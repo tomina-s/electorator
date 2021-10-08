@@ -64,6 +64,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd ${{ env.PROJ_PATH }}
+            ls
+            pwd
             REPO=${{ secrets.DOCKERHUB_USERNAME }} TAG=${{ env.DEV_TAG }} ENV=dev \
             docker-compose up -d
             docker image prune -a --force  --filter "until=24h"
