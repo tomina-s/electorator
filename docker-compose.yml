@@ -1,0 +1,26 @@
+version: '3'
+services:
+  electorator-db:
+    image: postgres:12.6
+    restart: always
+    volumes:
+      - ./infrastructure/postgres.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../electorator-data:/var/lib/postgresql/data
+    ports:
+      - "8001:5432"
+    env_file:
+      - ../electorator.env
+
+  electorator:
+    image: ${REPO}/electorator:${TAG}
+    restart: unless-stopped
+    env_file:
+      - ../electorator.env
+    depends_on:
+      - electorator-db
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./electorator:/electorator
+    working_dir: /electorator
+    ports:
+      - "8000:8000"
