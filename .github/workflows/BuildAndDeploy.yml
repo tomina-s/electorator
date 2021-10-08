@@ -53,8 +53,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd ${{ env.PROJ_PATH }}
-            ls
-            pwd
             git checkout dev
             git pull
       - name: Run project
@@ -66,8 +64,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd ${{ env.PROJ_PATH }}
-            ls
-            pwd
             REPO=${{ secrets.DOCKERHUB_USERNAME }} TAG=${{ env.DEV_TAG }} ENV=dev \
             docker-compose up -d
             docker image prune -a --force  --filter "until=24h"
