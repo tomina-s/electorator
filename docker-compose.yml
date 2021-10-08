@@ -4,7 +4,7 @@ services:
     image: postgres:12.6
     restart: always
     volumes:
-      - ./infrastructure/postgres.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./config/postgres/scheme.sql:/docker-entrypoint-initdb.d/init.sql
       - ../electorator-data:/var/lib/postgresql/data
     ports:
       - "8001:5432"
@@ -14,6 +14,8 @@ services:
   electorator:
     image: ${REPO}/electorator:${TAG}
     restart: unless-stopped
+    environment:
+      - ENV=${ENV}
     env_file:
       - ../electorator.env
     depends_on:
