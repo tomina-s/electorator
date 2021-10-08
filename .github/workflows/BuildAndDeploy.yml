@@ -21,7 +21,6 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     if: contains(github.ref, 'dev') || contains(github.ref, 'master')
-    needs: lint
     steps:
       - uses: actions/checkout@v1
       - uses: ricardochaves/python-lint@test
