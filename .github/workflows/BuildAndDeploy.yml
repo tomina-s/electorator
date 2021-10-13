@@ -38,7 +38,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: contains(github.ref, 'dev') || contains(github.ref, 'master')
-    needs: lint
     steps:
       - uses: actions/checkout@v1
       - name: Login to DockerHub
@@ -82,6 +81,10 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd ${{ env.PROJ_PATH }}
+            cd frontend
+            npm i
+            npm run build
+            cd ../
             REPO=${{ secrets.DOCKERHUB_USERNAME }} TAG=${{ env.DEV_TAG }} ENV=dev \
             docker-compose up -d
             docker image prune -a --force  --filter "until=24h"
