@@ -7,6 +7,8 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 import jwt
+from django.db.models import Model
+
 
 
 class AccountManager(BaseUserManager):
@@ -51,3 +53,13 @@ class Account(AbstractBaseUser):
         }, settings.SECRET_KEY, algorithm='HS256')
 
         return token
+
+
+class Permit(models.Model):
+    role_user = models.CharField(max_length=20)
+    url = models.URLField
+
+
+class Role(models.Model):
+    id_user = models.OneToOneField(Account)
+    role_user = models.ForeignKey(Permit, on_delete=models.CASCADE)
