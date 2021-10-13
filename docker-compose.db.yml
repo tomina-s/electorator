@@ -1,0 +1,12 @@
+version: '3'
+services:
+  electorator-db:
+    image: postgres:12.6
+    restart: always
+    volumes:
+      - ./config/postgres/scheme.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../electorator-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../electorator.env
