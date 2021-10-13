@@ -26,6 +26,6 @@ vue_urls = [
 ]
 
 urlpatterns = [
-    path('', include('accounts.urls')),
+    path('api/', include('accounts.urls')),
     path('', include(vue_urls)),
 ]
