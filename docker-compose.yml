@@ -20,9 +20,10 @@ services:
       - ../electorator.env
     depends_on:
       - electorator-db
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python electorator/manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./electorator:/electorator
+      - ./electorator:/electorator/electorator
+      - ./frontend:/electorator/frontend
     working_dir: /electorator
     ports:
       - "8000:8000"
