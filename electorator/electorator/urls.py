@@ -17,10 +17,12 @@ from django.urls import path, include
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from .view import MockView
+
 
 vue_urls = [
   path('', lambda request: HttpResponse(render(request, 'vue_index.html'))),
-  path('another-path/', lambda request: HttpResponse(render(request, 'vue_index.html'))),
+  path('mockview/', MockView.as_view(), name='mock_view'),
 ]
 
 urlpatterns = [
