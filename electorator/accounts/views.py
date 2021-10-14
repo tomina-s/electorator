@@ -16,7 +16,9 @@ class LoginAPIView(APIView):
 
         account = serializer.validated_data
 
-        response = Response(status=status.HTTP_200_OK)
-        response.set_cookie('jwt', account.get_jwt_token())
+        response = Response(
+            {'jwt': account.get_jwt_token()},
+            status=status.HTTP_200_OK
+        )
 
         return response

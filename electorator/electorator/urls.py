@@ -20,12 +20,16 @@ from django.shortcuts import render
 from .view import MockView
 
 
-vue_urls = [
+static_url = [
   path('', lambda request: HttpResponse(render(request, 'vue_index.html'))),
   path('mockview/', MockView.as_view(), name='mock_view'),
 ]
 
+account_url = [
+    path('account/', include('accounts.urls')),
+]
+
 urlpatterns = [
-    path('api/', include('accounts.urls')),
-    path('', include(vue_urls)),
+    path('api/', include(account_url)),
+    path('', include(static_url)),
 ]
