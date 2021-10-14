@@ -1,5 +1,7 @@
 const pages = {
-  index: "src/main.js",
+  index: {
+    entry: "src/main.js",
+  },
 };
 
 module.exports = {
@@ -8,5 +10,4 @@ module.exports = {
   indexPath: "../../templates/vue_index.html",
 
   pages: pages,
-
 };

@@ -82,8 +82,8 @@ jobs:
           script: |
             cd ${{ env.PROJ_PATH }}
             cd frontend
-            npm i
-            npm run build
+            npm ci
+            VUE_APP_DOMAIN=https://${{ secrets.HOST }} npm run build
             cd ../
             REPO=${{ secrets.DOCKERHUB_USERNAME }} TAG=${{ env.DEV_TAG }} ENV=dev \
             docker-compose up -d

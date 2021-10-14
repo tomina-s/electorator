@@ -47,10 +47,10 @@ class Account(AbstractBaseUser):
     def get_jwt_token(self):
         dt = datetime.now() + timedelta(days=60)
 
-        token = jwt.encode({
+        token = jwt.encode(payload={
             'id': self.pk,
             'exp': int(dt.strftime('%s'))
-        }, settings.SECRET_KEY, algorithm='HS256')
+        }, key=settings.SECRET_KEY, algorithm='HS256')
 
         return token
 
