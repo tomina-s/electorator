@@ -35,7 +35,7 @@
         >
           <label :for="`can${candidate.id}`">{{candidate.name}}</label>
           // TODO обязательные поля
-          <Field :name="`can${candidate.id}`" v-validate="'required'" type="number" class="form-control" />
+          <Field :name="`can${candidate.id}`" type="number" class="form-control" />
           <ErrorMessage :name="candidate-`${candidate.id}`" class="error-feedback" />
         </div>
 

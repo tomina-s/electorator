@@ -3,7 +3,7 @@ import axios from '../http-common'
 class AuthService {
   login(account) {
     return axios
-      .post('/login', {
+      .post('/account/login', {
         snils: account.snils,
         password: account.password
       })
