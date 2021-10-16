@@ -1,8 +1,13 @@
 import { createWebHistory, createRouter } from "vue-router"
-import Home from "./components/Home.vue"
-import Login from "./components/Login.vue"
+import Home from "./components/Home"
+import Login from "./components/Login"
+import Protocol from "./components/Protocol";
 
 const routes = [
+  {
+    path: "/protocol",
+    component: Protocol,
+  },
   {
     path: "/",
     component: Home,

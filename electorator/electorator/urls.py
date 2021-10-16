@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -21,8 +21,8 @@ from .view import MockView
 
 
 static_url = [
-  path('', lambda request: HttpResponse(render(request, 'vue_index.html'))),
-  path('mockview/', MockView.as_view(), name='mock_view'),
+    re_path(r'^.*$', lambda request: HttpResponse(render(request, 'vue_index.html'))),
+    path('mockview/', MockView.as_view(), name='mock_view'),
 ]
 
 account_url = [

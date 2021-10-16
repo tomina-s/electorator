@@ -1,12 +1,9 @@
-import axios from 'axios'
-import "../config"
-import config from "../config";
-const API_URL = config.DOMAIN + '/api/account/'
+import axios from '../http-common'
 
 class AuthService {
   login(account) {
     return axios
-      .post(API_URL + 'login', {
+      .post('/login', {
         snils: account.snils,
         password: account.password
       })
