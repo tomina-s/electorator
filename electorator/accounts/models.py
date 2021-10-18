@@ -10,7 +10,6 @@ import jwt
 from django.db.models import Model
 
 
-
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None):
         raise RuntimeError('Users must be created via CLI')

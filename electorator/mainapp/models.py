@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Model
 
 
-class Uik(Model): #Участки
+class Uik(Model):  #Участки
     num_uik = models.IntegerField(
         verbose_name='Номер участка',
         unique=True
@@ -32,6 +32,7 @@ class Uik(Model): #Участки
         verbose_name='Время последнего изменени',
         auto_now= True
     )
+
 
 class Candidate(Model):
     name = models.CharField(

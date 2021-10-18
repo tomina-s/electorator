@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import DB_test
+# from .models import DB_test
 from .models import Candidate
 
 
