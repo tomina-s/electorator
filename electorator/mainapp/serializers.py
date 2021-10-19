@@ -10,11 +10,18 @@ class DB_testSerializer(serializers.ModelSerializer):
 
 # Кандидат - чтение (модели), чтение всех кандидатов на данных выборах.
 
+# может быть несоклько сериализаторов для одной модеели
 
 class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ["name"]
+
+
+class CandidatInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Candidate
+        fields = ["name", "info", "sum_votes"]
 
 
 '''

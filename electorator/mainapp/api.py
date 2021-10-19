@@ -1,6 +1,6 @@
 from .models import Candidate
 from rest_framework import viewsets, permissions, response
-from .serializers import CandidateSerializer
+from .serializers import CandidateSerializer, CandidatInfoSerializer
 
 # мб еще импорты по сералайзеру должны быть и другие классы из сериалайзера
 
@@ -25,7 +25,10 @@ class CandidateViewSet(viewsets.ModelViewSet):
         ]
         #  что за переменная класса CandidateSerializer?
         # здесь в апи или в сериалайзере прописывать какие поля Модели нужны для этого метода -
+        # наверно в сериалайзере
         #     например: для list_of_candidats нужно только поле "name"
+
+        # нужно ли использовать атрибут ф-ции request?
         serializer_class = CandidateSerializer(queryset, many=True)
         return response.Response(serializer_class.data)
 
@@ -35,7 +38,7 @@ class CandidateViewSet(viewsets.ModelViewSet):
         # permission_classes = [
         #     permissions.AllowAny
         # ]
-        serializer_class = CandidateSerializer(queryset, many=True)
+        serializer_class = CandidatInfoSerializer(queryset, many=True)
         return response.Response(serializer_class.data)
 
 
