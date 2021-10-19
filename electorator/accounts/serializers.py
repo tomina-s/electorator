@@ -30,3 +30,12 @@ class LoginSerializer(serializers.Serializer):
             )
 
         return account
+
+    def create(self, validated_data):
+        return Account(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.snils = validated_data.get('snils', instance.snils)
+        instance.password = validated_data.get('password', instance.password)
+        instance.name = validated_data.get('name', instance.name)
+        return instance

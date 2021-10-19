@@ -14,6 +14,8 @@ class LoginAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        aa = serializer.data
+
         account = serializer.validated_data
 
         response = Response(
