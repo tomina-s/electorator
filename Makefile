@@ -11,5 +11,5 @@ start-local:
 	ENV=dev REPO=huvalk TAG=local docker-compose up
 
 start-local-db:
-	ENV=dev REPO=huvalk TAG=local docker-compose -f docker-compose.db.yml up
+	ENV=dev REPO=huvalk TAG=local docker-compose -f docker-compose.db.yml up -d
 
