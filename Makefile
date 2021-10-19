@@ -13,3 +13,6 @@ start-local:
 start-local-db:
 	ENV=dev REPO=huvalk TAG=local docker-compose -f docker-compose.db.yml up
 
+lint:
+	find electorator -type f -name "*.py" | xargs pylint
+
