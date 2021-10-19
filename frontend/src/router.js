@@ -1,24 +1,40 @@
 import { createWebHistory, createRouter } from "vue-router"
-import Home from "./components/Home"
 import Login from "./components/Login"
 import Protocol from "./components/Protocol";
+import Timer from "./components/Timer";
+import ProtocolsList from "./components/ProtocolsList";
+import ReadProtocol from "./components/ReadProtocol";
+import Turnout from "./components/Turnout";
 
 const routes = [
   {
-    path: "/protocol",
+    path: "/protocol/create",
     component: Protocol,
   },
   {
     path: "/",
-    component: Home,
+    component: ProtocolsList,
   },
   {
     path: "/home",
-    component: Home,
+    component: ProtocolsList,
   },
   {
     path: "/login",
     component: Login,
+  },
+  {
+    path: "/timer",
+    component: Timer,
+  },
+  {
+    path: "/protocol/read",
+    component: ReadProtocol,
+    props: {id: 0}
+  },
+  {
+    path: "/protocol/voters",
+    component: Turnout
   },
 ]
 

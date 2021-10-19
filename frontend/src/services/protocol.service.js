@@ -28,6 +28,17 @@ class ProtocolService {
           return response.data
       })
   }
+  SendTurnout(num) {
+    return axios
+      .post("/protocol/voters", {
+          num: num,
+      })
+      .then(response => {
+          console.log(response.data)
+
+          return response.data
+      })
+  }
 }
 
 export default new ProtocolService()

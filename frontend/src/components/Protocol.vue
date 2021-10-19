@@ -8,7 +8,7 @@
           <ErrorMessage name="num_uik" class="error-feedback" />
         </div>
         <div class="form-group">
-          <label for="status">Статус</label>
+          <label for="status">Участок открыт</label>
           <Field name="status" type="checkbox" :value="true" true-value="true" false-value="false" class="form-control" />
           <ErrorMessage name="status" class="error-feedback" />
         </div>
@@ -102,17 +102,13 @@ export default {
       this.loading = true
 
       ProtocolService.SendProtocolOne(protocol)
-        .catch(e => {
-          console.log(e)
-        })
-    },
-    isRequired(value) {
-      console.log("req")
-      if (value && value.trim()) {
-        return true;
-      }
-      return 'This is required';
+          .then(() => {this.loading = false})
+          .catch(e => {
+            this.loading = false
+            console.log(e)
+          })
     },
   },
 }
+
 </script>

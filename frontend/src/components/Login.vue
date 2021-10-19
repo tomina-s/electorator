@@ -1,15 +1,18 @@
 <template>
   <div class="col-md-12">
     <div class="card card-container">
+      <div class="display-4 text-center">
+        Вход в систему
+      </div>
       <Form @submit="handleLogin" :validation-schema="schema">
         <div class="form-group">
-          <label for="snils">СНИЛС</label>
-          <Field name="snils" type="text" class="form-control" />
+          <label for="snils">Имя пользователя</label>
+          <Field v-on:input="clearErrors" name="snils" type="text" class="form-control" />
           <ErrorMessage name="snils" class="error-feedback" />
         </div>
         <div class="form-group">
           <label for="password">Пароль</label>
-          <Field name="password" type="password" class="form-control" />
+          <Field v-on:input="clearErrors" name="password" type="password" class="form-control" />
           <ErrorMessage name="password" class="error-feedback" />
         </div>
 
@@ -19,7 +22,7 @@
               v-show="loading"
               class="spinner-border spinner-border-sm"
             ></span>
-            <span>Авторизоваться</span>
+            <span>Войти</span>
           </button>
         </div>
 
@@ -67,7 +70,11 @@ export default {
     }
   },
   methods: {
+    clearErrors() {
+      this.message = ""
+    },
     handleLogin(user) {
+      this.message = ""
       console.log("handling login")
       this.loading = true
 
@@ -77,12 +84,8 @@ export default {
         },
         (error) => {
           this.loading = false
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
+          console.log(error)
+          this.message = "Войти не удалось, попробуйте снова"
         }
       )
     },
