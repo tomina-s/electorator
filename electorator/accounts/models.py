@@ -10,7 +10,6 @@ import jwt
 from django.db.models import Model
 
 
-
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None):
         raise RuntimeError('Users must be created via CLI')
@@ -61,5 +60,5 @@ class Permit(models.Model):
 
 
 class Role(models.Model):
-    id_user = models.OneToOneField(Account,on_delete=models.CASCADE)
+    id_user = models.OneToOneField(Account, on_delete=models.CASCADE)
     role_user = models.ForeignKey(Permit, on_delete=models.CASCADE)

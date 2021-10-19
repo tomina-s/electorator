@@ -12,7 +12,7 @@ class MockView(APIView):
     def perm(self,request):
         #user.id  == user из базы ?
         # если да, то работаем лдальше
-        # если нет, response( 403) #todo
+        # если нет, response(403) #todo
         pass
 
     def get(self, request):
