@@ -2,15 +2,18 @@ from django.db import models
 from django.db.models import Model
 
 
-class Uik(Model): #Участки
+class Uik(Model):  # Участки
     num_uik = models.IntegerField(
         verbose_name='Номер участка',
         unique=True
     )
+    num_tik = models.IntegerField(
+        verbose_name='Номер ТИК'
+    )
     population = models.IntegerField(
         verbose_name='Численность'
     )
-    status = models.BooleanField (
+    status = models.BooleanField(
         verbose_name='Статус'
     )
     sum_votes = models.IntegerField(
@@ -19,19 +22,20 @@ class Uik(Model): #Участки
     sum_numb_votes_fin = models.IntegerField(
         verbose_name='Общее число голосов обработанное'
     )
-    presence = models.IntegerField (
+    presence = models.IntegerField(
         verbose_name='Явка'
     )
     perc_final_bul = models.IntegerField(
-        verbose_name= 'Процент обработанных бюллетеней'
+        verbose_name='Процент обработанных бюллетеней'
     )
     bad_form = models.IntegerField(
         verbose_name='Общее число испорченных бланков'
     )
     update_time = models.TimeField(
         verbose_name='Время последнего изменени',
-        auto_now= True
+        auto_now=True
     )
+
 
 class Candidate(Model):
     name = models.CharField(
@@ -39,11 +43,19 @@ class Candidate(Model):
         max_length=200,
         unique=True
     )
+    party = models.CharField(
+        verbose_name='Партия',
+        max_length=200
+    )
     info = models.TextField(
         verbose_name='Инфо о кандидате'
     )
     sum_votes = models.IntegerField(
         verbose_name='Общее число голосов'
+    )
+    photo = models.ImageField(
+        verbose_name='Фото',
+        upload_to='media/'
     )
 
 
@@ -74,14 +86,13 @@ class Protocol1(Model):
 
 class Protocol2(Model):
     num_protocol_2 = models.IntegerField(
-        verbose_name='Номер протокола 2го типа',
+        verbose_name='Номер протокола 2го типа'
     )
     num_uik = models.IntegerField(
         verbose_name='Номер участка'
     )
-    name = models.CharField(
-        verbose_name='ФИО кандидата',
-        max_length=200,
+    name = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE
     )
     candidate_votes = models.IntegerField(
         verbose_name='Число голосов за кандидата'
@@ -93,30 +104,23 @@ class Protocol2(Model):
 
 
 class UikCandidate(Model):
-    id_uik = models.OneToOneField(Uik,on_delete=models.CASCADE)
-    id_candidate = models.OneToOneField(Candidate,on_delete=models.CASCADE)
+    id_uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
+    id_candidate = models.OneToOneField(Candidate, on_delete=models.CASCADE)
 
 
 class UikProtocol1(Model):
-    id_uik = models.OneToOneField(Uik,on_delete=models.CASCADE)
-    id_protocol1 = models.OneToOneField(Protocol1,on_delete=models.CASCADE)
+    id_uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
+    id_protocol1 = models.OneToOneField(Protocol1, on_delete=models.CASCADE)
 
 
-class CandidateProtocol2(Model):
-    id_candidate = models.OneToOneField(Candidate,on_delete=models.CASCADE)
-    id_protocol2 = models.OneToOneField(Protocol2,on_delete=models.CASCADE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#class Users(Model):
+#    name = models.CharField(
+#        verbose_name='Имя пользователя',
+#        max_length=200
+#    )
+#    password = models.CharField(
+#        verbose_name='Пароль',
+#        max_length=200
+#    )
+#    num_uik = models.ForeignKey(Uik, on_delete=models.CASCADE)
 
