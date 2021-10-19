@@ -22,11 +22,12 @@ from .view import MockView
 
 static_url = [
     re_path(r'^.*$', lambda request: HttpResponse(render(request, 'vue_index.html'))),
-    path('mockview/', MockView.as_view(), name='mock_view'),
+
 ]
 
 account_url = [
     path('account/', include('accounts.urls')),
+    path('mockview/', MockView.as_view(), name='mock_view')
 ]
 
 urlpatterns = [
