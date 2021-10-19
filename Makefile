@@ -16,3 +16,7 @@ start-local-db:
 lint:
 	find electorator -type f -name "*.py" | xargs pylint
 
+build-local-front:
+	VUE_APP_DOMAIN=http://localhost:8000 npm run build
+
+

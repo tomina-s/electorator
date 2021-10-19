@@ -1,17 +1,20 @@
 <template>
   <div class="col-md-12">
     <div class="card card-container">
-      <Form @submit="openProtocol" :validation-schema="schema">
         <div
           v-for="(protocol) in protocols"
           :key="protocol.id"
           class="form-group"
         >
-          <button class="btn btn-outline-secondary btn-block" v-on:click="openProtocol(protocol.id)">{{ protocol.num }}</button>
+          <router-link
+              class="btn btn-outline-secondary btn-block"
+              :to="{ name:'/protocol/read', params:{ id:  protocol.id } }"
+          >
+            Протокол №{{ protocol.num }}
+          </router-link>
         </div>
 
         <router-link  class="btn btn-primary btn-block" to="/protocol/create" tag="button">Заполнить протокол</router-link>
-      </Form>
     </div>
   </div>
 </template>
@@ -36,7 +39,7 @@ export default {
       console.log(protocol)
       console.log("open protocol")
 
-      this.$router.push(`/protocol/read?id=${protocol.id}`)
+      this.$router.push(`?id=${protocol}`)
     },
   },
 }
