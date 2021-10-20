@@ -7,7 +7,7 @@ import re
 
 def read_env():
     try:
-        with open('../../electorator.env') as f:
+        with open('../electorator.env') as f:
             content = f.read()
     except IOError:
         content = ''

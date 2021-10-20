@@ -1,16 +1,16 @@
+"""Serializers for accounts"""
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import Account
-
 
 class LoginSerializer(serializers.Serializer):
+    """Serializes login and password of user"""
     snils = serializers.CharField(max_length=11, write_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
 
-    def validate(self, data):
-        snils = data.get('snils', None)
-        password = data.get('password', None)
+    def validate(self, attrs):
+        snils = attrs.get('snils', None)
+        password = attrs.get('password', None)
 
         if snils is None or len(snils) != 11:
             raise serializers.ValidationError(
@@ -32,10 +32,7 @@ class LoginSerializer(serializers.Serializer):
         return account
 
     def create(self, validated_data):
-        return Account(**validated_data)
+        print("Create not defined")
 
     def update(self, instance, validated_data):
-        instance.snils = validated_data.get('snils', instance.snils)
-        instance.password = validated_data.get('password', instance.password)
-        instance.name = validated_data.get('name', instance.name)
-        return instance
+        print("Update not defined")

@@ -1,4 +1,5 @@
-from django.urls import re_path, include
+"""urls for account API"""
+from django.urls import re_path
 
 from .views import LoginAPIView
 
