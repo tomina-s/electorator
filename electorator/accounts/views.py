@@ -22,5 +22,6 @@ class LoginAPIView(APIView):
             {'jwt': account.get_jwt_token()},
             status=status.HTTP_200_OK
         )
-
         return response
+
+

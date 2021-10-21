@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 import jwt
-from django.db.models import Model
+from mainapp.models import Uik
 
 
 class AccountManager(BaseUserManager):
@@ -54,11 +54,12 @@ class Account(AbstractBaseUser):
         return token
 
 
-class Permit(models.Model):
-    role_user = models.CharField(max_length=20)
-    url = models.URLField
-
-
 class Role(models.Model):
-    id_user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    role_user = models.ForeignKey(Permit, on_delete=models.CASCADE)
+    #user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    role = models.CharField(max_length=3) #TODO настроить ограничения
+
+
+class Permission(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
+
