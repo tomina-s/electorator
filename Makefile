@@ -14,5 +14,9 @@ start-local-db:
 	ENV=dev REPO=huvalk TAG=local docker-compose -f docker-compose.db.yml up
 
 lint:
-	find electorator -type f -name "*.py" | xargs pylint
+	find electorator -name "*.py" -not -path "*/migrations/*" | xargs pylint
+
+build-local-front:
+	VUE_APP_DOMAIN=http://localhost:8000 npm run build
+
 

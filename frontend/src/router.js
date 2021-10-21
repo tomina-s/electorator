@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router"
 import Login from "./components/Login"
-import Protocol from "./components/Protocol";
+import CreateProtocol from "./components/CreateProtocol";
 import Timer from "./components/Timer";
 import ProtocolsList from "./components/ProtocolsList";
 import ReadProtocol from "./components/ReadProtocol";
@@ -9,7 +9,7 @@ import Turnout from "./components/Turnout";
 const routes = [
   {
     path: "/protocol/create",
-    component: Protocol,
+    component: CreateProtocol,
   },
   {
     path: "/",
@@ -28,9 +28,9 @@ const routes = [
     component: Timer,
   },
   {
+    name: "/protocol/read",
     path: "/protocol/read",
     component: ReadProtocol,
-    props: {id: 0}
   },
   {
     path: "/protocol/voters",

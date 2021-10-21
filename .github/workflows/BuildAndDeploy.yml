@@ -33,7 +33,7 @@ jobs:
           pip install pylint
           pip install -r electorator/requirements.txt
       - name: Lint with Pylint
-        run: pylint electorator/electorator
+        run: make lint
 
   build:
     runs-on: ubuntu-latest

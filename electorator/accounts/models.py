@@ -1,3 +1,6 @@
+"""
+accounts model and model manager
+"""
 from datetime import (
     datetime, timedelta
 )
@@ -7,18 +10,26 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 import jwt
+
 from mainapp.models import Uik
 
 
+
 class AccountManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    """Model manager forbids to create user via django-admin"""
+    @staticmethod
+    def create_user(email, password=None):
+        """Model manager forbids to create user via django-admin"""
         raise RuntimeError('Users must be created via CLI')
 
-    def create_superuser(self, email, password):
+    @staticmethod
+    def create_superuser(email, password):
+        """Model manager forbids to create user via django-admin"""
         raise RuntimeError('Users must be created via CLI')
 
 
 class Account(AbstractBaseUser):
+    """Account model is used to replace default authorization"""
     objects = AccountManager()
     name = models.CharField(
         verbose_name='ФИО',
@@ -35,31 +46,48 @@ class Account(AbstractBaseUser):
     REQUIRED_FIELDS = []
 
     def get_full_name(self):
+        """account is defined by snils"""
         return self.snils
 
     def get_short_name(self):
+        """account is defined by snils"""
         return self.snils
 
     def __str__(self):
-        return self.snils
+        """account is defined by snils"""
+        return str(f'{self.snils}')
 
     def get_jwt_token(self):
-        dt = datetime.now() + timedelta(days=60)
+        """generates jwt out of account id"""
+        date_time = datetime.now() + timedelta(days=60)
 
         token = jwt.encode(payload={
             'id': self.pk,
-            'exp': int(dt.strftime('%s'))
+            'exp': int(date_time.strftime('%s'))
         }, key=settings.SECRET_KEY, algorithm='HS256')
 
         return token
 
 
+
 class Role(models.Model):
-    #user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
     role = models.CharField(max_length=3) #TODO настроить ограничения
 
 
 class Permission(models.Model):
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
     uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
+
+
+class Permit(models.Model):
+    """Permission table"""
+    role_user = models.CharField(max_length=20)
+    url = models.URLField
+
+
+class Role(models.Model):
+    """Role table"""
+    id_user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    role_user = models.ForeignKey(Permit, on_delete=models.CASCADE)
 
