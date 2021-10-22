@@ -7,8 +7,9 @@ class Uik(Model):  # Участки
         verbose_name='Номер участка',
         unique=True
     )
-    num_tik = models.IntegerField(
-        verbose_name='Номер ТИК'
+    num_tik = models.CharField(
+        verbose_name='Номер ТИК',
+        max_length=200
     )
     population = models.IntegerField(
         verbose_name='Численность'

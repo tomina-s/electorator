@@ -11,6 +11,9 @@ from django.contrib.auth.models import (
 from django.db import models
 import jwt
 
+from mainapp.models import Uik
+
+
 
 class AccountManager(BaseUserManager):
     """Model manager forbids to create user via django-admin"""
@@ -66,6 +69,17 @@ class Account(AbstractBaseUser):
         return token
 
 
+
+class Role(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    role = models.CharField(max_length=3) #TODO настроить ограничения
+
+
+class Permission(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
+
+
 class Permit(models.Model):
     """Permission table"""
     role_user = models.CharField(max_length=20)
@@ -76,3 +90,4 @@ class Role(models.Model):
     """Role table"""
     id_user = models.OneToOneField(Account, on_delete=models.CASCADE)
     role_user = models.ForeignKey(Permit, on_delete=models.CASCADE)
+
