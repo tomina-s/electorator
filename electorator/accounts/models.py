@@ -14,7 +14,6 @@ import jwt
 from mainapp.models import Uik
 
 
-
 class AccountManager(BaseUserManager):
     """Model manager forbids to create user via django-admin"""
     @staticmethod
@@ -67,12 +66,6 @@ class Account(AbstractBaseUser):
         }, key=settings.SECRET_KEY, algorithm='HS256')
 
         return token
-
-
-
-class Role(models.Model):
-    user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    role = models.CharField(max_length=3) #TODO настроить ограничения
 
 
 class Permission(models.Model):
