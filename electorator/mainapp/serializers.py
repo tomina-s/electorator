@@ -1,11 +1,7 @@
 from rest_framework import serializers
 # from .models import DB_test
-from .models import Candidate
-
-
-class DB_testSerializer(serializers.ModelSerializer):
-    class Meta:
-        pass
+from .models import Candidate, Uik
+from accounts.models import Account, Role, Permission
 
 
 # Кандидат - чтение (модели), чтение всех кандидатов на данных выборах.
@@ -15,13 +11,27 @@ class DB_testSerializer(serializers.ModelSerializer):
 class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
-        fields = ["name"]
+        fields = ["name", "info", "sum_votes"]
 
 
 class CandidatInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ["name", "info", "sum_votes"]
+
+#class RoleSerializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = Role
+#        fields = ["role"]
+
+#class UikSerializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = Uik
+#        fields = ["num_uik"]
+
+
+
+
 
 
 '''
