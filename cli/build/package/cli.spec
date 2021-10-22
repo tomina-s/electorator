@@ -9,13 +9,11 @@ Version:        %{_version}
 Release:        %{_release}
 Source0:        %{name}-%{_major}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}
-License:        Proprietary
-Vendor:         Mail.Ru
-Group:          Cloud
-Summary:        CLI - new Cloud CLI
+Vendor:         Huvalk
+Summary:        CLI - CLI
 
 %description
-CLI - set of command line tools for Mail.ru Cloud administration
+CLI - set of command line tools for electorator
 
 Packager: %(echo ${USER})
 BuildHost: %(echo ${HOSTNAME})
@@ -26,16 +24,10 @@ Commit: %(git rev-parse HEAD)
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 %setup -q -n %{name}
 mkdir configs/tmp
-go run cmd/cli/main.go completion bash > configs/tmp/bash
+go run cli/cmd/main.go completion bash > configs/tmp/bash
 
 %build
-go build -o build -ldflags "-linkmode=external \
-    	-X gitlab.corp.mail.ru/cloud/go-libs/version.BuildDate=`date -u --rfc-3339=seconds | sed -e 's/ /T/'` \
-    	-X gitlab.corp.mail.ru/cloud/go-libs/version.GitCommit=%(git rev-parse HEAD) \
-    	-X gitlab.corp.mail.ru/cloud/go-libs/version.GitBranch=%{_branch} \
-    	-X gitlab.corp.mail.ru/cloud/go-libs/version.BuildClean=`if [ -n "%(git status --porcelain)" ]; then echo 'no'; else echo 'yes'; fi` \
-    	-X gitlab.corp.mail.ru/cloud/go-libs/version.BuildVersion=%(git describe --tags --dirty --always|sed 's/-/./')" \
-		./cmd/...
+go build -o build -ldflags "-linkmode=external ./cli/cmd/main.go
 
 %install
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}

@@ -33,26 +33,26 @@ class Account(AbstractBaseUser):
         max_length=300,
         unique=False,
     )
-    snils = models.CharField(
+    username = models.CharField(
         verbose_name='Номер СНИЛС',
-        max_length=11,
+        max_length=30,
         unique=True,
     )
 
-    USERNAME_FIELD = 'snils'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     def get_full_name(self):
-        """account is defined by snils"""
-        return self.snils
+        """account is defined by username"""
+        return self.username
 
     def get_short_name(self):
-        """account is defined by snils"""
-        return self.snils
+        """account is defined by username"""
+        return self.username
 
     def __str__(self):
-        """account is defined by snils"""
-        return str(f'{self.snils}')
+        """account is defined by username"""
+        return str(f'{self.username}')
 
     def get_jwt_token(self):
         """generates jwt out of account id"""
