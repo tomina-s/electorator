@@ -10,7 +10,6 @@ import (
 
 func GetConfigPath(configFile string) (string, error) {
 	if configFile != "" {
-		// Use config file from the flag.
 		_, err := os.Stat(configFile)
 		if err != nil {
 			return "", err
@@ -19,7 +18,6 @@ func GetConfigPath(configFile string) (string, error) {
 		return configFile, nil
 	}
 
-	// Try to find config in home directory
 	home, err := homedir.Dir()
 	if err != nil {
 		return "", err
