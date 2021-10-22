@@ -5,14 +5,14 @@ from rest_framework import serializers
 
 class LoginSerializer(serializers.Serializer):
     """Serializes login and password of user"""
-    snils = serializers.CharField(max_length=11, write_only=True)
+    username = serializers.CharField(max_length=30, write_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
 
     def validate(self, attrs):
-        snils = attrs.get('username', None)
+        username = attrs.get('username', None)
         password = attrs.get('password', None)
 
-        if snils is None or len(snils) != 11:
+        if username is None or len(username) > 30:
             raise serializers.ValidationError(
                 'username is required and must be valid to log in.'
             )
@@ -22,7 +22,7 @@ class LoginSerializer(serializers.Serializer):
                 'password is required to log in.'
             )
 
-        account = authenticate(username=snils, password=password)
+        account = authenticate(username=username, password=password)
 
         if account is None:
             raise serializers.ValidationError(

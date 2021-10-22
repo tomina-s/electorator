@@ -7,7 +7,7 @@ build()
 
     git archive HEAD --prefix=cli/ --format=tar.gz -o cli-${MAJOR}.tar.gz
     mv ./cli-${MAJOR}.tar.gz ~/rpmbuild/SOURCES/
-    rpmbuild -ba build/package/cli.spec --define "_version ${VERSION}" --define "_major ${MAJOR}" --define "_branch ${BRANCH}"
+    rpmbuild -ba cli/build/package/cli.spec --define "_version ${VERSION}" --define "_major ${MAJOR}" --define "_branch ${BRANCH}"
 }
 
 usage()
