@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
+from .models import Role, Permission
 
 from .models import Account
 
@@ -30,3 +31,15 @@ class LoginSerializer(serializers.Serializer):
             )
 
         return account
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ['user', 'role']
+
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['user', 'uik']

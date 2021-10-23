@@ -1,6 +1,6 @@
 from rest_framework import serializers
 # from .models import DB_test
-from .models import Candidate
+from .models import Candidate, Protocol1, Protocol2
 
 
 class DB_testSerializer(serializers.ModelSerializer):
@@ -8,20 +8,29 @@ class DB_testSerializer(serializers.ModelSerializer):
         pass
 
 
-# Кандидат - чтение (модели), чтение всех кандидатов на данных выборах.
-
-# может быть несоклько сериализаторов для одной модеели
-
 class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ["name"]
 
 
+# TODO: пока не используется - мб убрать
 class CandidatInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ["name", "info", "sum_votes"]
+
+
+class Protocol1Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Protocol1
+        fields = '__all__'
+
+
+class Protocol2Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Protocol2
+        fields = '__all__'
 
 
 '''
