@@ -4,8 +4,7 @@ class AuthService {
   login(account) {
     return axios
       .post('/account/login', {
-        // TODO rename snils to username
-        username: account.snils,
+        username: account.username,
         password: account.password
       })
       .then(response => {

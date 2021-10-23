@@ -18,11 +18,6 @@
           <ErrorMessage name="sum_bul" class="error-feedback" />
         </div>
         <div class="form-group">
-          <label for="sum_final_bul">Проголосовало итог</label>
-          <Field name="sum_final_bul" type="number" class="form-control" />
-          <ErrorMessage name="sum_final_bul" class="error-feedback" />
-        </div>
-        <div class="form-group">
           <label for="bad_form">Бюллетеней испорчено</label>
           <Field name="bad_form" type="number" class="form-control" />
           <ErrorMessage name="bad_form" class="error-feedback" />
@@ -33,10 +28,9 @@
           :key="candidate.id"
           class="form-group"
         >
-          <label :for="`can${candidate.id}`">{{candidate.name}}</label>
-          // TODO обязательные поля
-          <Field :name="`can${candidate.id}`" type="number" class="form-control" />
-          <ErrorMessage :name="candidate-`${candidate.id}`" class="error-feedback" />
+          <label :for="`can:${candidate.id}`">{{candidate.name}}</label>
+          <Field :name="`can:${candidate.id}`" type="number" class="form-control" />
+          <ErrorMessage :name="`can:${candidate.id}`" class="error-feedback" />
         </div>
 
 
@@ -74,15 +68,23 @@ export default {
   },
   data() {
     console.log("data")
-    const schema = yup.object().shape({
+    const candidates = [{id: 3, name: "huvalk"}, {id: 32, name: "huvalk2"}]
+    let requiredFields = {
       num_uik: yup.string().required("Введите номер УИК"),
-      sum_bul: yup.string().required("Поле обязательно"),
-      sum_final_bul: yup.string().required("Поле обязательно"),
-      bad_form: yup.string().required("Поле обязательно"),
+      sum_bul: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+      bad_form: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+    }
+    candidates.forEach(candidate => {
+      requiredFields[`can:${candidate.id}`] = yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0")
     })
 
+    const schema = yup.object().shape(
+          requiredFields
+      )
+    console.log(schema)
+
     return {
-      candidates: [],
+      candidates: candidates,
       loading: false,
       message: "",
       schema,
@@ -91,8 +93,6 @@ export default {
   computed: {
   },
   created() {
-    // TODO запрашивать список кандидатов
-    this.candidates = [{id: 3, name: "huvalk"}, {id: 32, name: "huvalk2"}]
   },
   methods: {
     handleProtocol(protocol) {

@@ -17,6 +17,6 @@ lint:
 	find electorator -name "*.py" -not -path "*/migrations/*" -not -name "*manage.py" | xargs pylint
 
 build-local-front:
-	VUE_APP_DOMAIN=http://localhost:8000 npm run build
+	(cd frontend && VUE_APP_DOMAIN=http://localhost:8000 npm run build)
 
 

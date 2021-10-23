@@ -24,6 +24,7 @@
 
 <script>
 import ProtocolService from "../services/protocol.service"
+import ConfigService from "../services/config.service";
 
 export default {
   name: "Timer",
@@ -37,10 +38,20 @@ export default {
   },
   created() {
     // получать с сервера время открытия
-    const openTime = 1634635800000
-    const currentTime = new Date().getTime()
-    this.timeLeft = openTime - currentTime
-    this.countDownTimer()
+    console.log('config')
+    ConfigService.getTimeToOpen().then(
+        data => {
+          const openTime = data.timeToOpen * 1000
+     // openTime = 0 //1634635800000
+          const currentTime = new Date().getTime()
+    console.log('this', this)
+          this.timeLeft = openTime - currentTime
+          this.countDownTimer()
+        },
+        error => {
+          console.log(error)
+        }
+      )
   },
   methods: {
     handleOpening(protocol) {
@@ -58,12 +69,12 @@ export default {
     },
     countDownTimer() {
       console.log(this.timeLeft)
-      if(this.timeLeft > 0) {
+      // if(this.timeLeft > 0) {
         setTimeout(() => {
           this.timeLeft -= 1000
           this.countDownTimer()
         }, 1000)
-      }
+      // }
     },
   }
 }
