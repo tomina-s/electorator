@@ -68,13 +68,12 @@ export default {
           })
     },
     countDownTimer() {
-      console.log(this.timeLeft)
-      // if(this.timeLeft > 0) {
+      if(this.timeLeft > 0) {
         setTimeout(() => {
           this.timeLeft -= 1000
           this.countDownTimer()
         }, 1000)
-      // }
+      }
     },
   }
 }
