@@ -25,12 +25,11 @@ static_url = [
   path('mockview/', MockView.as_view(), name='mock_view'),
 ]
 
-api_urls = [
+account_url = [
     path('account/', include('accounts.urls')),
-    path('canditate/', include('mainapp.urls')),
 ]
 
 urlpatterns = [
-    path('api/', include(api_urls)),
+    path('api/', include(account_url)),
     path('', include(static_url)),
 ]
