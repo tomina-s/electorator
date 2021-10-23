@@ -10,7 +10,7 @@ class Uik(Model):  #Участки
     population = models.IntegerField(
         verbose_name='Численность'
     )
-    status = models.BooleanField (
+    status = models.BooleanField(
         verbose_name='Статус'
     )
     sum_votes = models.IntegerField(
@@ -23,14 +23,14 @@ class Uik(Model):  #Участки
         verbose_name='Явка'
     )
     perc_final_bul = models.IntegerField(
-        verbose_name= 'Процент обработанных бюллетеней'
+        verbose_name='Процент обработанных бюллетеней'
     )
     bad_form = models.IntegerField(
         verbose_name='Общее число испорченных бланков'
     )
     update_time = models.TimeField(
         verbose_name='Время последнего изменени',
-        auto_now= True
+        auto_now=True
     )
 
 
@@ -94,18 +94,18 @@ class Protocol2(Model):
 
 
 class UikCandidate(Model):
-    id_uik = models.OneToOneField(Uik,on_delete=models.CASCADE)
-    id_candidate = models.OneToOneField(Candidate,on_delete=models.CASCADE)
+    id_uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
+    id_candidate = models.OneToOneField(Candidate, on_delete=models.CASCADE)
 
 
 class UikProtocol1(Model):
-    id_uik = models.OneToOneField(Uik,on_delete=models.CASCADE)
-    id_protocol1 = models.OneToOneField(Protocol1,on_delete=models.CASCADE)
+    id_uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
+    id_protocol1 = models.OneToOneField(Protocol1, on_delete=models.CASCADE)
 
 
 class CandidateProtocol2(Model):
-    id_candidate = models.OneToOneField(Candidate,on_delete=models.CASCADE)
-    id_protocol2 = models.OneToOneField(Protocol2,on_delete=models.CASCADE)
+    id_candidate = models.OneToOneField(Candidate, on_delete=models.CASCADE)
+    id_protocol2 = models.OneToOneField(Protocol2, on_delete=models.CASCADE)
 
 
 
