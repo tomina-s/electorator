@@ -1,6 +1,7 @@
 from .models import Candidate
 from rest_framework import viewsets, permissions, response
 from .serializers import CandidateSerializer, CandidatInfoSerializer
+from rest_framework.decorators import action
 
 # мб еще импорты по сералайзеру должны быть и другие классы из сериалайзера
 
