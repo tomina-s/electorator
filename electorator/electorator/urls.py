@@ -27,6 +27,7 @@ static_url = [
 
 account_url = [
     path('account/', include('accounts.urls')),
+    path('candidate/', include('mainapp.urls')),
     path('mockview/', MockView.as_view(), name='mock_view')
 ]
 

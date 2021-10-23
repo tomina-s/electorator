@@ -19,19 +19,17 @@ class CandidatInfoSerializer(serializers.ModelSerializer):
         model = Candidate
         fields = ["name", "info", "sum_votes"]
 
-#class RoleSerializer(serializers.ModelSerializer):
-#    class Meta:
-#        model = Role
-#        fields = ["role"]
 
-#class UikSerializer(serializers.ModelSerializer):
-#    class Meta:
-#        model = Uik
-#        fields = ["num_uik"]
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ["role"]
 
 
-
-
+class UikSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Uik
+        fields = ["num_uik"]
 
 
 '''
