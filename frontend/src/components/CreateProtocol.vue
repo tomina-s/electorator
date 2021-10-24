@@ -3,22 +3,22 @@
     <div class="card card-container">
       <Form @submit="handleProtocol" :validation-schema="schema">
         <div class="form-group">
-          <label for="num_uik">Номер УИК</label>
+          <label class="font-weight-bold" for="num_uik">Номер УИК</label>
           <Field name="num_uik" type="text" class="form-control" />
           <ErrorMessage name="num_uik" class="error-feedback" />
         </div>
         <div class="form-group">
-          <label for="status">Участок открыт</label>
+          <label class="font-weight-bold" for="status">Участок открыт</label>
           <Field name="status" type="checkbox" :value="true" true-value="true" false-value="false" class="form-control" />
           <ErrorMessage name="status" class="error-feedback" />
         </div>
         <div class="form-group">
-          <label for="sum_bul">Проголосовало</label>
+          <label class="font-weight-bold" for="sum_bul">Проголосовало</label>
           <Field name="sum_bul" type="number" class="form-control" />
           <ErrorMessage name="sum_bul" class="error-feedback" />
         </div>
         <div class="form-group">
-          <label for="bad_form">Бюллетеней испорчено</label>
+          <label class="font-weight-bold" for="bad_form">Бюллетеней испорчено</label>
           <Field name="bad_form" type="number" class="form-control" />
           <ErrorMessage name="bad_form" class="error-feedback" />
         </div>
@@ -28,7 +28,7 @@
           :key="candidate.id"
           class="form-group"
         >
-          <label :for="`can:${candidate.id}`">{{candidate.name}}</label>
+          <label class="font-weight-bold" :for="`can:${candidate.id}`">{{candidate.name}}</label>
           <Field :name="`can:${candidate.id}`" type="number" class="form-control" />
           <ErrorMessage :name="`can:${candidate.id}`" class="error-feedback" />
         </div>
@@ -68,7 +68,7 @@ export default {
   },
   data() {
     console.log("data")
-    const candidates = [{id: 3, name: "huvalk"}, {id: 32, name: "huvalk2"}]
+    const candidates = [{id: 3, name: "Кандидат Петров"}, {id: 32, name: "Кандидат Владимиров"}]
     let requiredFields = {
       num_uik: yup.string().required("Введите номер УИК"),
       sum_bul: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),

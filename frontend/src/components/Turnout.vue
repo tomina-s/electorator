@@ -3,7 +3,7 @@
     <div class="card card-container">
       <Form @submit="handleTurnout" :validation-schema="schema">
         <div class="form-group">
-          <label for="num">Явка</label>
+          <label class="font-weight-bold" for="num">Внести явку</label>
           <Field name="num" type="number" class="form-control" />
           <ErrorMessage name="num" class="error-feedback" />
         </div>
