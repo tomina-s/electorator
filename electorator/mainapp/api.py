@@ -37,21 +37,24 @@ class CandidateViewSet(viewsets.ModelViewSet):
         serializer_class = CandidateSerializer(queryset, many=True)
         return response.Response(serializer_class.data)
 
-    def view_candidate_info(self, request):
-        """TODO: запрос на получение инфы по конкретному кандидату по id.
 
-        :param request:
-        :return:
-        """
-        queryset = Candidate.objects.all()
-        # candidate_id = request
+'''
+пример
+www.django-rest-framework.org/api-guide/filtering
 
-        # надо разобраться что такое permission_classes
-        # permission_classes = [
-        #     permissions.AllowAny
-        # ]
-        serializer_class = CandidatInfoSerializer(queryset, many=True)
-        return response.Response(serializer_class.data)
+url('^purchases/(?P.+)/$', PurchaseList.as_view()),
+
+class PurchaseList(generics.ListAPIView):
+serializer_class = PurchaseSerializer
+
+def get_queryset(self):
+    """
+    This view should return a list of all the purchases for
+    the user as determined by the username portion of the URL.
+    """
+    username = self.kwargs['username']
+    return Purchase.objects.filter(purchaser__username=username)
+'''
 
 
 class ProtocolViewSet(viewsets.ModelViewSet):
