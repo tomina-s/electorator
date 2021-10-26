@@ -8,7 +8,7 @@ from .api import CandidateViewSet, AccountPermissionsViewSet
 # urlpatterns = router.urls
 
 # candidate_urls = [
-#     path('candidate/', include('**.urls'))  # TODO **
+#     path('candidate/', include('**.urls'))
 # ]
 
 # /candidate/api/...
@@ -21,5 +21,4 @@ urlpatterns = [
     # path('candidate_info/', CandidateViewSet.as_view()),  # ?? или тут view должны быть?
     # path('', include(static_url)),
     path('permission', AccountPermissionsViewSet.as_view({'get':'list_of_role_uik'})),
-
 ]

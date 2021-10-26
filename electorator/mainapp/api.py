@@ -54,19 +54,21 @@ class AccountPermissionsViewSet(viewsets.ModelViewSet):
         ]
         user = request.user# request пустой AnonymousUser (хз почему)
         #заменить ниже user_id на user.id когда рекуест будет не пустой
-        user_id = 3
+        user_id = 1
         user_role = Role.objects.get(user_id=user_id)
         role = RoleSerializer(user_role)
-        c=1
+        new_dict = {}
+        new_dict.update(role.data)
         if user_role.role == 'ВИК':
-            print(type(role.data))
-            c=1
-            return response.Response(role.data)
-        #user_uik = Permission.objects.get(user_id=user.id)
-        #num_uik = Uik.objects.get(pk=user_uik.uik_id)
-        #uik = UikSerializer(num_uik)
+            return response.Response(new_dict)
+        user_uik = Permission.objects.get(user_id=user_id)
+        num_uik = Uik.objects.get(pk=user_uik.uik_id)
+        a=num_uik
+        uik = UikSerializer(num_uik.num_uik)
+        new_dict.update(uik.data)
+        c=1
 
-        #return response.Response(uik.data)
+        return response.Response(new_dict)
 
 
 

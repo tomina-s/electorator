@@ -71,23 +71,20 @@ class Account(AbstractBaseUser):
 
 
 class Role(models.Model):
-    user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    role = models.CharField(max_length=3) #TODO настроить ограничения
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    role = models.CharField(max_length=3) #настроить ограничения
+
+
 
 
 class Permission(models.Model):
+    """Permission table"""
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
     uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
 
 
-class Permit(models.Model):
-    """Permission table"""
-    role_user = models.CharField(max_length=20)
-    url = models.URLField
 
 
-class Role(models.Model):
-    """Role table"""
-    id_user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    role_user = models.ForeignKey(Permit, on_delete=models.CASCADE)
+
+
 
