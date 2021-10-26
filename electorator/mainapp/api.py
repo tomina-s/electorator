@@ -61,6 +61,7 @@ class ProtocolFirstCreate(APIView):
 
         serializer.save()
 
+        Uik.objects.filter(id=uik).update(status=protocol['status'])
         if protocol['sum_bul'] != 0:
             Uik.objects.filter(id=uik).update(presence=F("presence") + protocol['sum_bul'])
 
@@ -83,6 +84,9 @@ class ProtocolSecondCreate(APIView):
             raise exceptions.PermissionDenied()
 
         serializer.save()
+
+        Candidate.objects.filter(id=protocol['name'].id)\
+            .update(sum_votes=F("sum_votes") + protocol['candidate_votes'])
 
         return Response(status=status.HTTP_200_OK)
 

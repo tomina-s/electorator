@@ -132,6 +132,7 @@ export default {
           .then(() => {this.loading = false})
           .catch(e => {
             this.message = "Отправить протокол не удалось"
+            this.info = ""
             this.loading = false
             console.log(e)
           })
@@ -151,9 +152,11 @@ export default {
             .then(() => {
               this.loading = false
               this.info = "Явка успешно отправлена"
+              this.message = ""
             })
             .catch(e => {
               this.message = "Отправить протокол не удалось"
+              this.info = ""
               this.loading = false
               console.log(e)
             })
