@@ -111,13 +111,13 @@ class Protocol2(Model):
 
 
 class UikCandidate(Model):
-    id_uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
-    id_candidate = models.OneToOneField(Candidate, on_delete=models.CASCADE)
+    id_uik = models.ForeignKey(Uik, on_delete=models.CASCADE)
+    id_candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
 
 class UikProtocol1(Model):
-    id_uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
-    id_protocol1 = models.OneToOneField(Protocol1, on_delete=models.CASCADE)
+    id_uik = models.ForeignKey(Uik, on_delete=models.CASCADE)
+    id_protocol1 = models.ForeignKey(Protocol1, on_delete=models.CASCADE)
 
 
 #class Users(Model):

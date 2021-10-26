@@ -2,7 +2,7 @@ from django.core import exceptions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Candidate
+from .models import Candidate, UikCandidate
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, permissions, response, status
 from .serializers import (
@@ -100,10 +100,12 @@ class CandidateViewSet(viewsets.ModelViewSet):
         if uik_id not in perms:
             raise exceptions.PermissionDenied
 
-        queryset = Candidate.objects.select_related('uikcandidate').\
-            filter(uikcandidate__id_uik=uik_id).all()
+        can_ids = UikCandidate.objects.filter(id_uik=uik_id).values_list('id_candidate', flat=True)
+        print(can_ids.query)
+        cans = Candidate.objects.filter(id__in=can_ids).all()
+        print(cans.query)
 
-        serializer_class = CandidateSerializer(queryset, many=True)
+        serializer_class = CandidateSerializer(cans, many=True)
         return response.Response(serializer_class.data)
 
     def view_candidate_info(self, request):
