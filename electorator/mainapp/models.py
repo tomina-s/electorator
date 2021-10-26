@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Model
 
 
-class Uik(Model):  # Участки
+class Uik(Model):
     num_uik = models.IntegerField(
         verbose_name='Номер участка',
         unique=True

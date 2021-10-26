@@ -19,7 +19,7 @@ class ConfigAPIView(APIView):
         return Response(
             {
                 'timeToOpen': int(
-                    datetime.strptime(os.getenv("TIME_TO_OPEN", "25/10/2021-23:55:00"), "%d/%m/%Y-%H:%M:%S").timestamp()
+                    datetime.strptime(os.getenv("TIME_TO_OPEN", "27/10/2021-23:55:00"), "%d/%m/%Y-%H:%M:%S").timestamp()
                 ),
             },
             status=status.HTTP_200_OK

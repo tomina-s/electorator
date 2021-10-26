@@ -23,6 +23,12 @@
             {{ message }}
           </div>
         </div>
+
+        <div class="form-group">
+          <div v-if="info" class="alert alert-success" role="alert">
+            {{ info }}
+          </div>
+        </div>
       </Form>
     </div>
   </div>
@@ -32,6 +38,7 @@
 import { Form, Field, ErrorMessage } from "vee-validate"
 import * as yup from "yup"
 import ProtocolService from "../services/protocol.service"
+import {getUIKPermission} from "../services/common.service";
 
 export default {
   name: "Turnout",
@@ -48,6 +55,7 @@ export default {
     return {
       loading: false,
       message: "",
+      info: "",
       schema,
     }
   },
@@ -62,10 +70,28 @@ export default {
       console.log("handling turnout")
       this.loading = true
 
-      ProtocolService.SendProtocolFirst(num)
-          .then(() => {this.loading = false})
+      const perm = getUIKPermission()
+      if (!perm) {
+        this.message = "Роль не соответствует выполняемым действиям"
+        return
+      }
+
+      const protocol = {
+        num_uik: perm,
+        num_protocol_1: 0,
+        status: true,
+        sum_bul: num.num,
+        bad_form: 0,
+      }
+
+      ProtocolService.SendProtocolFirst(protocol)
+          .then(() => {
+            this.loading = false
+            this.info = "Явка успешно зафиксирована"
+          })
           .catch(e => {
             this.loading = false
+            this.message = "Не удалось зафиксировать явку"
             console.log(e)
           })
     },

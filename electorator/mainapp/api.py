@@ -1,8 +1,9 @@
 from django.core import exceptions
+from django.db.models import F
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Candidate, UikCandidate
+from .models import Candidate, UikCandidate, Uik
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, permissions, response, status
 from .serializers import (
@@ -60,6 +61,9 @@ class ProtocolFirstCreate(APIView):
 
         serializer.save()
 
+        if protocol['sum_bul'] != 0:
+            Uik.objects.filter(id=uik).update(presence=F("presence") + protocol['sum_bul'])
+
         return Response(status=status.HTTP_200_OK)
 
 
@@ -101,9 +105,7 @@ class CandidateViewSet(viewsets.ModelViewSet):
             raise exceptions.PermissionDenied
 
         can_ids = UikCandidate.objects.filter(id_uik=uik_id).values_list('id_candidate', flat=True)
-        print(can_ids.query)
         cans = Candidate.objects.filter(id__in=can_ids).all()
-        print(cans.query)
 
         serializer_class = CandidateSerializer(cans, many=True)
         return response.Response(serializer_class.data)

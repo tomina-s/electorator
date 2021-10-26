@@ -44,6 +44,12 @@
             {{ message }}
           </div>
         </div>
+
+        <div class="form-group">
+          <div v-if="info" class="alert alert-success" role="alert">
+            {{ info }}
+          </div>
+        </div>
       </Form>
     </div>
   </div>
@@ -68,6 +74,7 @@ export default {
       candidates: [],
       loading: false,
       message: "",
+      info: "",
       schema: {},
     }
   },
@@ -130,13 +137,21 @@ export default {
           })
 
       this.candidates.forEach(v => {
+        const votes = parseInt(protocol[`can:${v.id}`])
+        if (!votes) {
+          return
+        }
+
         const protocolSecond = {
           num_uik: perm,
           name: v.id,
-          candidate_votes: parseInt(protocol[`can:${v.id}`]),
+          candidate_votes: votes,
         }
         ProtocolService.SendProtocolSecond(protocolSecond)
-            .then(() => {this.loading = false})
+            .then(() => {
+              this.loading = false
+              this.info = "Явка успешно отправлена"
+            })
             .catch(e => {
               this.message = "Отправить протокол не удалось"
               this.loading = false

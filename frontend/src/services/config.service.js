@@ -3,7 +3,7 @@ import axios from '../http-common'
 class ConfigService {
   getTimeToOpen() {
     return axios
-      .get("/config")
+      .get("/config/")
       .then(response => {
           console.log(response.data)
 
