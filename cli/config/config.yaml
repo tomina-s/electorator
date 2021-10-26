@@ -1,7 +1,0 @@
-environment: dev
-dev:
-  db:
-    servers:
-      - http://huvalk.ru:8001
-  s3:
-

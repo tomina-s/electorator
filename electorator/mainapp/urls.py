@@ -1,12 +1,12 @@
-from rest_framework import routers
 from django.urls import path, include
+<<<<<<< HEAD
 from .api import CandidateViewSet, AccountPermissionsViewSet
+=======
+from .api import CandidateViewSet, ProtocolFirstCreate
+>>>>>>> dev
 
-# router = routers.DefaultRouter()
-# router.register('api/candidate', CandidateViewSet, 'candidate')
-#
-# urlpatterns = router.urls
 
+<<<<<<< HEAD
 # candidate_urls = [
 #     path('candidate/', include('**.urls'))
 # ]
@@ -21,4 +21,9 @@ urlpatterns = [
     # path('candidate_info/', CandidateViewSet.as_view()),  # ?? или тут view должны быть?
     # path('', include(static_url)),
     path('permission', AccountPermissionsViewSet.as_view({'get':'list_of_role_uik'})),
+=======
+urlpatterns = [
+    path('protocols/first/', ProtocolFirstCreate.as_view()),
+    path('candidates/list/', CandidateViewSet.as_view({'get': 'list_of_candidats'})),
+>>>>>>> dev
 ]

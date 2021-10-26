@@ -1,0 +1,225 @@
+swagger: "2.0"
+info:
+  title: Sample API
+  description: API description in Markdown.
+  version: 1.0.0
+host: huvalk.ru
+basePath: /api
+schemes:
+  - https
+paths:
+  /accounts:
+    post:
+      summary: Login
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: account credentials
+        schema:
+          $ref: '#/definitions/login'
+      responses:
+        200:
+          description: 'User logged in'
+          schema:
+            $ref: '#/definitions/jwt'
+  /protocols/first:
+    post:
+      summary: Create protocol 1
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: protocol
+        schema:
+          $ref: '#/definitions/protocol_first'
+      responses:
+        200:
+          description: 'Protocol created'
+  /protocols/first/{protocolID}:
+    get:
+      summary: Read protocol 1
+      produces:
+        - application/json
+      parameters:
+      - in: path
+        name: protocolID
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 'Protocol found'
+          schema:
+            $ref: '#/definitions/protocol_first'
+  /protocols/second:
+    post:
+      summary: Create protocol 2
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: protocol
+        schema:
+          $ref: '#/definitions/protocol_second'
+      responses:
+        200:
+          description: 'Protocol created'
+  /protocols/second/{protocolID}:
+    get:
+      summary: Read protocol 2
+      produces:
+        - application/json
+      parameters:
+      - in: path
+        name: protocolID
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: 'Protocol found'
+          schema:
+            $ref: '#/definitions/protocol_second'
+  /permissions:
+    get:
+      summary: Get user permissions
+      produces:
+        - application/json
+      responses:
+        200:
+          description: 'Permissions'
+          schema:
+            $ref: '#/definitions/permissions'
+  /roles:
+    get:
+      summary: Get user role
+      produces:
+        - application/json
+      responses:
+        200:
+          description: 'Role'
+          schema:
+            $ref: '#/definitions/role'
+  /uik/{uikID}/candidates/short/list:
+    get:
+      summary: Read candidates short info
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: uikID
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: 'Candidates found'
+          schema:
+            $ref: '#/definitions/candidates_list_short'
+  /candidates/list:
+    get:
+      summary: Read candidates full info
+      produces:
+      - application/json
+      responses:
+        200:
+          description: 'Candidates found'
+          schema:
+            $ref: '#/definitions/candidates_list_short'
+  /candidates/{candidateID}:
+    get:
+      summary: Read candidate full info
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: candidateID
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: 'Candidates found'
+          schema:
+            $ref: '#/definitions/candidate_short'
+
+
+definitions:
+  login:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+  jwt:
+    type: object
+    properties:
+      jwt:
+        type: string
+  protocol_first:
+    type: object
+    properties:
+      num_proto:
+        type: integer
+        format: int64
+      num_uik:
+        type: string
+      status:
+        type: boolean
+      sum_bul:
+        type: integer
+        format: int64
+      bad_form:
+        type: integer
+        format: int64
+      created:
+        type: integer
+        format: int64
+
+  protocol_second:
+    type: object
+    properties:
+      num_proto:
+        type: integer
+        format: int64
+      num_uik:
+        type: string
+      candidate:
+        type: integer
+        format: int64
+      votes:
+        type: integer
+        format: int64
+      created:
+        type: integer
+        format: int64
+  permissions:
+    type: object
+    properties:
+      permissins:
+        type: array
+        items:
+          type: integer
+          format: int64
+  role:
+    type: object
+    properties:
+      role:
+        type: string
+  candidates_list_short:
+    type: object
+    properties:
+      candidates:
+        type: array
+        items:
+          $ref: '#/definitions/candidate_short'
+  candidate_short:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+

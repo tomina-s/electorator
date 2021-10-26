@@ -1,0 +1,8 @@
+environment: dev
+dev:
+  db:
+    host: host
+    port: port
+    user: user
+    password: password
+    name: name

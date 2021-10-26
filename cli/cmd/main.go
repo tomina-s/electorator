@@ -1,7 +1,7 @@
 package main
 
 import (
-	"electorator/cli/internal/cmd/completion"
+	"electorator/cli/internal/cmd/electorator"
 	"fmt"
 	"os"
 
@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 
 	cli "electorator/cli/internal/cli"
+	"electorator/cli/internal/cmd/completion"
 )
 
 func main() {
@@ -25,6 +26,7 @@ func main() {
 
 	cmd.PersistentFlags().StringP("environment", "e", "", "Current environment (prod,dev,...) (required)")
 	_ = viper.BindPFlag("environment", cmd.PersistentFlags().Lookup("environment"))
+	env := &electorator.Env{}
 
 	cmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
 		cfg, err := cli.GetConfigPath(*configFile)
@@ -42,12 +44,9 @@ func main() {
 		}
 
 		environment := viper.GetString("environment")
-		if environment == "" {
-			return fmt.Errorf("set environment in -e flag or [environment] config file")
-		}
 
-		if viper.Get(environment) == nil {
-			return fmt.Errorf("environment %s  not found in config", environment)
+		if config := viper.Get(environment); config == nil {
+			return fmt.Errorf("environment %s not found in config", environment)
 		}
 		log.Infof("Start using environment %s", environment)
 
@@ -55,6 +54,7 @@ func main() {
 	}
 
 	cmd.AddCommand(completion.New())
+	cmd.AddCommand(electorator.New(env))
 
 	if err := cmd.Execute(); err != nil {
 		_, _ = fmt.Print(err)

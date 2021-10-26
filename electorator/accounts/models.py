@@ -14,7 +14,6 @@ import jwt
 from mainapp.models import Uik
 
 
-
 class AccountManager(BaseUserManager):
     """Model manager forbids to create user via django-admin"""
     @staticmethod
@@ -36,26 +35,26 @@ class Account(AbstractBaseUser):
         max_length=300,
         unique=False,
     )
-    snils = models.CharField(
+    username = models.CharField(
         verbose_name='Номер СНИЛС',
-        max_length=11,
+        max_length=30,
         unique=True,
     )
 
-    USERNAME_FIELD = 'snils'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     def get_full_name(self):
-        """account is defined by snils"""
-        return self.snils
+        """account is defined by username"""
+        return self.username
 
     def get_short_name(self):
-        """account is defined by snils"""
-        return self.snils
+        """account is defined by username"""
+        return self.username
 
     def __str__(self):
-        """account is defined by snils"""
-        return str(f'{self.snils}')
+        """account is defined by username"""
+        return str(f'{self.username}')
 
     def get_jwt_token(self):
         """generates jwt out of account id"""
@@ -69,6 +68,7 @@ class Account(AbstractBaseUser):
         return token
 
 
+<<<<<<< HEAD
 
 class Role(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
@@ -77,14 +77,23 @@ class Role(models.Model):
 
 
 
+=======
+>>>>>>> dev
 class Permission(models.Model):
     """Permission table"""
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
     uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
 
 
+<<<<<<< HEAD
 
 
 
 
 
+=======
+class Role(models.Model):
+    """Role table"""
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    role_user = models.CharField(max_length=20)
+>>>>>>> dev

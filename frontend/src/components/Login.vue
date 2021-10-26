@@ -6,9 +6,9 @@
       </div>
       <Form @submit="handleLogin" :validation-schema="schema">
         <div class="form-group">
-          <label for="snils">Имя пользователя</label>
-          <Field v-on:input="clearErrors" name="snils" type="text" class="form-control" />
-          <ErrorMessage name="snils" class="error-feedback" />
+          <label for="username">Имя пользователя</label>
+          <Field v-on:input="clearErrors" name="username" type="text" class="form-control" />
+          <ErrorMessage name="username" class="error-feedback" />
         </div>
         <div class="form-group">
           <label for="password">Пароль</label>
@@ -49,7 +49,7 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      snils: yup.string().required("СНИЛС обязателен для ввода"),
+      username: yup.string().required("СНИЛС обязателен для ввода"),
       password: yup.string().required("Пароль обязателен для ввода"),
     })
 

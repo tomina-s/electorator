@@ -3,7 +3,7 @@
     <div class="card card-container">
       <Form @submit="handleTurnout" :validation-schema="schema">
         <div class="form-group">
-          <label for="num">Явка</label>
+          <label class="font-weight-bold" for="num">Внести явку</label>
           <Field name="num" type="number" class="form-control" />
           <ErrorMessage name="num" class="error-feedback" />
         </div>
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      num: yup.number().required("Укажите явку"),
+      num: yup.number().required("Укажите явку").min(0, "Значение не может быть меньше 0"),
     })
 
     return {
@@ -62,7 +62,7 @@ export default {
       console.log("handling turnout")
       this.loading = true
 
-      ProtocolService.SendTurnout(num)
+      ProtocolService.SendProtocolOne(num)
           .then(() => {this.loading = false})
           .catch(e => {
             this.loading = false

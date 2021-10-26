@@ -64,21 +64,26 @@ class Candidate(Model):
 class Protocol1(Model):
     num_protocol_1 = models.IntegerField(
         verbose_name='Номер протокола 1го типа',
+        default=0
     )
     num_uik = models.IntegerField(
         verbose_name='Номер участка'
     )
     status = models.BooleanField(
-        verbose_name='Статус'
+        verbose_name='Статус',
+        default=False
     )
     sum_bul = models.IntegerField(
-        verbose_name='Число полученных бюллетеней'
+        verbose_name='Число полученных бюллетеней',
+        default=0
     )
     sum_final_bul = models.IntegerField(
-        verbose_name='Число обработаных бюллетеней'
+        verbose_name='Число обработаных бюллетеней',
+        default=0
     )
     bad_form = models.IntegerField(
-        verbose_name='Общее число испорченных бланков'
+        verbose_name='Общее число испорченных бланков',
+        default=0
     )
     transfer_time = models.TimeField(
         verbose_name='Время передачи протокола',
@@ -88,7 +93,8 @@ class Protocol1(Model):
 
 class Protocol2(Model):
     num_protocol_2 = models.IntegerField(
-        verbose_name='Номер протокола 2го типа'
+        verbose_name='Номер протокола 2го типа',
+        default=0
     )
     num_uik = models.IntegerField(
         verbose_name='Номер участка'
