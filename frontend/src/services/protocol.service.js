@@ -4,12 +4,12 @@ import authHeader from "./auth-header";
 class ProtocolService {
   SendProtocolOne(protocol) {
     return axios
-      .post("/protocol/one", {
+      .post("/protocols/first/", {
           num_uik: protocol.num_uik,
           status: protocol.status,
           sum_bul: protocol.sum_bul,
-          sum_final_bul: protocol.sum_final_bul,
           bad_form: protocol.bad_form,
+          num_protocol_1: protocol.num_protocol_1,
       }, {
         headers: authHeader()
       })

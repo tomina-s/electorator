@@ -26,10 +26,10 @@ static_url = [
 ]
 
 api_url = [
-    path('account/', include('accounts.urls')),
-    path('candidate/', include('mainapp.urls')),
-    path('config', include('configuration.urls')),
-    path('mockview/', MockView.as_view(), name='mock_view')
+    path('', include('accounts.urls')),
+    path('', include('mainapp.urls')),
+    path('config/', include('configuration.urls')),
+    path('mockview', MockView.as_view(), name='mock_view')
 ]
 
 urlpatterns = [

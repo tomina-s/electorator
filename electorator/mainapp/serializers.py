@@ -1,12 +1,18 @@
 from rest_framework import serializers
-# from .models import DB_test
-from .models import Candidate, Uik
+from .models import Candidate, Uik, Protocol1, Protocol2
 from accounts.models import Account, Role, Permission
 
 
 # Кандидат - чтение (модели), чтение всех кандидатов на данных выборах.
 
 # может быть несоклько сериализаторов для одной модеели
+
+class ProtocolFirstSerializer(serializers.ModelSerializer):
+    """Creation and reading of the first protocol"""
+    class Meta:
+        model = Protocol1
+        fields = ['id', 'num_uik', 'num_protocol_1', 'status', 'sum_bul', 'bad_form']
+
 
 class CandidateSerializer(serializers.ModelSerializer):
     class Meta:

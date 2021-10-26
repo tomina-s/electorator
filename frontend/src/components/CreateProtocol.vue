@@ -3,11 +3,6 @@
     <div class="card card-container">
       <Form @submit="handleProtocol" :validation-schema="schema">
         <div class="form-group">
-          <label class="font-weight-bold" for="num_uik">Номер УИК</label>
-          <Field name="num_uik" type="text" class="form-control" />
-          <ErrorMessage name="num_uik" class="error-feedback" />
-        </div>
-        <div class="form-group">
           <label class="font-weight-bold" for="status">Участок открыт</label>
           <Field name="status" type="checkbox" :value="true" true-value="true" false-value="false" class="form-control" />
           <ErrorMessage name="status" class="error-feedback" />
@@ -58,6 +53,8 @@
 import { Form, Field, ErrorMessage } from "vee-validate"
 import * as yup from "yup"
 import ProtocolService from "../services/protocol.service"
+import getPermissions from "../services/user-permissions";
+import getRole from "../services/user-role";
 
 export default {
   name: "Protocol",
@@ -70,7 +67,6 @@ export default {
     console.log("data")
     const candidates = [{id: 3, name: "Кандидат Петров"}, {id: 32, name: "Кандидат Владимиров"}]
     let requiredFields = {
-      num_uik: yup.string().required("Введите номер УИК"),
       sum_bul: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
       bad_form: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
     }
@@ -97,6 +93,18 @@ export default {
   methods: {
     handleProtocol(protocol) {
       protocol.status = protocol.status === true
+      protocol.num_protocol_1 = 0
+
+      const perm = getPermissions()
+      const role = getRole()
+      console.log(this.$store.state, perm, role)
+
+      if (role !== "УИК" || perm.length === 0) {
+        this.message = "Роль не соответствует выполняемым действиям"
+        return
+      }
+
+      protocol.num_uik = perm[0]
       console.log(protocol)
       console.log("handling protocol")
       this.loading = true
