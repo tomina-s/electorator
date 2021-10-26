@@ -68,32 +68,16 @@ class Account(AbstractBaseUser):
         return token
 
 
-<<<<<<< HEAD
-
-class Role(models.Model):
-    user = models.ForeignKey(Account,on_delete=models.CASCADE)
-    role = models.CharField(max_length=3) #настроить ограничения
 
 
-
-
-=======
->>>>>>> dev
 class Permission(models.Model):
     """Permission table"""
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
     uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
 
 
-<<<<<<< HEAD
-
-
-
-
-
-=======
 class Role(models.Model):
     """Role table"""
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
     role_user = models.CharField(max_length=20)
->>>>>>> dev
+

@@ -25,18 +25,13 @@ static_url = [
 
 ]
 
-<<<<<<< HEAD
-account_url = [
-    path('account/', include('accounts.urls')),
-    path('candidate/', include('mainapp.urls')),
-    path('mockview/', MockView.as_view(), name='mock_view')
-=======
+
 api_url = [
     path('', include('accounts.urls')),
     path('', include('mainapp.urls')),
     path('config/', include('configuration.urls')),
     path('mockview', MockView.as_view(), name='mock_view')
->>>>>>> dev
+
 ]
 
 urlpatterns = [
