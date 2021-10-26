@@ -30,9 +30,9 @@
 
 
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <button class="btn btn-primary btn-block" :disabled=isLoading>
             <span
-              v-show="loading"
+              v-show=isLoading
               class="spinner-border spinner-border-sm"
             ></span>
             <span>Отправить протокол</span>
@@ -53,8 +53,8 @@
 import { Form, Field, ErrorMessage } from "vee-validate"
 import * as yup from "yup"
 import ProtocolService from "../services/protocol.service"
-import getPermissions from "../services/user-permissions";
-import getRole from "../services/user-role";
+import CandidateService from "../services/candidate.service"
+import {getUIKPermission} from "../services/common.service"
 
 export default {
   name: "Protocol",
@@ -64,57 +64,85 @@ export default {
     ErrorMessage,
   },
   data() {
-    console.log("data")
-    const candidates = [{id: 3, name: "Кандидат Петров"}, {id: 32, name: "Кандидат Владимиров"}]
-    let requiredFields = {
-      sum_bul: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
-      bad_form: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
-    }
-    candidates.forEach(candidate => {
-      requiredFields[`can:${candidate.id}`] = yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0")
-    })
-
-    const schema = yup.object().shape(
-          requiredFields
-      )
-    console.log(schema)
-
     return {
-      candidates: candidates,
+      candidates: [],
       loading: false,
       message: "",
-      schema,
+      schema: {},
     }
   },
   computed: {
+    isLoading() {
+      return this.loading || this.candidates.length === 0
+    }
   },
   created() {
+  },
+  mounted() {
+    const perm = getUIKPermission()
+    if (!perm) {
+      this.message = "Роль не соответствует выполняемым действиям"
+      return
+    }
+    CandidateService.GetCandidatesFromUIK(perm)
+        .then(r => {
+          this.candidates = r
+
+          let requiredFields = {
+            sum_bul: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+            bad_form: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+          }
+          this.candidates.forEach(candidate => {
+            requiredFields[`can:${candidate.id}`] = yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0")
+          })
+
+          this.schema = yup.object().shape(
+            requiredFields
+          )
+        })
+        .catch(e => {
+          this.loading = false
+          console.log(e)
+        })
   },
   methods: {
     handleProtocol(protocol) {
       protocol.status = protocol.status === true
       protocol.num_protocol_1 = 0
 
-      const perm = getPermissions()
-      const role = getRole()
-      console.log(this.$store.state, perm, role)
-
-      if (role !== "УИК" || perm.length === 0) {
+      const perm = getUIKPermission()
+      if (!perm) {
         this.message = "Роль не соответствует выполняемым действиям"
         return
       }
 
-      protocol.num_uik = perm[0]
+      protocol.num_uik = perm
       console.log(protocol)
       console.log("handling protocol")
       this.loading = true
 
-      ProtocolService.SendProtocolOne(protocol)
+      ProtocolService.SendProtocolFirst(protocol)
           .then(() => {this.loading = false})
           .catch(e => {
+            this.message = "Отправить протокол не удалось"
             this.loading = false
             console.log(e)
           })
+
+      this.candidates.forEach(v => {
+        const protocolSecond = {
+          num_uik: perm,
+          name: v.id,
+          candidate_votes: parseInt(protocol[`can:${v.id}`]),
+        }
+        ProtocolService.SendProtocolSecond(protocolSecond)
+            .then(() => {this.loading = false})
+            .catch(e => {
+              this.message = "Отправить протокол не удалось"
+              this.loading = false
+              console.log(e)
+            })
+      })
     },
   },
 }

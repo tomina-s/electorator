@@ -62,7 +62,7 @@ export default {
       console.log("handling turnout")
       this.loading = true
 
-      ProtocolService.SendProtocolOne(num)
+      ProtocolService.SendProtocolFirst(num)
           .then(() => {this.loading = false})
           .catch(e => {
             this.loading = false

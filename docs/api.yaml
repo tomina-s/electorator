@@ -176,7 +176,6 @@ definitions:
       created:
         type: integer
         format: int64
-
   protocol_second:
     type: object
     properties:

@@ -1,6 +1,5 @@
 import axios from '../http-common'
 
-
 class ConfigService {
   getTimeToOpen() {
     return axios

@@ -5,7 +5,12 @@ from rest_framework.views import APIView
 from .models import Candidate
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, permissions, response, status
-from .serializers import CandidateSerializer, CandidatInfoSerializer, ProtocolFirstSerializer
+from .serializers import (
+    CandidateSerializer,
+    CandidatInfoSerializer,
+    ProtocolFirstSerializer,
+    ProtocolSecondSerializer
+)
 from accounts.models import Account, Permission, Role
 
 
@@ -44,7 +49,27 @@ class ProtocolFirstCreate(APIView):
     serializer_class = ProtocolFirstSerializer
 
     def post(self, request):
-        """create new protocol"""
+        """create new first protocol"""
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        protocol = serializer.validated_data
+        uik = protocol['num_uik']
+        if not has_permission_for(request.user.id, uik, 'УИК'):
+            raise exceptions.PermissionDenied()
+
+        serializer.save()
+
+        return Response(status=status.HTTP_200_OK)
+
+
+class ProtocolSecondCreate(APIView):
+    """protocol api"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProtocolSecondSerializer
+
+    def post(self, request):
+        """create new second protocol"""
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -70,10 +95,13 @@ class CandidateViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticated
     ]
 
-    def list_of_candidats(self, request):
-        perms, role = get_permissions(request.user.id)
+    def list_of_candidats(self, request, uik_id):
+        perms, _ = get_permissions(request.user.id)
+        if uik_id not in perms:
+            raise exceptions.PermissionDenied
 
-        queryset = Candidate.objects.filter(id_uik=perms).all()
+        queryset = Candidate.objects.select_related('uikcandidate').\
+            filter(uikcandidate__id_uik=uik_id).all()
 
         serializer_class = CandidateSerializer(queryset, many=True)
         return response.Response(serializer_class.data)

@@ -60,7 +60,7 @@ export default {
       console.log("handling opening")
       this.loading = true
 
-      ProtocolService.SendProtocolOne(protocol)
+      ProtocolService.SendProtocolFirst(protocol)
           .then(() => {this.loading = false})
           .catch(e => {
             this.loading = false
