@@ -2,7 +2,7 @@ from rest_framework import routers
 from django.urls import path, include
 from .api import CandidateViewSet
 
-router = routers.DefaultRouter()
+# router = routers.DefaultRouter()
 router.register('api/candidate', CandidateViewSet, 'candidate')
 
 urlpatterns = router.urls
