@@ -1,7 +1,7 @@
 from .models import Candidate, Uik
 from accounts.models import Account, Permission, Role
 from rest_framework import viewsets, permissions, response
-from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer
+from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer, PresenceSerializer
 from rest_framework.decorators import action
 
 from django.core import exceptions
@@ -19,7 +19,7 @@ from .serializers import (
     ProtocolSecondSerializer
 )
 from accounts.models import Account, Permission, Role
-
+from django.db.models import Sum
 
 def get_permissions(user_id):
     try:
@@ -117,10 +117,7 @@ class CandidateViewSet(viewsets.ModelViewSet):
         can_ids = UikCandidate.objects.filter(id_uik=uik_id).values_list('id_candidate', flat=True)
         cans = Candidate.objects.filter(id__in=can_ids).all()
 
-        serializer_class = CandidateSerializer(queryset, many=True)
-        c = serializer_class.data
-        b = 1
-
+        serializer_class = CandidateSerializer(cans, many=True)
         return response.Response(serializer_class.data)
 
     def view_candidate_info(self, request):
@@ -131,10 +128,10 @@ class CandidateViewSet(viewsets.ModelViewSet):
 
 
 class AccountPermissionsViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
     def list_of_role_uik(self, request):
-        permission_classes = [
-            permissions.AllowAny
-        ]
         user = request.user
         user_role = Role.objects.get(user_id=user.id)
         role = RoleSerializer(user_role)
@@ -148,9 +145,16 @@ class AccountPermissionsViewSet(viewsets.ModelViewSet):
         new_dict.update(uik.data)
         return response.Response(new_dict)
 
+class PresenceViewSet(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    def get(self, request):
+        queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'))
+        serializer_class = PresenceSerializer(queryset,many = True)
+        serializer_class.is_valid(raise_exception=True)
+        return response.Response(serializer_class.data)
 
-class PutVotersViewSet(viewsets.ModelViewSet):
-    def put(self,request):
-        pass
+
 
 
