@@ -1,6 +1,5 @@
-
 from .models import Candidate, Uik
-from accounts.models import Account,Permission,Role
+from accounts.models import Account, Permission, Role
 from rest_framework import viewsets, permissions, response
 from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer
 from rest_framework.decorators import action
@@ -20,7 +19,6 @@ from .serializers import (
     ProtocolSecondSerializer
 )
 from accounts.models import Account, Permission, Role
-
 
 
 def get_permissions(user_id):
@@ -93,7 +91,7 @@ class ProtocolSecondCreate(APIView):
 
         serializer.save()
 
-        Candidate.objects.filter(id=protocol['name'].id)\
+        Candidate.objects.filter(id=protocol['name'].id) \
             .update(sum_votes=F("sum_votes") + protocol['candidate_votes'])
 
         return Response(status=status.HTTP_200_OK)
@@ -119,12 +117,9 @@ class CandidateViewSet(viewsets.ModelViewSet):
         can_ids = UikCandidate.objects.filter(id_uik=uik_id).values_list('id_candidate', flat=True)
         cans = Candidate.objects.filter(id__in=can_ids).all()
 
-
-
-
         serializer_class = CandidateSerializer(queryset, many=True)
         c = serializer_class.data
-        b=1
+        b = 1
 
         return response.Response(serializer_class.data)
 
@@ -135,53 +130,27 @@ class CandidateViewSet(viewsets.ModelViewSet):
         return response.Response(serializer_class.data)
 
 
-
-'''GET /account/permissions  - получить роль пользувателя и доступные уики'''
-
-
 class AccountPermissionsViewSet(viewsets.ModelViewSet):
-    def list_of_role_uik(self,request):
+    def list_of_role_uik(self, request):
         permission_classes = [
             permissions.AllowAny
         ]
-        user = request.user# request пустой AnonymousUser (хз почему)
-        #заменить ниже user_id на user.id когда рекуест будет не пустой
-        user_id = 1
-        user_role = Role.objects.get(user_id=user_id)
+        user = request.user
+        user_role = Role.objects.get(user_id=user.id)
         role = RoleSerializer(user_role)
         new_dict = {}
         new_dict.update(role.data)
-        if user_role.role == 'ВИК':
+        if user_role.role_user == 'ВИК':
             return response.Response(new_dict)
-        user_uik = Permission.objects.get(user_id=user_id)
+        user_uik = Permission.objects.get(user_id=user.id)
         num_uik = Uik.objects.get(pk=user_uik.uik_id)
-        a=num_uik
-        uik = UikSerializer(num_uik.num_uik)
+        uik = UikSerializer(num_uik)
         new_dict.update(uik.data)
-        c=1
-
         return response.Response(new_dict)
 
 
+class PutVotersViewSet(viewsets.ModelViewSet):
+    def put(self,request):
+        pass
 
-
-
-        #print(user_role)
-        #if Permission.objects.get(pk=user.id):# or Account.objects.get(pk=user.id,role = 'УИК'):
-        #    print(Account.objects.get(pk = user.id))
-
-
-'''
-curl -H "Authorization:Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MywiZXhwI
-joxNjM5OTI5NTY5fQ.AAhViMxjaiIinQUXwjW2nhApKXtdA6wDBFglpA4AcFY" localhost:8000/api/candidate/permission
-'''
-
-class AccountPermissionsViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def list_of_role_uik(request):
-        user = request.user
-        if Account.objects.get(pk=user.id, role='ТИК') or Account.objects.get(pk=user.id, role='УИК'):
-            pass
 
