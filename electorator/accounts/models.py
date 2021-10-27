@@ -4,6 +4,7 @@ accounts model and model manager
 from datetime import (
     datetime, timedelta
 )
+from time import strftime
 from django.conf import settings
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
@@ -62,9 +63,8 @@ class Account(AbstractBaseUser):
 
         token = jwt.encode(payload={
             'id': self.pk,
-            'exp': int(date_time.strftime('%s'))
+            'exp': int(date_time.strftime('%S'))
         }, key=settings.SECRET_KEY, algorithm='HS256')
-
         return token
 
 
