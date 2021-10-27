@@ -87,9 +87,9 @@ class ProtocolsFirstList(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ProtocolFirstSerializer
 
-    @staticmethod
-    def get(request, uik_id, page):
+    def get(self, request, uik_id):
         """get list of the first protocols"""
+        page = int(request.GET.get('page', 1))
         perm, role = get_permissions(request.user.id)
         if uik_id not in perm and role != "ЦИК":
             raise exceptions.PermissionDenied()

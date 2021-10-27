@@ -26,7 +26,7 @@ class ProtocolService {
   }
   GetProtocolSecondList(uik, page) {
       return axios
-      .get(`/uiks/${uik}/protocols/second/list/?page=${page}`, {
+      .get(`/uiks/${uik}/protocols/first/list/?page=${page}`, {
           headers: authHeader()
       })
       .then(response => {

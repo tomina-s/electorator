@@ -10,7 +10,7 @@
               class="btn btn-outline-secondary btn-block"
               :to="{ name:'/protocol/read', params:{ id:  protocol.id } }"
           >
-            Протокол №{{ protocol.num }}
+            Протокол №{{ protocol.id }}
           </router-link>
         </div>
 
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import ProtocolService from "../services/protocol.service"
 
 export default {
   name: "ProtocolList",
@@ -32,11 +33,16 @@ export default {
   },
   mounted() {
     const uik_id = this.$route.params.id
-
+    ProtocolService.GetProtocolSecondList(uik_id, 1)
+        .then(r => {
+          console.log(r)
+          this.protocols = r
+        })
+        .catch(e => {
+          console.log(e)
+        })
   },
   created() {
-    // TODO запрашивать список протоколов
-    this.protocols = [{id: 3, num: "123"}, {id: 32, num: "2"}]
   },
   methods: {
   },
