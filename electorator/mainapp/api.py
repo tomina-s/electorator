@@ -1,7 +1,8 @@
-from .models import Candidate, Uik
+from .models import Candidate, Uik, Protocol2
 from accounts.models import Account, Permission, Role
 from rest_framework import viewsets, permissions, response
-from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer, PresenceSerializer
+from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer, PresenceSerializer, \
+    VotesSerializer
 from rest_framework.decorators import action
 
 from django.core import exceptions
@@ -19,7 +20,8 @@ from .serializers import (
     ProtocolSecondSerializer
 )
 from accounts.models import Account, Permission, Role
-from django.db.models import Sum
+from django.db.models import Sum, Count
+
 
 def get_permissions(user_id):
     try:
@@ -131,6 +133,7 @@ class AccountPermissionsViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
     def list_of_role_uik(self, request):
         user = request.user
         user_role = Role.objects.get(user_id=user.id)
@@ -145,16 +148,35 @@ class AccountPermissionsViewSet(viewsets.ModelViewSet):
         new_dict.update(uik.data)
         return response.Response(new_dict)
 
+
 class PresenceViewSet(APIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
     def get(self, request):
         queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'))
-        serializer_class = PresenceSerializer(queryset,many = True)
+        serializer_class = PresenceSerializer(queryset, many=True)
         serializer_class.is_valid(raise_exception=True)
         return response.Response(serializer_class.data)
 
 
+class PercVotersViewSet(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request):
+        sum_votes = Uik.objects.aggregate(Sum('sum_votes'))
+        a = sum_votes['sum_votes__sum']
+        queryset = Candidate.objects.all()
+        serializer_class = VotesSerializer(queryset, many=True)
+        for el in serializer_class.data:
+            el['sum_votes'] = f"{round((el['sum_votes']/a)*100,1)}%"
+        return response.Response(serializer_class.data)
 
 
+#class TopPresence(APIView):
+#    permission_classes = [
+#        permissions.IsAuthenticated
+#    ]
