@@ -18,19 +18,24 @@ class Uik(Model):
         verbose_name='Статус'
     )
     sum_votes = models.IntegerField(
-        verbose_name='Общее число голосов'
+        verbose_name='Общее число голосов',
+        default=0
     )
     sum_numb_votes_fin = models.IntegerField(
-        verbose_name='Общее число голосов обработанное'
+        verbose_name='Общее число голосов обработанное',
+        default=0
     )
     presence = models.IntegerField(
-        verbose_name='Явка'
+        verbose_name='Явка',
+        default=0
     )
     perc_final_bul = models.IntegerField(
-        verbose_name='Процент обработанных бюллетеней'
+        verbose_name='Процент обработанных бюллетеней',
+        default=0
     )
     bad_form = models.IntegerField(
-        verbose_name='Общее число испорченных бланков'
+        verbose_name='Общее число испорченных бланков',
+        default=0
     )
     update_time = models.TimeField(
         verbose_name='Время последнего изменени',
@@ -52,7 +57,8 @@ class Candidate(Model):
         verbose_name='Инфо о кандидате'
     )
     sum_votes = models.IntegerField(
-        verbose_name='Общее число голосов'
+        verbose_name='Общее число голосов',
+        default=0
     )
     photo = models.ImageField(
         verbose_name='Фото',

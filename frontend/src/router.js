@@ -3,6 +3,7 @@ import Login from "./components/Login"
 import CreateProtocol from "./components/CreateProtocol";
 import Timer from "./components/Timer";
 import ProtocolsList from "./components/ProtocolsList";
+import UIKList from "./components/UIKList";
 import ReadProtocol from "./components/ReadProtocol";
 import Turnout from "./components/Turnout";
 
@@ -12,8 +13,13 @@ const routes = [
     component: CreateProtocol,
   },
   {
-    path: "/",
+    name: "/protocols",
+    path: "/protocols",
     component: ProtocolsList,
+  },
+  {
+    path: "/uiks",
+    component: UIKList,
   },
   {
     path: "/home",

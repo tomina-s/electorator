@@ -30,17 +30,15 @@ export default {
   },
   computed: {
   },
+  mounted() {
+    const uik_id = this.$route.params.id
+
+  },
   created() {
     // TODO запрашивать список протоколов
     this.protocols = [{id: 3, num: "123"}, {id: 32, num: "2"}]
   },
   methods: {
-    openProtocol(protocol) {
-      console.log(protocol)
-      console.log("open protocol")
-
-      this.$router.push(`?id=${protocol}`)
-    },
   },
 }
 
