@@ -27,8 +27,9 @@ static_url = [
 
 
 api_url = [
-    path('', include('accounts.urls')),
     path('', include('mainapp.urls')),
+    path('', include('accounts.urls')),
+
     path('config/', include('configuration.urls')),
     path('mockview', MockView.as_view(), name='mock_view')
 
