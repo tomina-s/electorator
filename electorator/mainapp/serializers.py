@@ -48,3 +48,10 @@ class PresenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Uik
         fields = ['num_tik', 'presence']
+
+
+class VotesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Candidate
+        fields = ['name','party','sum_votes']
+

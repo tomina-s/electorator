@@ -3,7 +3,7 @@ from .api import (
     CandidateViewSet,
     ProtocolFirstCreate,
     ProtocolSecondCreate,
-    AccountPermissionsViewSet, PresenceViewSet,
+    AccountPermissionsViewSet, PresenceViewSet, PercVotersViewSet,
 )
 
 urlpatterns = [
@@ -13,5 +13,6 @@ urlpatterns = [
     path('uik/<int:uik_id>/candidates/short/list/', CandidateViewSet.as_view({'get': 'list_of_candidats'})),
 
     path('accounts/permission/', AccountPermissionsViewSet.as_view({'get':'list_of_role_uik'})),
-    path('presence/',PresenceViewSet.as_view())
+    path('presence/',PresenceViewSet.as_view()),
+    path('votes/',PercVotersViewSet.as_view())
 ]
