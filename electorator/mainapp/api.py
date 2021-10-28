@@ -100,7 +100,7 @@ class ProtocolsFirstList(APIView):
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
 
-class ProtocolsFirstListSize(APIView):
+class ProtocolsFirstListQuantity(APIView):
     """protocol api"""
     permission_classes = [IsAuthenticated]
 
@@ -111,10 +111,10 @@ class ProtocolsFirstListSize(APIView):
         if uik_id not in perm and role != "ЦИК":
             raise exceptions.PermissionDenied()
 
-        size = Protocol1.objects.filter(num_uik=uik_id).count()
+        quantity = Protocol1.objects.filter(num_uik=uik_id).count()
 
         return Response({
-            'size': size
+            'quantity': quantity
         }, status=status.HTTP_200_OK)
 
 

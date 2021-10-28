@@ -24,9 +24,20 @@ class ProtocolService {
               return response.data
           })
   }
-  GetProtocolSecondList(uik, page) {
+  GetProtocolFirstList(uik, page) {
       return axios
       .get(`/uiks/${uik}/protocols/first/list/?page=${page}`, {
+          headers: authHeader()
+      })
+      .then(response => {
+          console.log(response.data)
+
+          return response.data
+      })
+  }
+  GetProtocolFirstQuantity(uik) {
+      return axios
+      .get(`/uiks/${uik}/protocols/first/quantity/`, {
           headers: authHeader()
       })
       .then(response => {

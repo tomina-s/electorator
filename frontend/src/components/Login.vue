@@ -79,8 +79,19 @@ export default {
       this.loading = true
 
       this.$store.dispatch("auth/login", user).then(
-        () => {
-          this.$router.push("/profile")
+        (r) => {
+          console.log(r)
+          if (r.role === "УИК" && r.permissions.length !== 0) {
+            this.$router.push({ name: '/protocols', params: { uik_id: r.permissions[0] } })
+          } else if (r.role === "ТИК" && r.permissions.length !== 0) {
+            this.$router.push({ name: '/uiks' })
+          } else if (r.role === "ЦИК") {
+            this.$router.push({ name: '/uiks' })
+          } else {
+            this.$store.dispatch('auth/logout')
+            this.message = "Похоже, уровень доступа для данного аккаунта " +
+                "настроен неверно. Обратитесь к администратору"
+          }
         },
         (error) => {
           this.loading = false

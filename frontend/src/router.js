@@ -18,6 +18,7 @@ const routes = [
     component: ProtocolsList,
   },
   {
+    name: "/uiks",
     path: "/uiks",
     component: UIKList,
   },

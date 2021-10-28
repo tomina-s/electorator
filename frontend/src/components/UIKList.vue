@@ -46,11 +46,10 @@ export default {
   computed: {
   },
   created() {
-    // TODO запрашивать список протоколов УИКов
   },
   methods: {
     onChangePage(page) {
-      console.log(page)
+      this.pageOfItems = this.uiks.slice((page - 1) * 10, page * 10)
     }
   },
 }
