@@ -154,7 +154,7 @@ class PresenceViewSet(APIView):
         permissions.IsAuthenticated
     ]
 
-    def get(self, request):
+    def get(self, request): #TODO переделать в проценты
         queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'))
         serializer_class = PresenceSerializer(queryset, many=True)
         serializer_class.is_valid(raise_exception=True)
@@ -176,7 +176,10 @@ class PercVotersViewSet(APIView):
         return response.Response(serializer_class.data)
 
 
-#class TopPresence(APIView):
-#    permission_classes = [
-#        permissions.IsAuthenticated
-#    ]
+class TopPresence(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    def get(self,request):
+        pass
+
