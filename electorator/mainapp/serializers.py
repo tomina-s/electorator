@@ -32,6 +32,12 @@ class Protocol2Serializer(serializers.ModelSerializer):
         model = Protocol2
         fields = '__all__'
 
+# пока не нужно
+# class UikProtocol1Serializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Protocol1
+#         fields = ['id_protocol1']
+
 
 '''
 # прлписывает ли в БД?

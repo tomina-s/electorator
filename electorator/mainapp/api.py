@@ -1,4 +1,4 @@
-from .models import Candidate, Protocol1, Protocol2
+from .models import Candidate, UikProtocol1, Protocol1, Protocol2
 from ..accounts.models import Role, Permission
 from rest_framework import viewsets, permissions, response
 from .serializers import CandidateSerializer, CandidatInfoSerializer, Protocol1Serializer, Protocol2Serializer
@@ -69,7 +69,7 @@ class ProtocolViewSet(viewsets.ModelViewSet):
     def list(self, request):
         """GET /protocol - получить все протоколы, к которым пользователь имеет доступ.
 
-        :return два массива с протоколами 1 и второго типа по отдельности.
+        :return два массива с протоколами 1-ого и 2-ого типа по отдельности.
         """
 
         permission_classes = [
@@ -78,13 +78,18 @@ class ProtocolViewSet(viewsets.ModelViewSet):
         # получение юзера и user.id
         user = request.user
         # получение роли юзера
-        user_role = Role.objects.get(user_id=user.id)
+        # user_role = Role.objects.get(user_id=user.id)
 
-        # получили уик
-        uik = Permission.objects.filter(purchaser=user)
+        # получение id уик и протокола 1
+        uik_id = Permission.objects.filter(user=user.id).value_list('uik', flat=True)
+        id_protocol1 = UikProtocol1.objects.filter(id_uik=uik_id).value_list('id_protocol1', flat=True)
+
+        # id_protocol1 = UikProtocol1.objects.filter(id_uik=uik_id).value_list('id_protocol1', flat=True)
+
+
         # получение протоколов по этому уику
-        queryset_prot1 = Protocol1.onjects.filter(purchase=uik)
-        queryset_prot2 = Protocol2.onjects.filter(purchase=uik)
+        queryset_prot1 = Protocol1.onjects.filter(num_protocol_1=id_protocol1)
+        # queryset_prot2 = Protocol2.onjects.filter(purchase=uik)
 
         serializer_class1 = Protocol1Serializer(queryset_prot1, meny=True)
         serializer_class2 = Protocol2Serializer(queryset_prot2, meny=True)
@@ -96,3 +101,10 @@ class ProtocolViewSet(viewsets.ModelViewSet):
         # Protocol1.objects.filter(contractor=request.user.id)
         # Protocol2.objects.filter(contractor=request.user.id)
         return response.Response(serializer_class1.data), response.Response(serializer_class2.data)
+
+
+    def list_protocol_id(self, request):
+        """
+        GET /protocol/{id} - получить информацию о протоколе по его id.  Нужно проверять,
+        есть ли у пользователя на это права!
+        """
