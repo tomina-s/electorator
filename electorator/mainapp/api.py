@@ -10,7 +10,7 @@ from django.db.models import F
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Candidate, UikCandidate, Uik
+from .models import Candidate, UikCandidate, Uik, Protocol1
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, permissions, response, status
 from .serializers import (
@@ -49,10 +49,10 @@ def get_permissions(user_id):
 
 def has_permission_for(user_id, uik, role):
     perms, user_role = get_permissions(user_id)
-    return uik in perms or user_role == role
+    return (uik in perms and user_role == role) or user_role == "ЦИК"
 
 
-class ProtocolFirstCreate(APIView):
+class ProtocolFirst(APIView):
     """protocol api"""
     permission_classes = [IsAuthenticated]
     serializer_class = ProtocolFirstSerializer
@@ -72,8 +72,58 @@ class ProtocolFirstCreate(APIView):
         Uik.objects.filter(id=uik).update(status=protocol['status'])
         if protocol['sum_bul'] != 0:
             Uik.objects.filter(id=uik).update(presence=F("presence") + protocol['sum_bul'])
+        if protocol['bad_form'] != 0:
+            Uik.objects.filter(id=uik).update(bad_form=F("bad_form") + protocol['bad_form'])
 
         return Response(status=status.HTTP_200_OK)
+
+    @staticmethod
+    def get(request, prot_id):
+        protocol = Protocol1.objects.filter(id=prot_id).first()
+        num_uik = protocol.num_uik
+        perms, role = get_permissions(request.user.id)
+        if num_uik not in perms and role != "ЦИК":
+            raise exceptions.PermissionDenied()
+
+        protocol = Protocol1.objects.filter(id=prot_id).first()
+        serializer_class = ProtocolFirstSerializer(protocol)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+
+class ProtocolsFirstList(APIView):
+    """protocol api"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProtocolFirstSerializer
+
+    def get(self, request, uik_id):
+        """get list of the first protocols"""
+        page = int(request.GET.get('page', 1))
+        perm, role = get_permissions(request.user.id)
+        if uik_id not in perm and role != "ЦИК":
+            raise exceptions.PermissionDenied()
+
+        protocols = Protocol1.objects.filter(num_uik=uik_id).order_by('-id')[(page - 1) * 10:page * 10]
+        serializer_class = ProtocolFirstSerializer(protocols, many=True)
+
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+
+class ProtocolsFirstListQuantity(APIView):
+    """protocol api"""
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def get(request, uik_id):
+        """get countity of the first protocols"""
+        perm, role = get_permissions(request.user.id)
+        if uik_id not in perm and role != "ЦИК":
+            raise exceptions.PermissionDenied()
+
+        quantity = Protocol1.objects.filter(num_uik=uik_id).count()
+
+        return Response({
+            'quantity': quantity
+        }, status=status.HTTP_200_OK)
 
 
 class ProtocolSecondCreate(APIView):
