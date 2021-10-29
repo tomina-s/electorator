@@ -6,13 +6,11 @@ from .api import (
     ProtocolsFirstListQuantity,
     ProtocolFirst,
 
-
     ProtocolSecondCreate,
     AccountPermissionsViewSet, PresenceViewSet, PercVotersViewSet, TopPresenceViewSet, TopTikViewSet,
     GeneralInfoViewSet,
     UikAvailableList,
-    UikAvailableQuantity
-
+    UikAvailableQuantity, GeneralInfoPresenceViewSet, VotesPresenceViewSet
 
 )
 
@@ -35,7 +33,10 @@ urlpatterns = [
     path('votes/', PercVotersViewSet.as_view()),
     path('toppresence/', TopPresenceViewSet.as_view()),
     path('toptik/', TopTikViewSet.as_view()),
-    path('generalinfo/', GeneralInfoViewSet.as_view())
+    path('generalinfo/', GeneralInfoViewSet.as_view()),
+    path('generalinfopresence/', GeneralInfoPresenceViewSet.as_view()),
+    path('votespresence/',VotesPresenceViewSet.as_view())
+
 
 
 ]

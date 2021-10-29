@@ -4,7 +4,7 @@ from .models import Candidate, Uik, Protocol2
 from accounts.models import Account, Permission, Role
 from rest_framework import viewsets, permissions, response
 from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer, PresenceSerializer, \
-    VotesSerializer, TopTikSerializer
+    VotesSerializer, TopTikSerializer, PresenceSerializer1
 from rest_framework.decorators import action
 
 from django.core import exceptions
@@ -226,7 +226,7 @@ class AccountPermissionsViewSet(viewsets.ModelViewSet):
         role = RoleSerializer(user_role)
         new_dict = {}
         new_dict.update(role.data)
-        if user_role.role_user == 'ВИК':
+        if user_role.role_user == 'ЦИК':
             return response.Response(new_dict)
         user_uik = Permission.objects.get(user_id=user.id)
         num_uik = Uik.objects.get(pk=user_uik.uik_id)
@@ -243,11 +243,16 @@ class PresenceViewSet(APIView):
         permissions.IsAuthenticated
     ]
 
-    def get(self, request):  #  неправильно считает, явка в процентах
-        queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'))
-        serializer_class = PresenceSerializer(queryset, many=True)
-        serializer_class.is_valid(raise_exception=True)
-        return response.Response(serializer_class.data)
+    def get(self, request):  # TODO добавить сортировку
+
+        queryset = Uik.objects.values('num_tik').annotate(sum_votes=Sum('sum_votes'), population=Sum('population'))
+        serializer_class = PresenceSerializer1(queryset, many=True)
+        result_list = []
+        for i in range(len(serializer_class.data)):
+            result_list.append({'num_tik': serializer_class.data[i]['num_tik'],
+                                'presence': f"{round((serializer_class.data[i]['sum_votes'] / serializer_class.data[i]['population']) * 100)}%"})
+
+        return response.Response(result_list)
 
 
 class PercVotersViewSet(APIView):
@@ -268,7 +273,7 @@ class PercVotersViewSet(APIView):
         return response.Response(serializer_class.data)
 
 
-class TopPresenceViewSet(APIView):  #  сделать топ2-4 и отдельно топ1
+class TopPresenceViewSet(APIView):  # TODO  сделать топ2-4 и отдельно топ1
     '''
     топ УИКов по явке
     'top_presence' список тиков с явкой
@@ -301,7 +306,7 @@ class TopTikViewSet(APIView):
         queryset = Uik.objects.values('num_tik').annotate(population=Sum('population'))
         serializer_class = TopTikSerializer(queryset, many=True)
         top_tik = sorted(serializer_class.data, key=lambda x: x['population'], reverse=True)[
-            0]  #  подумать как лучше сделать
+            0]  # TODO  подумать как лучше сделать
 
         return response.Response(top_tik)
 
@@ -319,4 +324,47 @@ class GeneralInfoViewSet(APIView):
         result_dict.update(Uik.objects.aggregate(population=Sum('population')))
         result_dict.update(Uik.objects.filter(status=True).aggregate(open_uik=Count('id')))
         return response.Response(result_dict)
+
+
+class GeneralInfoPresenceViewSet(APIView):
+    '''
+    количество открытых участков,охваченных избирателей и явка
+    '''
+
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request):
+        result_dict = {}
+        result_dict.update(Uik.objects.filter(status=True).aggregate(open=Count('id')))
+        result_dict.update(Uik.objects.filter(status=True).aggregate(sum_electorators=Sum('population')))
+        presence = Uik.objects.filter(status=True).aggregate(sum_vot=Sum('sum_votes'), sum_pop=Sum('population'))
+        presence = f"{round((presence['sum_vot'] / presence['sum_pop']) * 100, 1)}%"
+        result_dict.update({'presence': presence})
+
+        return response.Response(result_dict)
+
+class VotesPresenceViewSet(APIView):
+    '''
+    явка и процент обработанных бюллетеней
+    '''
+
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    def get(self,request):
+
+        result_dict = {}
+        percent = Uik.objects.aggregate(sum_votes_fin=Sum('sum_numb_votes_fin'),sum_votes=Sum('sum_votes'))
+        result_dict.update({'percent_votes':round((percent['sum_votes_fin']/percent['sum_votes'])*100)})
+        presence = Uik.objects.aggregate(population=Sum('population'),sum_votes=Sum('sum_votes'))
+        result_dict.update({'presence':round((presence['sum_votes']/presence['population'])*100)})
+
+
+
+        return response.Response(result_dict)
+
+
+
 
