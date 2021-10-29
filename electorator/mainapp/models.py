@@ -43,6 +43,7 @@ class Uik(Model):
     )
 
 
+
 class Candidate(Model):
     name = models.CharField(
         verbose_name='ФИО кандидата',

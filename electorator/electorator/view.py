@@ -33,13 +33,14 @@ class MockView(APIView):
 
 
     def get(self, request):
-        user = request.user
-        user_id_DB = Account.objects.get(pk=user.id)
-        if not user_id_DB:
-            response = Response(status=status.HTTP_403_FORBIDDEN)
-        else:
-            response = Response(status=status.HTTP_200_OK)
-        return response
+        return Response('hello')
+        #user = request.user
+        #user_id_DB = Account.objects.get(pk=user.id)
+        #if not user_id_DB:
+        #    response = Response(status=status.HTTP_403_FORBIDDEN)
+        #else:
+        #    response = Response(status=status.HTTP_200_OK)
+        #return response
 
 
 
