@@ -63,7 +63,7 @@ class Account(AbstractBaseUser):
 
         token = jwt.encode(payload={
             'id': self.pk,
-            'exp': int(date_time.strftime('%S'))
+            # 'exp': int(date_time.strftime('%s')) # TODO конфликт форматной строки на разных машинах
         }, key=settings.SECRET_KEY, algorithm='HS256')
         return token
 

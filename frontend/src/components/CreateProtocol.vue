@@ -30,7 +30,7 @@
 
 
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled=isLoading>
+          <button class="btn btn-primary btn-block" :disabled=isDisabled>
             <span
               v-show=isLoading
               class="spinner-border spinner-border-sm"
@@ -71,6 +71,8 @@ export default {
   },
   data() {
     return {
+      innerNumber: 0,
+      globalError: false,
       candidates: [],
       loading: false,
       message: "",
@@ -81,6 +83,10 @@ export default {
   computed: {
     isLoading() {
       return this.loading || this.candidates.length === 0
+    },
+    isDisabled() {
+      return this.loading || this.candidates.length === 0
+          || this.globalError
     }
   },
   created() {
@@ -88,6 +94,7 @@ export default {
   mounted() {
     const perm = getUIKPermission()
     if (!perm) {
+      this.globalError = true
       this.message = "Роль не соответствует выполняемым действиям"
       return
     }
@@ -110,6 +117,23 @@ export default {
         .catch(e => {
           this.loading = false
           console.log(e)
+        })
+
+    ProtocolService.GetProtocolFirstQuantity(perm)
+        .then(r => {
+          this.innerNumber = r.quantity + 1
+          if (r.quantity === 0) {
+            this.$router.push("/timer")
+          } else if (r.quantity < 4) {
+            this.$router.push("/protocol/voters")
+          } else if (r.quantity > 4) {
+            this.$router.push({ name: '/protocols', query: { uik_id: perm } })
+          }
+        })
+        .catch(e => {
+          this.globalError = true
+          console.log(e)
+          this.message = "Что-то пошло не так"
         })
   },
   methods: {
@@ -153,6 +177,8 @@ export default {
               this.loading = false
               this.info = "Явка успешно отправлена"
               this.message = ""
+
+              this.$router.push({ name: '/protocols', query: { uik_id: perm } })
             })
             .catch(e => {
               this.message = "Отправить протокол не удалось"

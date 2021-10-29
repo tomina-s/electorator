@@ -17,6 +17,6 @@ urlpatterns = [
     path('uiks/<int:uik_id>/candidates/short/list/', CandidateViewSet.as_view({'get': 'list_of_candidats'})),
     path('uiks/<int:uik_id>/protocols/first/list/<int:page>/', ProtocolsFirstList.as_view()),
     path('uiks/<int:uik_id>/protocols/first/quantity/', ProtocolsFirstListQuantity.as_view()),
-    path('presence/',PresenceViewSet.as_view()),
-    path('votes/',PercVotersViewSet.as_view())
+    path('presence/', PresenceViewSet.as_view()),
+    path('votes/', PercVotersViewSet.as_view())
 ]
