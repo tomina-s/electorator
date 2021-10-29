@@ -55,3 +55,8 @@ class VotesSerializer(serializers.ModelSerializer):
         model = Candidate
         fields = ['name','party','sum_votes']
 
+class TopTikSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Uik
+        fields = ['num_tik', 'population']
+

@@ -1,8 +1,10 @@
+import math
+
 from .models import Candidate, Uik, Protocol2
 from accounts.models import Account, Permission, Role
 from rest_framework import viewsets, permissions, response
 from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer, PresenceSerializer, \
-    VotesSerializer
+    VotesSerializer, TopTikSerializer
 from rest_framework.decorators import action
 
 from django.core import exceptions
@@ -150,11 +152,14 @@ class AccountPermissionsViewSet(viewsets.ModelViewSet):
 
 
 class PresenceViewSet(APIView):
+    '''
+    информация о явке в процентах
+    '''
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def get(self, request): #TODO переделать в проценты
+    def get(self, request):  #  неправильно считает, явка в процентах
         queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'))
         serializer_class = PresenceSerializer(queryset, many=True)
         serializer_class.is_valid(raise_exception=True)
@@ -162,6 +167,9 @@ class PresenceViewSet(APIView):
 
 
 class PercVotersViewSet(APIView):
+    '''
+    распределение голосов
+    '''
     permission_classes = [
         permissions.IsAuthenticated
     ]
@@ -172,14 +180,59 @@ class PercVotersViewSet(APIView):
         queryset = Candidate.objects.all()
         serializer_class = VotesSerializer(queryset, many=True)
         for el in serializer_class.data:
-            el['sum_votes'] = f"{round((el['sum_votes']/a)*100,1)}%"
+            el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
         return response.Response(serializer_class.data)
 
 
-class TopPresence(APIView):
+class TopPresenceViewSet(APIView):  #  сделать топ2-4 и отдельно топ1
+    '''
+    топ УИКов по явке
+    'top_presence' список тиков с явкой
+    'min_presence' на табло - На этих участках знаение явки привысело 'min_presence' процентов
+    '''
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    def get(self,request):
-        pass
+
+    def get(self, request):
+        queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'), count=Count('id'))
+        serializer_class = PresenceSerializer(queryset, many=True)
+        for i in range(len(serializer_class.data)):
+            serializer_class.data[i]['presence'] = serializer_class.data[i]['presence'] / queryset[i]['count']
+        new_list = sorted(serializer_class.data, key=lambda x: x['presence'], reverse=True)
+        rez_dict = {'top_presence': new_list, 'min_presence': math.floor(new_list[2]['presence'])}
+
+        return response.Response(rez_dict)
+
+
+class TopTikViewSet(APIView):
+    '''
+    Выводит тик с самым большим числом избирателей
+    '''
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request):
+        queryset = Uik.objects.values('num_tik').annotate(population=Sum('population'))
+        serializer_class = TopTikSerializer(queryset, many=True)
+        top_tik = sorted(serializer_class.data, key=lambda x: x['population'], reverse=True)[
+            0]  #  подумать как лучше сделать
+
+        return response.Response(top_tik)
+
+
+class GeneralInfoViewSet(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    '''
+    количество открытых участков и избирателей
+    '''
+
+    def get(self, request):
+        result_dict = {}
+        result_dict.update(Uik.objects.aggregate(population=Sum('population')))
+        result_dict.update(Uik.objects.filter(status=True).aggregate(open_uik=Count('id')))
+        return response.Response(result_dict)
 
