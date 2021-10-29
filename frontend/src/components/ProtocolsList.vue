@@ -3,32 +3,28 @@
     <div class="card card-container">
         <router-link  class="btn btn-primary btn-block" to="/protocol/create" tag="button">Заполнить протокол</router-link>
 
-        <div
-          v-for="(protocol) in protocols"
-          :key="protocol.id"
-          class="form-group"
-        >
-          <router-link
-              class="btn btn-outline-secondary btn-block"
-              :to="{ name:'/protocol/read', params:{ id:  protocol.id } }"
-          >
-            Протокол №{{ protocol.id }}
-          </router-link>
-        </div>
-
-        <div class="card-footer pb-0 pt-3">
-          <!--TODO для тестов маленькие страницы -->
-          <pagination
-              v-model="page"
-              :records="numberOfProtocols"
-              :per-page="10"
-              :options='{
-                chunk: 4,
-                texts: {count: "", first: "", last: ""}
-              }'
-              @paginate="onChangePage"
-          />
-        </div>
+          <div v-for="protocol in protocols" :key="protocol.id" class="card card-container">
+            <div class="form-group">
+              Протокол №{{ protocol.id }}
+            </div>
+            <div class="form-group">
+              Номер УИК: {{ protocol.num_uik }}
+            </div>
+            <div class="form-group">
+              Участок {{ protocol.status ? 'открыт' : 'закрыт' }}
+            </div>
+            <div class="form-group">
+              Проголосовало: {{ protocol.sum_bul }}
+            </div>
+            <div class="form-group">
+              Бюллетеней испорчено: {{ protocol.bad_form }}
+            </div>
+            <div v-for="(candidate) in protocol.candidates"
+                 :key="candidate.id"
+                 class="form-group">
+              {{ candidate.name }}:
+            </div>
+          </div>
     </div>
   </div>
 </template>
@@ -39,23 +35,13 @@ import ProtocolService from "../services/protocol.service"
 export default {
   name: "ProtocolList",
   data() {
+    console.log(this.uik_id)
     return {
-      page: 1,
-      uik_id: this.$route.params.uik_id,
-      numberOfProtocols: 0,
+      uik_id: this.$route.query.uik_id,
       protocols: [],
     }
   },
-  computed: {
-  },
   mounted() {
-    ProtocolService.GetProtocolFirstQuantity(this.uik_id, 1)
-        .then(r => {
-          this.numberOfProtocols = r.quantity
-        })
-        .catch(e => {
-          console.log(e)
-        })
     ProtocolService.GetProtocolFirstList(this.uik_id, 1)
         .then(r => {
           this.protocols = r
@@ -64,19 +50,7 @@ export default {
           console.log(e)
         })
   },
-  created() {
-  },
   methods: {
-    onChangePage(p) {
-    ProtocolService.GetProtocolFirstList(this.uik_id, p)
-        .then(r => {
-          console.log('updateProtocols')
-          this.protocols = r
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    }
   },
 }
 
