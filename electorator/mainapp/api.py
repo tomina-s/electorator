@@ -1,3 +1,10 @@
+from .models import Candidate, Uik, Protocol2
+from accounts.models import Account, Permission, Role
+from rest_framework import viewsets, permissions, response
+from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer, PresenceSerializer, \
+    VotesSerializer
+from rest_framework.decorators import action
+
 from django.core import exceptions
 from django.db.models import F
 from rest_framework.response import Response
@@ -13,6 +20,7 @@ from .serializers import (
     ProtocolSecondSerializer, UIKSerializer
 )
 from accounts.models import Account, Permission, Role
+from django.db.models import Sum, Count
 
 
 def get_permissions(user_id):
@@ -201,14 +209,61 @@ class CandidateViewSet(viewsets.ModelViewSet):
     def view_candidate_info(self, request):
         queryset = Candidate.objects.all()
         serializer_class = CandidatInfoSerializer(queryset, many=True)
+
         return response.Response(serializer_class.data)
 
 
 class AccountPermissionsViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
-    @staticmethod
-    def list_of_role_uik(request):
+    def list_of_role_uik(self, request):
         user = request.user
-        if Account.objects.get(pk=user.id, role='ТИК') or Account.objects.get(pk=user.id, role='УИК'):
-            pass
+        user_role = Role.objects.get(user_id=user.id)
+        role = RoleSerializer(user_role)
+        new_dict = {}
+        new_dict.update(role.data)
+        if user_role.role_user == 'ВИК':
+            return response.Response(new_dict)
+        user_uik = Permission.objects.get(user_id=user.id)
+        num_uik = Uik.objects.get(pk=user_uik.uik_id)
+        uik = UikSerializer(num_uik)
+        new_dict.update(uik.data)
+        return response.Response(new_dict)
+
+
+class PresenceViewSet(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request): #TODO переделать в проценты
+        queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'))
+        serializer_class = PresenceSerializer(queryset, many=True)
+        serializer_class.is_valid(raise_exception=True)
+        return response.Response(serializer_class.data)
+
+
+class PercVotersViewSet(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request):
+        sum_votes = Uik.objects.aggregate(Sum('sum_votes'))
+        a = sum_votes['sum_votes__sum']
+        queryset = Candidate.objects.all()
+        serializer_class = VotesSerializer(queryset, many=True)
+        for el in serializer_class.data:
+            el['sum_votes'] = f"{round((el['sum_votes']/a)*100,1)}%"
+        return response.Response(serializer_class.data)
+
+
+class TopPresence(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    def get(self,request):
+        pass
+

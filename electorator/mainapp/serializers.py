@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from accounts.models import Role
 from .models import Candidate, Protocol1, Protocol2, Uik
 
 
@@ -42,3 +43,28 @@ class CandidatInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ["name", "info", "sum_votes"]
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ["role_user"]
+
+
+class UikSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Uik
+        fields = ["num_uik"]
+
+
+class PresenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Uik
+        fields = ['num_tik', 'presence']
+
+
+class VotesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Candidate
+        fields = ['name','party','sum_votes']
+
