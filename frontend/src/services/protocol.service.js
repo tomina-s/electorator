@@ -14,9 +14,31 @@ class ProtocolService {
       })
   }
   SendProtocolSecond(protocol) {
-    return axios
-      .post("/protocols/second/", protocol, {
-        headers: authHeader()
+      return axios
+          .post("/protocols/second/", protocol, {
+              headers: authHeader()
+          })
+          .then(response => {
+              console.log(response.data)
+
+              return response.data
+          })
+  }
+  GetProtocolFirstList(uik, page) {
+      return axios
+      .get(`/uiks/${uik}/protocols/first/list/?page=${page}`, {
+          headers: authHeader()
+      })
+      .then(response => {
+          console.log(response.data)
+
+          return response.data
+      })
+  }
+  GetProtocolFirstQuantity(uik) {
+      return axios
+      .get(`/uiks/${uik}/protocols/first/quantity/`, {
+          headers: authHeader()
       })
       .then(response => {
           console.log(response.data)

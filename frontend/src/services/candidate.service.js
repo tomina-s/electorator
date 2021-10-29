@@ -4,7 +4,7 @@ import authHeader from "./auth-header";
 class CandidateService {
   GetCandidatesFromUIK(uikID) {
     return axios
-      .get(`/uik/${uikID}/candidates/short/list/`, {
+      .get(`/uiks/${uikID}/candidates/short/list/`, {
         headers: authHeader()
       })
       .then(response => {
