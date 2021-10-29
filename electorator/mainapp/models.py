@@ -72,8 +72,10 @@ class Protocol1(Model):
         verbose_name='Номер протокола 1го типа',
         default=0
     )
-    num_uik = models.IntegerField(
-        verbose_name='Номер участка'
+    num_uik = models.ForeignKey(
+        Uik,
+        verbose_name='Номер участка',
+        on_delete=models.CASCADE
     )
     status = models.BooleanField(
         verbose_name='Статус',
@@ -102,8 +104,10 @@ class Protocol2(Model):
         verbose_name='Номер протокола 2го типа',
         default=0
     )
-    num_uik = models.IntegerField(
-        verbose_name='Номер участка'
+    num_uik = models.ForeignKey(
+        Uik,
+        verbose_name='Номер участка',
+        on_delete=models.CASCADE
     )
     name = models.ForeignKey(
         Candidate, on_delete=models.CASCADE

@@ -2,22 +2,22 @@
   <div class="col-md-12">
     <div class="card card-container">
         <div
-          v-for="(uik) in pageOfItems"
-          :key="uik"
+          v-for="(uik) in uiks"
+          :key="uik.id"
           class="form-group"
         >
           <router-link
               class="btn btn-outline-secondary btn-block"
-              :to="{ name:'/protocols', params:{ id:  uik } }"
+              :to="{ name:'/protocols', query:{ uik_id:  uik.id } }"
           >
-               УИК №{{ uik }}
+               УИК №{{ uik.num_uik }}
           </router-link>
         </div>
 
         <div class="card-footer pb-0 pt-3">
           <pagination
               v-model="page"
-              :records="uiks.length"
+              :records="quantity"
               :per-page="10"
               :options='{ texts: {count: "", first: "", last: ""} }'
               @paginate="onChangePage"
@@ -29,27 +29,42 @@
 
 <script>
 
-import {getPermissions} from "../services/common.service";
+import UIKService from "../services/uik.service";
 
 export default {
   name: "UIKList",
   data() {
-    const uiks = getPermissions().sort()
-    const firstPage = uiks.slice(0, uiks.length < 10 ? uiks.length : 10)
-
     return {
       page: 1,
-      uiks: uiks,
-      pageOfItems: firstPage,
+      quantity: 0,
+      uiks: [],
     }
   },
-  computed: {
-  },
-  created() {
+  mounted() {
+    UIKService.GetUIKQuantity()
+        .then(r => {
+          this.quantity = r.quantity
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    UIKService.GetUIKList(1)
+        .then(r => {
+          this.uiks = r
+        })
+        .catch(e => {
+          console.log(e)
+        })
   },
   methods: {
     onChangePage(page) {
-      this.pageOfItems = this.uiks.slice((page - 1) * 10, page * 10)
+      UIKService.GetUIKList(page)
+          .then(r => {
+            this.uiks = r
+          })
+          .catch(e => {
+            console.log(e)
+          })
     }
   },
 }

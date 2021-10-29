@@ -34,7 +34,7 @@ class UIKSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Uik
-        fields = ["num_uik", "num_tik", "population", "status",
+        fields = ["id", "num_uik", "num_tik", "population", "status",
                   "sum_votes", "sum_numb_votes_fin", "presence",
                   "perc_final_bul", "bad_form", "update_time"]
 
