@@ -3,6 +3,8 @@ import pandas as pd
 # import csv
 import random
 import string
+from sqlalchemy import create_engine
+
 
 '''
 1 прописать формат данных таблицы 
@@ -28,6 +30,7 @@ def gen_string(length):
     return rand_string
 
 
+path_to_DB = '***postgresql://username:password@localhost:5432/dbname'
 ACCOUNTS_NUM = 10
 table_name_accounts = 'accounts_account'
 
@@ -41,15 +44,30 @@ username_series = pd.Series([gen_string(random.randint(5, 15)) for _ in range(AC
 
 # создание DataFrame
 # colums_account = ['password', 'last_login', 'name', 'username']
-df = pd.DataFrame({'password': password_series,
-                   'last_login': name_series,
-                   'name': name_series,
-                   'username': username_series,
+df_accounts = pd.DataFrame({'password': password_series,
+                            'last_login': name_series,
+                            'name': name_series,
+                            'username': username_series,
 })
-# print(df)
 
-# df.to_csv('accounts.csv', index=False)
-csv_data = df.to_csv(index=False)
+engine = create_engine(path_to_DB)
+df_accounts.to_sql(table_name_accounts, engine)
+
+ACCOUNTS_ROLE_NUM = 10
+table_name_accounts_role = 'accounts_role'
+
+user_series = pd.Series([random.randint(1, 10) for _ in range(ACCOUNTS_ROLE_NUM)])
+role_user_series = pd.Series([gen_string(random.randint(5, 10)) for _ in range(ACCOUNTS_ROLE_NUM)])
+df_account_role = pd.DataFrame({'user': user_series,
+                               'role_user': role_user_series
+                                })
+engine = create_engine(path_to_DB)
+df_accounts.to_sql(table_name_accounts, engine)
+
+
+# print(df_accounts)
+# df_accounts.to_csv('accounts.csv', index=False)
+csv_data = df_accounts.to_csv(index=False)
 print('\nCSV String:\n', csv_data)
 
 # file_writer = csv.writer(w_file, delimiter = "\t")
