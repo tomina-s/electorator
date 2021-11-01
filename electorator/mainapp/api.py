@@ -46,7 +46,7 @@ def get_permissions(user_id):
 def has_permission_for(user_id, uik, role):
     """Првоерить, есть ли у пользователя доступ к УИК"""
     perms, user_role = get_permissions(user_id)
-    return (uik in perms and user_role == role) or user_role == "ЦИК"
+    return (uik in perms and user_role == role) or user_role == "ЦИК"  # ЦИК
 
 
 class ProtocolFirst(APIView):
@@ -74,8 +74,8 @@ class ProtocolFirst(APIView):
 
         Uik.objects.filter(id=uik.id).update(status=protocol['status'])
         if protocol['sum_bul'] != 0:
-            Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
-            # Uik.objects.filter(id=uik.id).update(presence=F("presence") + (protocol['sum_bul']/uik_table['population'])*100 )
+            #Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
+            Uik.objects.filter(id=uik.id).update(presence=F("presence") + (protocol['sum_bul']/uik_table['population'])*100 )
         if protocol['bad_form'] != 0:
             Uik.objects.filter(id=uik.id).update(bad_form=F("bad_form") + protocol['bad_form'])
 
@@ -188,7 +188,7 @@ class ProtocolSecondCreate(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class CandidateViewSet(viewsets.ModelViewSet):
+#class CandidateViewSet(viewsets.ModelViewSet):  #
     """
     ViewSet для отображения данных по кандидатам.
     Кандидат - чтение (модели).
@@ -196,26 +196,63 @@ class CandidateViewSet(viewsets.ModelViewSet):
     user_list = CandidateViewSet.as_view({'get': 'list_of_candidats'})
     user_detail = CandidateViewSet.as_view({'get': '***'})
     """
+#    permission_classes = [
+#        permissions.IsAuthenticated
+#    ]
+
+#    def list_of_candidats(self, request, uik_id):
+#        perms, _ = get_permissions(request.user.id)
+#        if uik_id not in perms:
+#            raise exceptions.PermissionDenied
+
+#        can_ids = UikCandidate.objects.filter(id_uik=uik_id).values_list('id_candidate', flat=True)
+#        cans = Candidate.objects.filter(id__in=can_ids).all().order_by('id')
+
+#        serializer_class = CandidateSerializer(cans, many=True)
+#        return response.Response(serializer_class.data)
+
+#    def view_candidate_info(self, request):
+#        queryset = Candidate.objects.all()
+#        serializer_class = CandidatInfoSerializer(queryset, many=True)
+
+ #       return response.Response(serializer_class.data)
+
+class CandidateViewSet(APIView): # прикрутить фото
+    '''
+    вся информация по кандидатам в порядке следования в бюллетенях
+    '''
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def list_of_candidats(self, request, uik_id):
-        perms, _ = get_permissions(request.user.id)
-        if uik_id not in perms:
-            raise exceptions.PermissionDenied
-
-        can_ids = UikCandidate.objects.filter(id_uik=uik_id).values_list('id_candidate', flat=True)
-        cans = Candidate.objects.filter(id__in=can_ids).all()
-
-        serializer_class = CandidateSerializer(cans, many=True)
+    def get(self, request):
+        sum_votes = Uik.objects.aggregate(Sum('sum_votes'))
+        a = sum_votes['sum_votes__sum']
+        queryset = Candidate.objects.all().order_by('id')
+        serializer_class = VotesSerializer(queryset, many=True)
+        for el in serializer_class.data:
+            el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
         return response.Response(serializer_class.data)
 
-    def view_candidate_info(self, request):
+class CandidateDescVotesViewSet(APIView): #  прикрутить фото,
+    '''
+    вся информация по кандидатам в порядке следования в бюллетенях
+    '''
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request):
+        result_list=[]
+        sum_votes = Uik.objects.aggregate(Sum('sum_votes'))
+        a = sum_votes['sum_votes__sum']
         queryset = Candidate.objects.all()
-        serializer_class = CandidatInfoSerializer(queryset, many=True)
+        serializer_class = VotesSerializer(queryset, many=True)
+        for el in serializer_class.data:
+            el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
+        result_list = sorted(serializer_class.data, key=lambda k: k['sum_votes'], reverse=True)
 
-        return response.Response(serializer_class.data)
+        return response.Response(result_list)
 
 
 class AccountPermissionsViewSet(viewsets.ModelViewSet):
@@ -258,22 +295,6 @@ class PresenceViewSet(APIView):
         return response.Response(result_list)
 
 
-class PercVotersViewSet(APIView):
-    '''
-    распределение голосов
-    '''
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
-
-    def get(self, request):
-        sum_votes = Uik.objects.aggregate(Sum('sum_votes'))
-        a = sum_votes['sum_votes__sum']
-        queryset = Candidate.objects.all()
-        serializer_class = VotesSerializer(queryset, many=True)
-        for el in serializer_class.data:
-            el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
-        return response.Response(serializer_class.data)
 
 
 class Top24PresenceViewSet(APIView):  #
@@ -384,3 +405,14 @@ class VotesPresenceViewSet(APIView):
         result_dict.update({'presence': round((presence['sum_votes'] / presence['population']) * 100)})
 
         return response.Response(result_dict)
+
+
+
+
+
+
+
+
+
+
+

@@ -26,7 +26,7 @@ class ProtocolSecondSerializer(serializers.ModelSerializer):
 class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
-        fields = ["id", "name", "info", "sum_votes"]
+        fields = ["id", "name", "party","info", "photo"]
 
 
 class UIKSerializer(serializers.ModelSerializer):
@@ -71,7 +71,7 @@ class PresenceSerializer1(serializers.ModelSerializer):
 class VotesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
-        fields = ['name','party','sum_votes']
+        fields = ["id", "name", "party","info", "photo","sum_votes"]
 
 class TopTikSerializer(serializers.ModelSerializer):
     class Meta:
