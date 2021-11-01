@@ -6,8 +6,13 @@ import ProtocolsList from "./components/ProtocolsList";
 import UIKList from "./components/UIKList";
 import ReadProtocol from "./components/ReadProtocol";
 import Turnout from "./components/Turnout";
+import Demonstration from "./components/Demonstration";
 
 const routes = [
+  {
+    path: "/demonstration",
+    component: Demonstration,
+  },
   {
     path: "/protocol/create",
     component: CreateProtocol,

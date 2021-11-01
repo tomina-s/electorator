@@ -4,11 +4,6 @@
       <a href="/" class="navbar-brand">Main</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
-          <router-link to="/home" class="nav-link">
-            <font-awesome-icon icon="home" /> Home
-          </router-link>
-        </li>
-        <li class="nav-item">
           <router-link v-if="currentUser" to="/protocol/create" class="nav-link">Протокол</router-link>
         </li>
         <li class="nav-item">
@@ -16,6 +11,9 @@
         </li>
         <li class="nav-item">
           <router-link v-if="ableToOpen" to="/timer" class="nav-link">Открыть участок</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link  to="/demonstration" class="nav-link">Демонстрация</router-link>
         </li>
       </div>
 
