@@ -1,42 +1,44 @@
 <template>
-  <div class="col-md-12">
-    <div v-if="opened" class="card card-container ext-center display-3">
-      Участок открыт
-    </div>
-    <div v-if="!opened" class="card card-container">
-      <div class="text-center">
-        <label v-if="!timeLeft || timeLeft < 0" class="display-3">
-          Откройте участок
-        </label>
-        <label v-if="timeLeft > 0" class="display-3">
-          {{ Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) }}:
-          {{ Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60)) }}:
-          {{Math.floor((timeLeft % (1000 * 60)) / 1000)}}
-        </label>
+  <div class="container">
+    <div class="col-md-12">
+      <div v-if="opened" class="card card-container ext-center display-3">
+        Участок открыт
       </div>
-      <Form @submit="handleOpening" :validation-schema="schema">
-        <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading || globalError">
-            <span
-              v-show="loading"
-              class="spinner-border spinner-border-sm"
-            ></span>
-            <span>Открыть участок</span>
-          </button>
+      <div v-if="!opened" class="card card-container">
+        <div class="text-center">
+          <label v-if="!timeLeft || timeLeft < 0" class="display-3">
+            Откройте участок
+          </label>
+          <label v-if="timeLeft > 0" class="display-3">
+            {{ Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) }}:
+            {{ Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60)) }}:
+            {{Math.floor((timeLeft % (1000 * 60)) / 1000)}}
+          </label>
         </div>
-
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
+        <Form @submit="handleOpening" :validation-schema="schema">
+          <div class="form-group">
+            <button class="btn btn-primary btn-block" :disabled="loading || globalError">
+              <span
+                v-show="loading"
+                class="spinner-border spinner-border-sm"
+              ></span>
+              <span>Открыть участок</span>
+            </button>
           </div>
-        </div>
 
-        <div class="form-group">
-          <div v-if="info" class="alert alert-success" role="alert">
-            {{ info }}
+          <div class="form-group">
+            <div v-if="message" class="alert alert-danger" role="alert">
+              {{ message }}
+            </div>
           </div>
-        </div>
-      </Form>
+
+          <div class="form-group">
+            <div v-if="info" class="alert alert-success" role="alert">
+              {{ info }}
+            </div>
+          </div>
+        </Form>
+      </div>
     </div>
   </div>
 </template>

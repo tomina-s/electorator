@@ -1,56 +1,58 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <Form @submit="handleProtocol" :validation-schema="schema">
-        <div class="form-group">
-          <label class="font-weight-bold" for="status">Участок открыт</label>
-          <Field name="status" type="checkbox" :value="true" true-value="true" false-value="false" class="form-control" />
-          <ErrorMessage name="status" class="error-feedback" />
-        </div>
-        <div class="form-group">
-          <label class="font-weight-bold" for="sum_bul">Проголосовало</label>
-          <Field name="sum_bul" type="number" class="form-control" />
-          <ErrorMessage name="sum_bul" class="error-feedback" />
-        </div>
-        <div class="form-group">
-          <label class="font-weight-bold" for="bad_form">Бюллетеней испорчено</label>
-          <Field name="bad_form" type="number" class="form-control" />
-          <ErrorMessage name="bad_form" class="error-feedback" />
-        </div>
-
-        <div
-          v-for="(candidate) in candidates"
-          :key="candidate.id"
-          class="form-group"
-        >
-          <label class="font-weight-bold" :for="`can:${candidate.id}`">{{candidate.name}}</label>
-          <Field :name="`can:${candidate.id}`" type="number" class="form-control" />
-          <ErrorMessage :name="`can:${candidate.id}`" class="error-feedback" />
-        </div>
-
-
-        <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled=isDisabled>
-            <span
-              v-show=isLoading
-              class="spinner-border spinner-border-sm"
-            ></span>
-            <span>Отправить протокол</span>
-          </button>
-        </div>
-
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
+  <div class="container">
+    <div class="col-md-12">
+      <div class="card card-container">
+        <Form @submit="handleProtocol" :validation-schema="schema">
+          <div class="form-group">
+            <label class="font-weight-bold" for="status">Участок открыт</label>
+            <Field name="status" type="checkbox" :value="true" true-value="true" false-value="false" class="form-control" />
+            <ErrorMessage name="status" class="error-feedback" />
           </div>
-        </div>
-
-        <div class="form-group">
-          <div v-if="info" class="alert alert-success" role="alert">
-            {{ info }}
+          <div class="form-group">
+            <label class="font-weight-bold" for="sum_bul">Проголосовало</label>
+            <Field name="sum_bul" type="number" class="form-control" />
+            <ErrorMessage name="sum_bul" class="error-feedback" />
           </div>
-        </div>
-      </Form>
+          <div class="form-group">
+            <label class="font-weight-bold" for="bad_form">Бюллетеней испорчено</label>
+            <Field name="bad_form" type="number" class="form-control" />
+            <ErrorMessage name="bad_form" class="error-feedback" />
+          </div>
+
+          <div
+            v-for="(candidate) in candidates"
+            :key="candidate.id"
+            class="form-group"
+          >
+            <label class="font-weight-bold" :for="`can:${candidate.id}`">{{candidate.name}}</label>
+            <Field :name="`can:${candidate.id}`" type="number" class="form-control" />
+            <ErrorMessage :name="`can:${candidate.id}`" class="error-feedback" />
+          </div>
+
+
+          <div class="form-group">
+            <button class="btn btn-primary btn-block" :disabled=isDisabled>
+              <span
+                v-show=isLoading
+                class="spinner-border spinner-border-sm"
+              ></span>
+              <span>Отправить протокол</span>
+            </button>
+          </div>
+
+          <div class="form-group">
+            <div v-if="message" class="alert alert-danger" role="alert">
+              {{ message }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div v-if="info" class="alert alert-success" role="alert">
+              {{ info }}
+            </div>
+          </div>
+        </Form>
+      </div>
     </div>
   </div>
 </template>

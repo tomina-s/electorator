@@ -76,7 +76,7 @@ export default {
           case 18:
              break
        }
-        this.state++
+        // this.state++
         this.countTimer()
       }, 3000)
     },

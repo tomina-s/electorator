@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <nav
+        class="navbar navbar-expand navbar-dark bg-dark"
+        v-if="$route.path!=='/demonstration'"
+    >
       <a href="/" class="navbar-brand">Main</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -37,7 +40,7 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div>
       <router-view />
     </div>
   </div>

@@ -1,35 +1,37 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <Form @submit="handleTurnout" :validation-schema="schema">
-        <div class="form-group">
-          <label class="font-weight-bold" for="num">Внести явку</label>
-          <Field name="num" type="number" class="form-control" />
-          <ErrorMessage name="num" class="error-feedback" />
-        </div>
-
-        <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading || globalError">
-            <span
-              v-show="loading"
-              class="spinner-border spinner-border-sm"
-            ></span>
-            <span>Отправить протокол</span>
-          </button>
-        </div>
-
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
+  <div class="container">
+    <div class="col-md-12">
+      <div class="card card-container">
+        <Form @submit="handleTurnout" :validation-schema="schema">
+          <div class="form-group">
+            <label class="font-weight-bold" for="num">Внести явку</label>
+            <Field name="num" type="number" class="form-control" />
+            <ErrorMessage name="num" class="error-feedback" />
           </div>
-        </div>
 
-        <div class="form-group">
-          <div v-if="info" class="alert alert-success" role="alert">
-            {{ info }}
+          <div class="form-group">
+            <button class="btn btn-primary btn-block" :disabled="loading || globalError">
+              <span
+                v-show="loading"
+                class="spinner-border spinner-border-sm"
+              ></span>
+              <span>Отправить протокол</span>
+            </button>
           </div>
-        </div>
-      </Form>
+
+          <div class="form-group">
+            <div v-if="message" class="alert alert-danger" role="alert">
+              {{ message }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div v-if="info" class="alert alert-success" role="alert">
+              {{ info }}
+            </div>
+          </div>
+        </Form>
+      </div>
     </div>
   </div>
 </template>

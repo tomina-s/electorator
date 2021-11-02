@@ -1,28 +1,30 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-        <div
-          v-for="(uik) in uiks"
-          :key="uik.id"
-          class="form-group"
-        >
-          <router-link
-              class="btn btn-outline-secondary btn-block"
-              :to="{ name:'/protocols', query:{ uik_id:  uik.id } }"
+  <div class="container">
+    <div class="col-md-12">
+      <div class="card card-container">
+          <div
+            v-for="(uik) in uiks"
+            :key="uik.id"
+            class="form-group"
           >
-               УИК №{{ uik.num_uik }}
-          </router-link>
-        </div>
+            <router-link
+                class="btn btn-outline-secondary btn-block"
+                :to="{ name:'/protocols', query:{ uik_id:  uik.id } }"
+            >
+                 УИК №{{ uik.num_uik }}
+            </router-link>
+          </div>
 
-        <div class="card-footer pb-0 pt-3">
-          <pagination
-              v-model="page"
-              :records="quantity"
-              :per-page="10"
-              :options='{ texts: {count: "", first: "", last: ""} }'
-              @paginate="onChangePage"
-          />
-        </div>
+          <div class="card-footer pb-0 pt-3">
+            <pagination
+                v-model="page"
+                :records="quantity"
+                :per-page="10"
+                :options='{ texts: {count: "", first: "", last: ""} }'
+                @paginate="onChangePage"
+            />
+          </div>
+      </div>
     </div>
   </div>
 </template>
