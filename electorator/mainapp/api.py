@@ -1,5 +1,6 @@
 import math
 
+from electorator.settings import MEDIA_ROOT
 from .models import Candidate, Uik, Protocol2
 from accounts.models import Account, Permission, Role
 from rest_framework import viewsets, permissions, response
@@ -23,6 +24,7 @@ from .serializers import (
 )
 from accounts.models import Account, Permission, Role
 from django.db.models import Sum, Count
+from PIL import Image
 
 
 def get_permissions(user_id):
@@ -74,8 +76,9 @@ class ProtocolFirst(APIView):
 
         Uik.objects.filter(id=uik.id).update(status=protocol['status'])
         if protocol['sum_bul'] != 0:
-            #Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
-            Uik.objects.filter(id=uik.id).update(presence=F("presence") + (protocol['sum_bul']/uik_table['population'])*100 )
+            # Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
+            Uik.objects.filter(id=uik.id).update(
+                presence=F("presence") + (protocol['sum_bul'] / uik_table['population']) * 100)
         if protocol['bad_form'] != 0:
             Uik.objects.filter(id=uik.id).update(bad_form=F("bad_form") + protocol['bad_form'])
 
@@ -187,8 +190,7 @@ class ProtocolSecondCreate(APIView):
 
         return Response(status=status.HTTP_200_OK)
 
-
-#class CandidateViewSet(viewsets.ModelViewSet):  #
+    # class CandidateViewSet(viewsets.ModelViewSet):  #
     """
     ViewSet для отображения данных по кандидатам.
     Кандидат - чтение (модели).
@@ -196,6 +198,8 @@ class ProtocolSecondCreate(APIView):
     user_list = CandidateViewSet.as_view({'get': 'list_of_candidats'})
     user_detail = CandidateViewSet.as_view({'get': '***'})
     """
+
+
 #    permission_classes = [
 #        permissions.IsAuthenticated
 #    ]
@@ -215,9 +219,9 @@ class ProtocolSecondCreate(APIView):
 #        queryset = Candidate.objects.all()
 #        serializer_class = CandidatInfoSerializer(queryset, many=True)
 
- #       return response.Response(serializer_class.data)
+#       return response.Response(serializer_class.data)
 
-class CandidateViewSet(APIView): # прикрутить фото
+class CandidateViewSet(APIView):
     '''
     вся информация по кандидатам в порядке следования в бюллетенях
     '''
@@ -232,9 +236,11 @@ class CandidateViewSet(APIView): # прикрутить фото
         serializer_class = VotesSerializer(queryset, many=True)
         for el in serializer_class.data:
             el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
+
         return response.Response(serializer_class.data)
 
-class CandidateDescVotesViewSet(APIView): #  прикрутить фото,
+
+class CandidateDescVotesViewSet(APIView):
     '''
     вся информация по кандидатам в порядке следования в бюллетенях
     '''
@@ -243,7 +249,7 @@ class CandidateDescVotesViewSet(APIView): #  прикрутить фото,
     ]
 
     def get(self, request):
-        result_list=[]
+        result_list = []
         sum_votes = Uik.objects.aggregate(Sum('sum_votes'))
         a = sum_votes['sum_votes__sum']
         queryset = Candidate.objects.all()
@@ -293,8 +299,6 @@ class PresenceViewSet(APIView):
         result_list = sorted(result_list, key=lambda k: k['presence'], reverse=True)
 
         return response.Response(result_list)
-
-
 
 
 class Top24PresenceViewSet(APIView):  #
@@ -405,14 +409,3 @@ class VotesPresenceViewSet(APIView):
         result_dict.update({'presence': round((presence['sum_votes'] / presence['population']) * 100)})
 
         return response.Response(result_dict)
-
-
-
-
-
-
-
-
-
-
-
