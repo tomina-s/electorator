@@ -100,7 +100,7 @@ export default {
       this.message = "Роль не соответствует выполняемым действиям"
       return
     }
-    CandidateService.GetCandidatesFromUIK(perm)
+    CandidateService.GetCandidatesFromUIK()
         .then(r => {
           this.candidates = r
 

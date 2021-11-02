@@ -1,12 +1,22 @@
 <template>
-  <c1_opened
-      v-if="state===1"
-      :data="{opened: data.open_uik, voters: data.population}"
-  />
-  <c2_candidates v-if="state===2"/>
+  <transition name="component-fade" mode="out-in">
+    <c0_screen
+        v-if="state===0"
+    />
+  </transition>
+  <transition name="component-fade" mode="out-in">
+    <c1_opened
+        v-if="state===1"
+        :data="{opened: data.open_uik, voters: data.population}"
+    />
+  </transition>
+  <transition name="component-fade" mode="out-in">
+    <c2_candidates v-if="state===2"/>
+  </transition>
 </template>
 
 <script>
+import c0_screen from './journalistScreens/0_screen'
 import c1_opened from './journalistScreens/1_opened'
 import c2_candidates from './journalistScreens/2_candidates'
 import DemonstrationService from './../services/demonstration.service'
@@ -14,23 +24,17 @@ import DemonstrationService from './../services/demonstration.service'
 export default {
   name: "Demonstration",
   components: {
+    c0_screen,
     c1_opened,
     c2_candidates,
   },
   data() {
     return {
-      state: 1,
+      state: 0,
       data: {}
     }
   },
   mounted() {
-    DemonstrationService.GeneralInfo()
-        .then(r => {
-          this.data = r
-        })
-        .catch(e =>{
-          console.log(e)
-        })
   },
   created() {
     this.countTimer()
@@ -40,7 +44,18 @@ export default {
       setTimeout(() => {
         switch (this.state) {
           // 10 00
+          case 0:
+            DemonstrationService.GeneralInfo()
+                .then(r => {
+                  this.data = r
+                  this.state = 1
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
+            break
           case 1:
+            this.state = 0
             break
           case 2:
             this.state = 0

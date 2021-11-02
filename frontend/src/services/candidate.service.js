@@ -2,9 +2,9 @@ import axios from '../http-common'
 import authHeader from "./auth-header";
 
 class CandidateService {
-  GetCandidatesFromUIK(uikID) {
+  GetCandidatesFromUIK() {
     return axios
-      .get(`/uiks/${uikID}/candidates/short/list/`, {
+      .get(`/uiks/candidates/short/list/`, {
         headers: authHeader()
       })
       .then(response => {
