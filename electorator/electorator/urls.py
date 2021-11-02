@@ -17,14 +17,13 @@ from django.urls import path, include, re_path
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from . import settings
 from .view import MockView
-
 
 static_url = [
     re_path(r'^.*$', lambda request: HttpResponse(render(request, 'vue_index.html'))),
 
 ]
-
 
 api_url = [
     path('', include('mainapp.urls')),
