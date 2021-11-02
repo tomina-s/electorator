@@ -75,10 +75,12 @@ class ProtocolFirst(APIView):
         serializer.save()
 
         Uik.objects.filter(id=uik.id).update(status=protocol['status'])
+        new_presence = (protocol['sum_bul'] / uik_table["population"]) * 100
         if protocol['sum_bul'] != 0:
-            # Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
+            #Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
             Uik.objects.filter(id=uik.id).update(
-                presence=F("presence") + (protocol['sum_bul'] / uik_table['population']) * 100)
+                presence=F("presence") + new_presence
+            )
         if protocol['bad_form'] != 0:
             Uik.objects.filter(id=uik.id).update(bad_form=F("bad_form") + protocol['bad_form'])
 
