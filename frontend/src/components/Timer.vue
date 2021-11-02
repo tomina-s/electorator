@@ -5,10 +5,10 @@
     </div>
     <div v-if="!opened" class="card card-container">
       <div class="text-center">
-        <label v-if="!timeLeft" class="display-3">
+        <label v-if="!timeLeft || timeLeft < 0" class="display-3">
           Откройте участок
         </label>
-        <label v-if="timeLeft" class="display-3">
+        <label v-if="timeLeft > 0" class="display-3">
           {{ Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) }}:
           {{ Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60)) }}:
           {{Math.floor((timeLeft % (1000 * 60)) / 1000)}}
@@ -16,7 +16,7 @@
       </div>
       <Form @submit="handleOpening" :validation-schema="schema">
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <button class="btn btn-primary btn-block" :disabled="loading || globalError">
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
@@ -50,6 +50,8 @@ export default {
   name: "Timer",
   data() {
     return {
+      globalError: false,
+      innerNumber: 0,
       timeLeft: 0,
       loading: false,
       message: "",
@@ -60,7 +62,28 @@ export default {
   computed: {
   },
   mounted() {
-    // TODO проверять статус участка
+    const perm = getUIKPermission()
+    if (!perm) {
+      this.globalError = true
+      this.message = "Что-то пошло не так"
+      return
+    }
+    ProtocolService.GetProtocolFirstQuantity(perm)
+        .then(r => {
+          this.innerNumber = r.quantity + 1
+          if (r.quantity > 0 && r.quantity < 4) {
+            this.$router.push("/protocol/voters")
+          } else if (r.quantity === 4) {
+            this.$router.push("/protocol/create")
+          } else if (r.quantity !== 0) {
+            this.$router.push({ name: '/protocols', query: { uik_id: perm } })
+          }
+        })
+        .catch(e => {
+          console.log(e)
+          this.globalError = true
+          this.message = "Что-то пошло не так"
+        })
   },
   created() {
     ConfigService.getTimeToOpen().then(
@@ -97,8 +120,8 @@ export default {
 
       ProtocolService.SendProtocolFirst(protocol)
           .then(() => {
-            this.loading = false
-            this.info = "Участок открыт"
+            this.info = "Протокол отправлен"
+            this.$router.push("/protocol/voters")
           })
           .catch(e => {
             this.loading = false

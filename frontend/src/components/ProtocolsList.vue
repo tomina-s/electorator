@@ -5,7 +5,7 @@
 
           <div v-for="protocol in protocols" :key="protocol.id" class="card card-container">
             <div class="form-group">
-              Протокол №{{ protocol.id }}
+              Протокол №{{ protocol.num_protocol_1 }}
             </div>
             <div class="form-group">
               Номер УИК: {{ protocol.num_uik }}
@@ -35,7 +35,7 @@ import ProtocolService from "../services/protocol.service"
 export default {
   name: "ProtocolList",
   data() {
-    console.log(this.uik_id)
+    console.log(this.$route.query.uik_id)
     return {
       uik_id: this.$route.query.uik_id,
       protocols: [],

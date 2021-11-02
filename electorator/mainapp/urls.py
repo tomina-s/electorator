@@ -38,5 +38,4 @@ urlpatterns = [
     path('generalinfo/', GeneralInfoViewSet.as_view()),
     path('generalinfopresence/', GeneralInfoPresenceViewSet.as_view()),
     path('votespresence/', VotesPresenceViewSet.as_view())
-
 ]

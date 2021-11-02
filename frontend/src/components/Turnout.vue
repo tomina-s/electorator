@@ -9,7 +9,7 @@
         </div>
 
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <button class="btn btn-primary btn-block" :disabled="loading || globalError">
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
@@ -53,6 +53,8 @@ export default {
     })
 
     return {
+      globalError: false,
+      innerNumber: 0,
       loading: false,
       message: "",
       info: "",
@@ -61,8 +63,29 @@ export default {
   },
   computed: {
   },
-  created() {
-
+  mounted() {
+    const perm = getUIKPermission()
+    if (!perm) {
+      this.globalError = true
+      this.message = "Что-то пошло не так"
+      return
+    }
+    ProtocolService.GetProtocolFirstQuantity(perm)
+        .then(r => {
+          this.innerNumber = r.quantity + 1
+          if (r.quantity === 0) {
+            this.$router.push("/timer")
+          } else  if (r.quantity === 4){
+            this.$router.push("/protocol/create")
+          } else  if (r.quantity === 5){
+            this.$router.push({ name: '/protocols', query: { uik_id: perm } })
+          }
+        })
+        .catch(e => {
+          this.globalError = true
+          console.log(e)
+          this.message = "Что-то пошло не так"
+        })
   },
   methods: {
     handleTurnout(num) {
@@ -86,8 +109,15 @@ export default {
 
       ProtocolService.SendProtocolFirst(protocol)
           .then(() => {
-            this.loading = false
             this.info = "Явка успешно зафиксирована"
+
+            console.log(this.innerNumber)
+            if (this.innerNumber === 4) {
+              this.$router.push("/protocol/create")
+              return
+            }
+            this.innerNumber++
+            this.loading = false
           })
           .catch(e => {
             this.loading = false
