@@ -39,6 +39,7 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate"
 import * as yup from "yup"
+import ProtocolService from "../services/protocol.service"
 
 export default {
   name: "Login",
@@ -79,13 +80,28 @@ export default {
       this.loading = true
 
       this.$store.dispatch("auth/login", user).then(
-        (r) => {
-          console.log(r)
-          if (r.role === "УИК" && r.permissions.length !== 0) {
-            this.$router.push({ name: '/protocols', params: { uik_id: r.permissions[0] } })
-          } else if (r.role === "ТИК" && r.permissions.length !== 0) {
+        (r1) => {
+          console.log(r1)
+          if (r1.role === "УИК" && r1.permissions.length !== 0) {
+            ProtocolService.GetProtocolFirstQuantity(r1.permissions[0])
+                .then(r => {
+                  console.log(r)
+                  if (r.quantity === 0) {
+                    this.$router.push("/timer")
+                  } else if (r.quantity < 5) {
+                    this.$router.push("/protocol/voters")
+                  } else {
+                    console.log('here', r1.permissions[0])
+                    this.$router.push({ name: '/protocols', query: { uik_id: r1.permissions[0] } })
+                  }
+                })
+                .catch(e => {
+                  console.log(e)
+                  this.$store.dispatch('auth/logout')
+                })
+          } else if (r1.role === "ТИК" && r1.permissions.length !== 0) {
             this.$router.push({ name: '/uiks' })
-          } else if (r.role === "ЦИК") {
+          } else if (r1.role === "ЦИК") {
             this.$router.push({ name: '/uiks' })
           } else {
             this.$store.dispatch('auth/logout')

@@ -33,7 +33,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
         token = auth_header[1].decode('utf-8')
 
         if prefix.lower() != auth_header_prefix:
-            c=1
             return None
 
         return self._authenticate_credentials(request, token)
