@@ -132,6 +132,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, '../frontend/build/static')]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
+
+
 AUTH_USER_MODEL = 'accounts.Account'
 
 REST_FRAMEWORK = {
