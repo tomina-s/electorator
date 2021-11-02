@@ -1,7 +1,7 @@
 <template>
   <c1_opened
       v-if="state===1"
-      :data="{opened: data.opened, voters: data.voters}"
+      :data="{opened: data.open_uik, voters: data.population}"
   />
   <c2_candidates v-if="state===2"/>
 </template>
@@ -9,6 +9,7 @@
 <script>
 import c1_opened from './journalistScreens/1_opened'
 import c2_candidates from './journalistScreens/2_candidates'
+import DemonstrationService from './../services/demonstration.service'
 
 export default {
   name: "Demonstration",
@@ -19,14 +20,17 @@ export default {
   data() {
     return {
       state: 1,
-      data: {
-        opened: 12,
-        voters: 13,
-      }
+      data: {}
     }
   },
   mounted() {
-
+    DemonstrationService.GeneralInfo()
+        .then(r => {
+          this.data = r
+        })
+        .catch(e =>{
+          console.log(e)
+        })
   },
   created() {
     this.countTimer()
@@ -76,7 +80,6 @@ export default {
           case 18:
              break
        }
-        // this.state++
         this.countTimer()
       }, 3000)
     },

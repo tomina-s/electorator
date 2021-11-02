@@ -5,9 +5,32 @@
           'height': '100vh'
         }"
   >
-    Участков открыто {{ data.opened }}
+    <p :style="{
+        'position': 'fixed',
+        'width': '25%',
+        'color': '#FFFFFF',
+        'font-size': '96px',
+        'font-weight': 'bold',
+        'text-align': 'center',
+        'top': '25%',
+        'left': '62%'
+      }"
+    >
+      {{ data.opened }}
+    </p>
     <br/>
-    Избирателей {{ data.voters }}
+    <p :style="{
+        'position': 'fixed',
+        'width': '25%',
+        'color': '#FFFFFF',
+        'font-size': '96px',
+        'font-weight': 'bold',
+        'text-align': 'center',
+        'top': '60%',
+        'left': '62%'
+      }">
+      {{ data.voters }}
+    </p>
   </div>
 </template>
 
