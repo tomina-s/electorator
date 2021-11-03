@@ -1,18 +1,10 @@
 <template>
-  <transition name="component-fade" mode="out-in">
-    <c0_screen
-        v-if="state===0"
-    />
-  </transition>
-  <transition name="component-fade" mode="out-in">
-    <c1_opened
-        v-if="state===1"
-        :data="{opened: data.open_uik, voters: data.population}"
-    />
-  </transition>
-  <transition name="component-fade" mode="out-in">
-    <c2_candidates v-if="state===2"/>
-  </transition>
+  <div>
+    <transition name="component-fade" mode="out-in">
+      <component v-bind:is="slide" v-bind="currentData"></component>
+    </transition>
+  </div>
+
 </template>
 
 <script>
@@ -30,8 +22,14 @@ export default {
   },
   data() {
     return {
+      slide: c0_screen,
       state: 0,
       data: {}
+    }
+  },
+  computed: {
+    currentData() {
+      return {'data': this.data}
     }
   },
   mounted() {
@@ -48,6 +46,7 @@ export default {
             DemonstrationService.GeneralInfo()
                 .then(r => {
                   this.data = r
+                  this.slide = c1_opened
                   this.state = 1
                 })
                 .catch(e =>{
@@ -55,6 +54,7 @@ export default {
                 })
             break
           case 1:
+            this.slide = c0_screen
             this.state = 0
             break
           case 2:
