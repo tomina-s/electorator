@@ -2,14 +2,52 @@ from django.db import models
 from django.db.models import Model
 
 
+class Tik(Model):
+    num_tik = models.CharField(
+        verbose_name='Номер ТИК',
+        max_length=200
+    )
+    population = models.IntegerField(
+        verbose_name='Численность',
+        default=0
+    )
+    open_uik = models.IntegerField(
+        verbose_name='Число открытых участков',
+        default=0
+    )
+    sum_votes = models.IntegerField(
+        verbose_name='Общее число голосов',
+        default=0
+    )
+    sum_numb_votes_fin = models.IntegerField(
+        verbose_name='Общее число бюллетеней обработанное',
+        default=0
+    )
+    presence = models.IntegerField(
+        verbose_name='Явка',
+        default=0
+    )
+    perc_final_bul = models.IntegerField(
+        verbose_name='Процент обработанных бюллетеней',
+        default=0
+    )
+    bad_form = models.IntegerField(
+        verbose_name='Общее число испорченных бланков',
+        default=0
+    )
+    update_time = models.TimeField(
+        verbose_name='Время последнего изменени',
+        auto_now=True
+    )
+
+
 class Uik(Model):
     num_uik = models.IntegerField(
         verbose_name='Номер участка',
         unique=True
     )
-    num_tik = models.CharField(
-        verbose_name='Номер ТИК',
-        max_length=200
+    num_tik = models.ForeignKey(
+        Tik, on_delete=models.CASCADE
     )
     population = models.IntegerField(
         verbose_name='Численность'
@@ -41,7 +79,6 @@ class Uik(Model):
         verbose_name='Время последнего изменени',
         auto_now=True
     )
-
 
 
 class Candidate(Model):
@@ -129,16 +166,3 @@ class UikCandidate(Model):
 class UikProtocol1(Model):
     id_uik = models.ForeignKey(Uik, on_delete=models.CASCADE)
     id_protocol1 = models.ForeignKey(Protocol1, on_delete=models.CASCADE)
-
-
-#class Users(Model):
-#    name = models.CharField(
-#        verbose_name='Имя пользователя',
-#        max_length=200
-#    )
-#    password = models.CharField(
-#        verbose_name='Пароль',
-#        max_length=200
-#    )
-#    num_uik = models.ForeignKey(Uik, on_delete=models.CASCADE)
-
