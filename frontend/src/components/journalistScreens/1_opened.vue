@@ -16,7 +16,7 @@
         'left': '62%'
       }"
     >
-      {{ data.opened }}
+      {{ data.open_uik }}
     </p>
     <br/>
     <p :style="{
@@ -29,7 +29,7 @@
         'top': '60%',
         'left': '62%'
       }">
-      {{ data.voters }}
+      {{ data.population }}
     </p>
   </div>
 </template>
@@ -39,11 +39,12 @@ export default {
   name: "1_opened",
   props: {
     data: {
-      opened: Number,
-      voters: Number
+      open_uik: Number,
+      population: Number
     }
   },
   data() {
+    console.log(this.data)
       return {
       }
   }
