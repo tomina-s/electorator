@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div class="bg-image"
+       :style="{
+          'background-image': `url(${require('../assets/gradient.png')})`,
+          'height': '100vh'
+        }"
+  >
     <transition name="component-fade" mode="out-in">
       <component v-bind:is="slide" v-bind="currentData"></component>
     </transition>
