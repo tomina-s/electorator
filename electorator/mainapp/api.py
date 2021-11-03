@@ -80,7 +80,8 @@ class ProtocolFirst(APIView):
         if protocol['sum_bul'] != 0:
             #Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
             Uik.objects.filter(id=uik.id).update(
-                presence=F("presence") + (protocol['sum_bul'] / uik_table.data[0]['population']) * 100
+                presence=(protocol['sum_bul'] / uik_table.data[0]['population']) * 100,
+                sum_votes=protocol['sum_bul']
             )
         if protocol['bad_form'] != 0:
             Uik.objects.filter(id=uik.id).update(bad_form=F("bad_form") + protocol['bad_form'])
@@ -239,11 +240,6 @@ class CandidateViewSet(APIView):
         serializer_class = VotesSerializer(queryset, many=True)
         for el in serializer_class.data:
             el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
-
-
-
-
-
         return response.Response(serializer_class.data)
 
 
