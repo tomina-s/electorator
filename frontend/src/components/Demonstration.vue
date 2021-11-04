@@ -51,7 +51,16 @@ export default {
         switch (this.state) {
           // 10 00
           case 0:
-            DemonstrationService.GeneralInfo()
+            DemonstrationService.TopTik()
+                .then(r => {
+                  this.data = r
+                  this.slide = c5_toptik
+                  this.state = 1
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
+            /*DemonstrationService.GeneralInfo()
                 .then(r => {
                   this.data = r
                   this.slide = c1_opened
@@ -59,30 +68,18 @@ export default {
                 })
                 .catch(e =>{
                   console.log(e)
-                })
+                })*/
             break
           case 1:
             this.slide = c0_screen
-            this.state =  4// 0
+            this.state = 0
             break
           case 2:
             this.state = 0
             break
           case 3:
-
             break
           case 4:
-            DemonstrationService.TopTik()
-                .then(r => {
-                  this.data = r
-                  this.slide = c5_toptik
-                  this.state = 0
-                })
-                .catch(e =>{
-                  console.log(e)
-                })
-
-
             break
             // 12 00, 15 00, 18 00
           case 5:
