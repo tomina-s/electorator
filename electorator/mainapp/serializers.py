@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from accounts.models import Role
-from .models import Candidate, Protocol1, Protocol2, Uik
+from .models import Candidate, Protocol1, Protocol2, Uik, Tik
 
 
 class ProtocolFirstSerializer(serializers.ModelSerializer):
@@ -15,6 +15,7 @@ class ProtocolFirstSerializer(serializers.ModelSerializer):
         exclusions = super(ProtocolFirstSerializer, self).get_validation_exclusions()
         return exclusions + ['transfer_time']
 
+
 class ProtocolSecondSerializer(serializers.ModelSerializer):
     """Creation of the second protocol"""
 
@@ -26,7 +27,7 @@ class ProtocolSecondSerializer(serializers.ModelSerializer):
 class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
-        fields = ["id", "name", "party","info", "photo"]
+        fields = ["id", "name", "party", "info", "photo"]
 
 
 class UIKSerializer(serializers.ModelSerializer):
@@ -62,19 +63,27 @@ class PresenceSerializer(serializers.ModelSerializer):
         model = Uik
         fields = ['num_tik', 'presence']
 
+
 class PresenceSerializer1(serializers.ModelSerializer):
     class Meta:
         model = Uik
-        fields = ['num_tik', 'sum_votes','population']
+        fields = ['num_tik', 'sum_votes', 'population']
 
 
 class VotesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
-        fields = ["id", "name", "party","info", "photo","sum_votes"]
+        fields = ["id", "name", "party", "info", "photo", "sum_votes"]
+
 
 class TopTikSerializer(serializers.ModelSerializer):
     class Meta:
         model = Uik
         fields = ['num_tik', 'population']
 
+
+
+class TopTikSerializer1(serializers.ModelSerializer):
+    class Meta:
+        model = Tik
+        fields = ['num_tik', 'population']

@@ -1,11 +1,11 @@
 import math
 
 from electorator.settings import MEDIA_ROOT
-from .models import Candidate, Uik, Protocol2
+from .models import Candidate, Uik, Protocol2, Tik
 from accounts.models import Account, Permission, Role
 from rest_framework import viewsets, permissions, response
 from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer, PresenceSerializer, \
-    VotesSerializer, TopTikSerializer, PresenceSerializer1
+    VotesSerializer, TopTikSerializer, PresenceSerializer1, TopTikSerializer1
 from rest_framework.decorators import action
 
 from django.core import exceptions
@@ -209,6 +209,7 @@ class CandidateViewSet(APIView):
         a = sum_votes['sum_votes__sum']
         queryset = Candidate.objects.all().order_by('id')
         serializer_class = VotesSerializer(queryset, many=True)
+        c=1
         for el in serializer_class.data:
             el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
 
@@ -297,9 +298,9 @@ class Top24PresenceViewSet(APIView):  #
         return response.Response(rez_dict)
 
 
-class TopPresenceViewSet(APIView):
+class TopPresenceViewSet(APIView): # исправить подсчет явки (брать из таблицы ТИК)
     '''
-    топ УИКов по явке
+    топ ТИКов по явке
     '''
     permission_classes = [
         permissions.IsAuthenticated
@@ -315,21 +316,39 @@ class TopPresenceViewSet(APIView):
         return response.Response(new_list[0])
 
 
-class TopTikViewSet(APIView):
+#class TopTikViewSet(APIView):
     '''
     Выводит тик с самым большим числом избирателей
     '''
+
+#    permission_classes = [
+#        permissions.IsAuthenticated
+#    ]
+
+ #   def get(self, request):
+
+ #       queryset = Uik.objects.values('num_tik').annotate(population=Sum('population'))
+
+  #     c=1
+
+
+   #     top_tik = sorted(serializer_class.data, key=lambda x: x['population'], reverse=True)[
+#            0]
+
+
+    #    return response.Response(top_tik)
+
+class TopTikViewSet(APIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+    def get(self,request):
+        queryset = Tik.objects.all().order_by('-population')[:1]
+        seralizer = TopTikSerializer1(queryset,many=True)
+        c=1
 
-    def get(self, request):
-        queryset = Uik.objects.values('num_tik').annotate(population=Sum('population'))
-        serializer_class = TopTikSerializer(queryset, many=True)
-        top_tik = sorted(serializer_class.data, key=lambda x: x['population'], reverse=True)[
-            0]
+        return response.Response(seralizer.data[0])
 
-        return response.Response(top_tik)
 
 
 class GeneralInfoViewSet(APIView):

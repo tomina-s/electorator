@@ -11,6 +11,7 @@
 import c0_screen from './journalistScreens/0_screen'
 import c1_opened from './journalistScreens/1_opened'
 import c2_candidates from './journalistScreens/2_candidates'
+import c5_toptik from './journalistScreens/5_toptik'
 import DemonstrationService from './../services/demonstration.service'
 
 export default {
@@ -19,6 +20,8 @@ export default {
     c0_screen,
     c1_opened,
     c2_candidates,
+    c5_toptik
+
   },
   data() {
     return {
@@ -55,14 +58,26 @@ export default {
             break
           case 1:
             this.slide = c0_screen
-            this.state = 0
+            this.state =  4// 0
             break
           case 2:
             this.state = 0
             break
           case 3:
+
             break
           case 4:
+            DemonstrationService.TopTik()
+                .then(r => {
+                  this.data = r
+                  this.slide = c5_toptik
+                  this.state = 0
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
+
+
             break
             // 12 00, 15 00, 18 00
           case 5:
