@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-# import csv
 import random
 import string
 from sqlalchemy import create_engine
+
+'''
+Скрипт заполнения таблиц БД рандомными данными, походящими по типу.
+
+Заоплняются таблицы:
+    accounts_account
+    accounts_role
+    mainapp_candidate   
+    mainapp_uik.
+    
+'''
 
 
 def gen_password(length):
