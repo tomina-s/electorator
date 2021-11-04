@@ -277,6 +277,8 @@ class PresenceViewSet(APIView):
         return response.Response(result_list)
 
 
+
+
 class Top24PresenceViewSet(APIView):  #
     '''
     топ2-4 УИКов по явке

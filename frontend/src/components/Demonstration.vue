@@ -25,8 +25,7 @@ export default {
     c0_screen,
     c1_opened,
     c2_candidates,
-    c5_toptik
-
+    c5_toptik,
   },
   data() {
     return {
@@ -51,16 +50,7 @@ export default {
         switch (this.state) {
           // 10 00
           case 0:
-            DemonstrationService.TopTik()
-                .then(r => {
-                  this.data = r
-                  this.slide = c5_toptik
-                  this.state = 1
-                })
-                .catch(e =>{
-                  console.log(e)
-                })
-            /*DemonstrationService.GeneralInfo()
+            DemonstrationService.GeneralInfo()
                 .then(r => {
                   this.data = r
                   this.slide = c1_opened
@@ -68,18 +58,28 @@ export default {
                 })
                 .catch(e =>{
                   console.log(e)
-                })*/
+                })
             break
           case 1:
             this.slide = c0_screen
-            this.state = 0
+            this.state = 4
             break
           case 2:
-            this.state = 0
+
             break
           case 3:
+
             break
           case 4:
+             DemonstrationService.TopTik()
+                .then(r => {
+                  this.data = r
+                  this.slide = c5_toptik
+                  this.state = 0
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
             break
             // 12 00, 15 00, 18 00
           case 5:
@@ -113,7 +113,7 @@ export default {
              break
        }
         this.countTimer()
-      }, 3000)
+      }, 1000)
     },
   }
 }
