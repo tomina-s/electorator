@@ -1,36 +1,10 @@
 <template>
-  <div class="bg-image"
-       :style="{
-          'background-image': `url(${require('../../assets/journalistScreens/5.png')})`,
-          'height': '100vh'
-        }"
+  <div
+
+
   >
-    <p :style="{
-        'position': 'fixed',
-        'width': '25%',
-        'color': '#FFFFFF',
-        'font-size': '96px',
-        'font-weight': 'bold',
-        'text-align': 'center',
-        'top': '25%',
-        'left': '62%'
-      }"
-    >
-      {{ data.num_tik }}
-    </p>
-    <br/>
-    <p :style="{
-        'position': 'fixed',
-        'width': '25%',
-        'color': '#FFFFFF',
-        'font-size': '96px',
-        'font-weight': 'bold',
-        'text-align': 'center',
-        'top': '60%',
-        'left': '62%'
-      }">
-      {{ data.population }}
-    </p>
+    topUik
+    {{data.num_tik}}
   </div>
 </template>
 
@@ -44,7 +18,7 @@ export default {
     }
   },
   data() {
-    console.log(this.data)
+    console.log("toptik", this.data)
       return {
       }
   }

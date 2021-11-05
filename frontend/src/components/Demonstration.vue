@@ -113,7 +113,7 @@ export default {
              break
        }
         this.countTimer()
-      }, 1000)
+      }, 3000)
     },
   }
 }

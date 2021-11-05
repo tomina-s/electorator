@@ -18,8 +18,10 @@ class DemonstrationService {
         .get('toptik/',{
       headers:authHeader()
       })
-        .then(responce => {
-          console.log(responce.data)
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
         })
   }
 
