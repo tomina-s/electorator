@@ -3,9 +3,9 @@
 
 
   >
-    topUik
+    top_presence
     {{data.num_tik}}
-    {{data.population}}
+    {{data.presence}}
 
   </div>
 </template>
@@ -16,11 +16,11 @@ export default {
   props: {
     data: {
       num_tik: String,
-      population: Number
+      presence: Number
     }
   },
   data() {
-    console.log("toptik", this.data)
+    console.log("toppresence", this.data)
       return {
       }
   }

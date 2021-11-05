@@ -3,24 +3,22 @@
 
 
   >
-    topUik
-    {{data.num_tik}}
-    {{data.population}}
+ привет
+
 
   </div>
 </template>
 
 <script>
 export default {
-  name: "5_toptik",
+  name: "7_presence",
   props: {
     data: {
-      num_tik: String,
-      population: Number
+
     }
   },
   data() {
-    console.log("toptik", this.data)
+    console.log("presence", this.data)
       return {
       }
   }

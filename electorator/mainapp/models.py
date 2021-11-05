@@ -5,7 +5,8 @@ from django.db.models import Model
 class Tik(Model):
     num_tik = models.CharField(
         verbose_name='Номер ТИК',
-        max_length=200
+        max_length=200,
+
     )
     population = models.IntegerField(
         verbose_name='Численность',
@@ -47,8 +48,10 @@ class Uik(Model):
         unique=True
     )
     num_tik = models.ForeignKey(
-        Tik, on_delete=models.CASCADE
+        Tik, on_delete=models.CASCADE,
+        default='0'
     )
+
     population = models.IntegerField(
         verbose_name='Численность'
     )
@@ -79,6 +82,7 @@ class Uik(Model):
         verbose_name='Время последнего изменени',
         auto_now=True
     )
+
 
 
 class Candidate(Model):

@@ -38,6 +38,40 @@ class DemonstrationService {
         return response.data
       })
   }
+   GeneralInfoPresence(){
+    return axios
+        .get('generalinfopresence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+  Presence(){
+    return axios
+        .get('presence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+  TopPresence(){
+    return axios
+        .get('toppresence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+
 
 }
 
