@@ -6,7 +6,12 @@
         }"
   >
     <transition name="component-fade" mode="out-in">
-      <component v-bind:is="slide" v-bind="currentData"></component>
+      <component
+          :key="counter"
+          v-bind:is="slide"
+          v-bind="currentData"
+      >
+      </component>
     </transition>
   </div>
 
@@ -18,6 +23,7 @@ import c1_opened from './journalistScreens/1_opened'
 import c2_candidates from './journalistScreens/2_candidates'
 import c5_toptik from './journalistScreens/5_toptik'
 import DemonstrationService from './../services/demonstration.service'
+import ConfigService from "../services/config.service";
 
 export default {
   name: "Demonstration",
@@ -29,9 +35,11 @@ export default {
   },
   data() {
     return {
+      counter: 0,
       slide: c0_screen,
       state: 0,
-      data: {}
+      data: {},
+      config: {}
     }
   },
   computed: {
@@ -40,13 +48,40 @@ export default {
     }
   },
   mounted() {
+    ConfigService.getTimeToOpen().then(
+        data => {
+          this.config = data
+        },
+        error => {
+          console.log(error)
+        }
+      )
   },
   created() {
     this.countTimer()
   },
   methods: {
+    splitArray(array) {
+      let arrayOfArrays = [];
+        while (array.length > 0) {
+            let arrayElement = array.splice(0,4);
+            arrayOfArrays.push(arrayElement);
+        }
+        return arrayOfArrays;
+    },
     countTimer() {
       setTimeout(() => {
+        if (this.state === 0 || this.state === 5 || this.state === 10) {
+          const currentTime = new Date().getTime()
+          if (currentTime > this.config.firstConference * 1000) {
+            this.state = 0
+          } else if (currentTime > this.config.secondConference * 1000) {
+            this.state = 5
+          } else if (currentTime > this.config.thirdConference * 1000) {
+            this.state = 10
+          }
+        }
+
         switch (this.state) {
           // 10 00
           case 0:
@@ -61,11 +96,25 @@ export default {
                 })
             break
           case 1:
-            this.slide = c0_screen
-            this.state = 4
+            DemonstrationService.ListCandidatesInfo()
+                .then(r => {
+                  this.data = this.splitArray(r)
+                  this.slide = c2_candidates
+                  this.state = 2
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
             break
           case 2:
-
+            if (this.data.length !== 0) {
+              console.log("before", this.data)
+              this.data.splice(0, 2)
+              console.log("after", this.data)
+            } else {
+              this.slide = c0_screen
+              this.state = 0
+            }
             break
           case 3:
 
@@ -112,6 +161,7 @@ export default {
           case 18:
              break
        }
+        this.counter++
         this.countTimer()
       }, 3000)
     },

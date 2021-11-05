@@ -1,10 +1,9 @@
 <template>
-  <div class="bg-image"
-       :style="{
-          'background-image': `url(${require('../../assets/journalistScreens/1.png')})`,
+  <div>
+    <img :src="`${require('../../assets/logo_shadow.png')}`"
+         :style="{
           'height': '100vh'
-        }"
-  >
+    }">
     <p :style="{
         'position': 'fixed',
         'width': '25%',
@@ -16,7 +15,7 @@
         'left': '62%'
       }"
     >
-      {{ data.open_uik }}
+      {{ data.open_uik }} открыто
     </p>
     <br/>
     <p :style="{
@@ -29,7 +28,7 @@
         'top': '60%',
         'left': '62%'
       }">
-      {{ data.population }}
+      {{ data.population }} избирателей
     </p>
   </div>
 </template>

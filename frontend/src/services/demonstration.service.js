@@ -13,6 +13,7 @@ class DemonstrationService {
         return response.data
       })
   }
+
   TopTik(){
     return axios
         .get('toptik/',{
@@ -23,6 +24,19 @@ class DemonstrationService {
 
           return response.data
         })
+  }
+
+
+  ListCandidatesInfo() {
+    return axios
+      .get('uiks/candidates/short/list/desc/', {
+        headers: authHeader()
+      })
+      .then(response => {
+        console.log(response.data)
+
+        return response.data
+      })
   }
 
 }

@@ -16,13 +16,14 @@ Including another URLconf
 from django.urls import path, include, re_path
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.conf.urls.static import static
 
 from . import settings
 from .view import MockView
 
-static_url = [
+static_url = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+static_url += [
     re_path(r'^.*$', lambda request: HttpResponse(render(request, 'vue_index.html'))),
-
 ]
 
 api_url = [
