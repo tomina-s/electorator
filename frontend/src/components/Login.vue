@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
       <div class="card card-container">
         <div class="display-4 text-center">
