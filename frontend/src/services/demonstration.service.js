@@ -13,6 +13,20 @@ class DemonstrationService {
         return response.data
       })
   }
+
+  TopTik(){
+    return axios
+        .get('toptik/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+
+
   ListCandidatesInfo() {
     return axios
       .get('uiks/candidates/short/list/desc/', {
@@ -24,6 +38,52 @@ class DemonstrationService {
         return response.data
       })
   }
+   GeneralInfoPresence(){
+    return axios
+        .get('generalinfopresence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+  Presence(){
+    return axios
+        .get('presence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+  TopPresence(){
+    return axios
+        .get('toppresence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+    VotesPresence(){
+    return axios
+        .get('votespresence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+
+
 }
 
 export default new DemonstrationService()
