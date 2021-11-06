@@ -71,6 +71,17 @@ class DemonstrationService {
           return response.data
         })
   }
+    VotesPresence(){
+    return axios
+        .get('votespresence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
 
 
 }

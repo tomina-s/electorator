@@ -307,7 +307,8 @@ class Top24PresenceViewSet(APIView):  #переднлаь под другую т
         return response.Response(rez_dict)
 
 
-class TopPresenceViewSet(APIView): #
+
+class TopPresenceViewSet(APIView):
     '''
     топ ТИКов по явке
     '''
@@ -413,9 +414,9 @@ class VotesPresenceViewSet(APIView):
     def get(self, request):
         result_dict = {}
         percent = Uik.objects.aggregate(sum_votes_fin=Sum('sum_numb_votes_fin'), sum_votes=Sum('sum_votes'))
-        result_dict.update({'percent_votes': round((percent['sum_votes_fin'] / percent['sum_votes']) * 100)})
+        result_dict.update({'percent_votes': f"{round((percent['sum_votes_fin'] / percent['sum_votes']) * 100)}%"})
         presence = Uik.objects.aggregate(population=Sum('population'), sum_votes=Sum('sum_votes'))
-        result_dict.update({'presence': round((presence['sum_votes'] / presence['population']) * 100)})
+        result_dict.update({'presence': f"{round((presence['sum_votes'] / presence['population']) * 100)}%"})
 
         return response.Response(result_dict)
 

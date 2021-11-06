@@ -25,6 +25,7 @@ import c5_toptik from './journalistScreens/5_toptik'
 import c6_general_info_presence from './journalistScreens/6_general_info_presence'
 import c7_presence from './journalistScreens/7_presence'
 import c8_toppresence from './journalistScreens/8_top_presence'
+import c11_votespresence from './journalistScreens/11_votespresence'
 import DemonstrationService from './../services/demonstration.service'
 import ConfigService from "../services/config.service";
 
@@ -163,7 +164,7 @@ export default {
                 })
             break
           case 8:
-            DemonstrationService.TopPresence() //не могу пока вывести массив
+            DemonstrationService.TopPresence()
                 .then(r => {
                   this.data = r
                   this.slide = c8_toppresence
@@ -177,19 +178,48 @@ export default {
             break
             // 21 00
           case 10:
-
+            this.slide = c0_screen
+            this.state = 11
             break
           case 11:
+            DemonstrationService.VotesPresence()
+                .then(r => {
+                  this.data = r
+                  this.slide = c11_votespresence
+                  this.state = 13
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
             break
           case 12:
             break
-          case 13:
+          case 13://
+            DemonstrationService.TopTik() //самая многочисленная тик москвы
+                .then(r => {
+                  this.data = r
+                  this.slide = c5_toptik
+                  this.state = 10
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
             break
           case 14:
             break
           case 15:
             break
           case 16:
+            DemonstrationService.TopPresence()
+                .then(r => {
+                  this.data = r
+                  this.slide = c8_toppresence
+                  this.state = 10
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
+
             break
           case 17:
             break

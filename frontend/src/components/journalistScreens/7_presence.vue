@@ -3,7 +3,8 @@
 
 
   >
- привет
+    привет
+ {{data}}
 
 
   </div>
@@ -13,9 +14,9 @@
 export default {
   name: "7_presence",
   props: {
-    data: {
+    data: []
 
-    }
+
   },
   data() {
     console.log("presence", this.data)

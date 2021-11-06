@@ -3,8 +3,8 @@
 
 
   >
-    top_presence
-    {{data.num_tik}}
+    votes_presence
+    {{data.percent_votes}}
     {{data.presence}}
 
   </div>
@@ -12,15 +12,15 @@
 
 <script>
 export default {
-  name: "8_top_presence",
+  name: "11_votespresence",
   props: {
     data: {
-      num_tik: String,
-      presence: Number
+      percent_votes: String,
+      presence: String
     }
   },
   data() {
-    console.log("toppresence", this.data)
+    console.log("votespresence", this.data)
       return {
       }
   }
