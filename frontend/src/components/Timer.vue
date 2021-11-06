@@ -1,10 +1,10 @@
 <template>
   <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
-      <div v-if="opened" class="card card-container ext-center display-3">
+      <div v-if="opened" class="card card-container ext-center display-3" :style="{'background-color': 'transparent !important'}">
         Участок открыт
       </div>
-      <div v-if="!opened" class="card card-container">
+      <div v-if="!opened" class="card card-container" :style="{'background-color': 'transparent !important'}">
         <div class="text-center">
           <label v-if="!timeLeft || timeLeft < 0" class="display-3">
             Откройте участок
