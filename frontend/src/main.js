@@ -4,7 +4,7 @@ import router from "./router"
 import store from "./store"
 import "bootstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
-import "./css/fade.css"
+import "./assets/css/fade.css"
 import { FontAwesomeIcon } from './plugins/font-awesome'
 import Pagination from 'v-pagination-3'
 
