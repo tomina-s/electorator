@@ -82,6 +82,19 @@ class DemonstrationService {
           return response.data
         })
   }
+    Top24Presence(){
+    return axios
+        .get('top24presence/',{
+      headers:authHeader()
+      })
+        .then(response => {
+          console.log(response.data)
+
+          return response.data
+        })
+  }
+
+
 
 
 }

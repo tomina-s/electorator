@@ -78,7 +78,7 @@ class ProtocolFirst(APIView):
         Uik.objects.filter(id=uik.id).update(status=protocol['status'])
 
         if protocol['sum_bul'] != 0:
-            #Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
+            # Uik.objects.filter(id=uik.id).update(presence=F("presence") + protocol['sum_bul'])
             Uik.objects.filter(id=uik.id).update(
                 presence=(protocol['sum_bul'] / uik_table.data[0]['population']) * 100,
                 sum_votes=protocol['sum_bul']
@@ -195,7 +195,6 @@ class ProtocolSecondCreate(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-
 class CandidateViewSet(APIView):
     '''
     вся информация по кандидатам в порядке следования в бюллетенях
@@ -209,7 +208,7 @@ class CandidateViewSet(APIView):
         a = sum_votes['sum_votes__sum']
         queryset = Candidate.objects.all().order_by('id')
         serializer_class = VotesSerializer(queryset, many=True)
-        c=1
+        c = 1
         for el in serializer_class.data:
             el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
 
@@ -265,7 +264,7 @@ class PresenceViewSet(APIView):
         permissions.IsAuthenticated
     ]
 
-    #def get(self, request):
+    # def get(self, request):
     #    queryset = Uik.objects.values('num_tik').annotate(sum_votes=Sum('sum_votes'), population=Sum('population'))
     #    serializer_class = PresenceSerializer1(queryset, many=True)
     #    result_list = []
@@ -275,18 +274,16 @@ class PresenceViewSet(APIView):
     #    result_list = sorted(result_list, key=lambda k: k['presence'], reverse=True)
 
     #    return response.Response(result_list)
-    def get(self,request):
+    def get(self, request):
         queryset = Tik.objects.values('update_time').annotate(presence=Count('id'))[:1]
-        number_tik=queryset[0]['presence']
-        queryset = Tik.objects.all().order_by('-update_time','-presence')[:number_tik]
-        serializer_class = PresenceSerializer(queryset,many = True)
-        c=1
+        number_tik = queryset[0]['presence']
+        queryset = Tik.objects.all().order_by('-update_time', '-presence')[:number_tik]
+        serializer_class = PresenceSerializer(queryset, many=True)
+        c = 1
         return response.Response(serializer_class.data)
 
 
-
-
-class Top24PresenceViewSet(APIView):  #переднлаь под другую таблицу
+class Top24PresenceViewSet(APIView):  # переднлаь под другую таблицу
     '''
     топ2-4 УИКов по явке
     'top_presence' список тиков с явкой
@@ -296,16 +293,20 @@ class Top24PresenceViewSet(APIView):  #переднлаь под другую т
         permissions.IsAuthenticated
     ]
 
+    # def get(self, request):
+    #    queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'), count=Count('id'))
+    #    serializer_class = PresenceSerializer(queryset, many=True)
+    #    for i in range(len(serializer_class.data)):
+    #        serializer_class.data[i]['presence'] = serializer_class.data[i]['presence'] / queryset[i]['count']
+    #    new_list = sorted(serializer_class.data, key=lambda x: x['presence'], reverse=True)
+    #    rez_dict = {'top_presence': new_list[1:4], 'min_presence': math.floor(new_list[3]['presence'])}
+
+    #    return response.Response(rez_dict)
     def get(self, request):
-        queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'), count=Count('id'))
+        queryset = Tik.objects.all().order_by('-update_time', '-presence')[1:4]
         serializer_class = PresenceSerializer(queryset, many=True)
-        for i in range(len(serializer_class.data)):
-            serializer_class.data[i]['presence'] = serializer_class.data[i]['presence'] / queryset[i]['count']
-        new_list = sorted(serializer_class.data, key=lambda x: x['presence'], reverse=True)
-        rez_dict = {'top_presence': new_list[1:4], 'min_presence': math.floor(new_list[3]['presence'])}
-
-        return response.Response(rez_dict)
-
+        c = 1
+        return response.Response(serializer_class.data)
 
 
 class TopPresenceViewSet(APIView):
@@ -316,7 +317,7 @@ class TopPresenceViewSet(APIView):
         permissions.IsAuthenticated
     ]
 
-    #def get(self, request):
+    # def get(self, request):
     #    queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'), count=Count('id'))
     #    serializer_class = PresenceSerializer(queryset, many=True)
     #    for i in range(len(serializer_class.data)):
@@ -324,47 +325,47 @@ class TopPresenceViewSet(APIView):
     #    new_list = sorted(serializer_class.data, key=lambda x: x['presence'], reverse=True)
 
     #    return response.Response(new_list[0])
-    def get(self,request):
+    def get(self, request):
         queryset = Tik.objects.all().order_by('-presence')[:1]
-        seralizer = PresenceSerializer(queryset,many=True)
-        c=1
+        seralizer = PresenceSerializer(queryset, many=True)
+        c = 1
 
         return response.Response(seralizer.data[0])
 
-
-#class TopTikViewSet(APIView):
+    # class TopTikViewSet(APIView):
     '''
     Выводит тик с самым большим числом избирателей
     '''
+
 
 #    permission_classes = [
 #        permissions.IsAuthenticated
 #    ]
 
- #   def get(self, request):
+#   def get(self, request):
 
- #       queryset = Uik.objects.values('num_tik').annotate(population=Sum('population'))
+#       queryset = Uik.objects.values('num_tik').annotate(population=Sum('population'))
 
-  #     c=1
+#     c=1
 
 
-   #     top_tik = sorted(serializer_class.data, key=lambda x: x['population'], reverse=True)[
+#     top_tik = sorted(serializer_class.data, key=lambda x: x['population'], reverse=True)[
 #            0]
 
 
-    #    return response.Response(top_tik)
+#    return response.Response(top_tik)
 
 class TopTikViewSet(APIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    def get(self,request):
+
+    def get(self, request):
         queryset = Tik.objects.all().order_by('-population')[:1]
-        seralizer = TopTikSerializer1(queryset,many=True)
-        c=1
+        seralizer = TopTikSerializer1(queryset, many=True)
+        c = 1
 
         return response.Response(seralizer.data[0])
-
 
 
 class GeneralInfoViewSet(APIView):
@@ -419,4 +420,3 @@ class VotesPresenceViewSet(APIView):
         result_dict.update({'presence': f"{round((presence['sum_votes'] / presence['population']) * 100)}%"})
 
         return response.Response(result_dict)
-

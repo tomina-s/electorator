@@ -3,8 +3,8 @@
 
 
   >
-
- {{data}}
+    top_24_presence
+    {{data}}
 
 
   </div>
@@ -12,14 +12,14 @@
 
 <script>
 export default {
-  name: "7_presence",
+  name: "9_top_24_presence",
   props: {
     data: []
 
 
   },
   data() {
-    console.log("presence", this.data)
+    console.log("top24presence", this.data)
       return {
       }
   }
