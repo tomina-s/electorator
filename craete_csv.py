@@ -66,21 +66,21 @@ df_account_role = pd.DataFrame({'user_id': user_series,
 
 CANDIDATE_NUM = 8
 table_name_candidate = 'mainapp_candidate'
-candidate_name_series = pd.Series(['Петров Олег Степанович', 'Лужков', 'Иванов', 'Собянин Сергей Семенович',
+candidate_name_series = pd.Series(['Васильев Олег Степанович', 'Лужков', 'Иванов', 'Собянин Сергей Семенович',
                                    'Собянин Иван', 'Антонова', 'Срегеев', 'Романов',
 ])
 party_series = pd.Series('Партия' for _ in range(CANDIDATE_NUM))
 info_series = pd.Series('Глава муниципального округа Таганский города Москвы' for _ in range(CANDIDATE_NUM))
 sim_votes_series = pd.Series(random.randint(500, 650) for _ in range(CANDIDATE_NUM))
-df_candidates = pd.DataFrame({'name': candidate_name_series,
+df_candidats = pd.DataFrame({'name': candidate_name_series,
                               'party': party_series,
                               'info': info_series,
                               'sum_votes': sim_votes_series,
                               'photo': pd.Series('file_name.jpg' for _ in range(CANDIDATE_NUM)),  # название файла .jpg
                               })
-# print('df_candidates', df_candidates)
-candidates = df_candidates.to_dict('dict')
-print('df_candidates', candidates)
+# print('df_candidats', df_candidats)
+candidats = df_candidats.to_dict('dict')
+print('df_candidats', candidats)
 
 
 table_name_uik = 'mainapp_uik'
@@ -132,7 +132,6 @@ def insert_account(account_name):
             conn.close()
     return account_id
 
-
 def insert_candidate(name, party, info, sum_votes, photo):
     # print('candidate_name', candidate_name)
     sql = """INSERT INTO mainapp_candidate(name, party, info, sum_votes, photo)
@@ -176,8 +175,56 @@ def insert_candidate(name, party, info, sum_votes, photo):
             conn.close()
     return candidate_id
 
+def insert_candidats(cand_info):
+    sql = """INSERT INTO mainapp_candidate(name, party, info, sum_votes, photo)
+             VALUES(%s,%s,%s,%s,%s) RETURNING id;"""
+    conn = None
+    PK_candadats = []
+
+    try:
+        # Подключение к существующей базе данных
+        conn = psycopg2.connect(user="postgres",
+                                  # пароль, который указали при установке PostgreSQL
+                                  password="***",
+                                  host="huvalk.ru",
+                                  port="8001",
+                                  database="electorator")
+        # Курсор для выполнения операций с базой данных
+        cursor = conn.cursor()
+
+        # Распечатать сведения о PostgreSQL
+        print("Информация о сервере PostgreSQL")
+        print(conn.get_dsn_parameters(), "\n")
+        # Выполнение SQL-запроса
+        cursor.execute("SELECT version();")
+        # Получить результат
+        record = cursor.fetchone()
+        print("Вы подключены к - ", record, "\n")
+
+        for idx in range(CANDIDATE_NUM-1):
+            row = (cand_info['name'][idx], cand_info['party'][idx], cand_info['info'][idx], cand_info['sum_votes'][idx], cand_info['photo'][idx])
+            cursor.execute(sql, row)
+
+            # get the generated id back
+            candidate_id = cursor.fetchone()[0]
+            PK_candadats.append(candidate_id)
+
+        # commit the changes to the database
+        conn.commit()
+        # close communication with the database
+        cursor.close()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Ошибка при работе с PostgreSQL", error)
+    finally:
+        if conn:
+            conn.close()
+    return PK_candadats
+
 
 # print(insert_account('ac_name'))
-print(insert_candidate(candidates['name'][0], candidates['party'][0], candidates['info'][0], candidates['sum_votes'][0], candidates['photo'][0]))
-# PK_candadate = []
+# print(insert_candidate(candidats['name'][0], candidats['party'][0], candidats['info'][0], candidats['sum_votes'][0], candidats['photo'][0]))
+
+print(insert_candidats(candidats))
+
 # PK_candadate.append(insert_candidate(***))
