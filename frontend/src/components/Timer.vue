@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
       <div v-if="opened" class="card card-container ext-center display-3">
         Участок открыт

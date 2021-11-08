@@ -40,7 +40,12 @@
       </div>
     </nav>
 
-    <div>
+    <div class="bg-image"
+       :style="{
+          'background-image': `url(${require('./assets/gradient.png')})`,
+          'height': '100vh'
+        }"
+    >
       <router-view />
     </div>
   </div>

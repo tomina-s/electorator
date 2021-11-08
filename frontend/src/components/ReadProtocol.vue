@@ -1,5 +1,5 @@
 <template>
-  <div class="card card-container">
+  <div class="card card-container" :style="{'background-color': 'transparent !important'}">
     <div class="form-group">
       Протокол №{{protocol.id}}
     </div>

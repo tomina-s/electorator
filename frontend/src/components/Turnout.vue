@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
-      <div class="card card-container">
+      <div class="card card-container" :style="{'background-color': 'transparent !important'}">
         <Form @submit="handleTurnout" :validation-schema="schema">
           <div class="form-group">
             <label class="font-weight-bold" for="num">Внести явку</label>
