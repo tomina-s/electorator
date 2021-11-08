@@ -80,13 +80,23 @@ df_candidats = pd.DataFrame({'name': candidate_name_series,
                               })
 # print('df_candidats', df_candidats)
 candidats = df_candidats.to_dict('dict')
-print('df_candidats', candidats)
+# print('df_candidats', candidats)
 
 
 table_name_uik = 'mainapp_uik'
 
 UIK_NUM = 3628
 
+uik_values = {'num_uik': pd.Series(i for i in range(1, UIK_NUM+1)),
+              'num_tik': pd.Series(1 for _ in range(1, UIK_NUM+1)),
+              'population': pd.Series(random.randint(100, 300) for _ in range(UIK_NUM)),
+              'sum_numb_votes_fin': pd.Series(0 for _ in range(UIK_NUM)),
+              'presence': pd.Series(0 for _ in range(UIK_NUM)),
+              'perc_final_bul': pd.Series(0 for _ in range(UIK_NUM)),
+              'bad_form': pd.Series(random.randint(0, 5) for _ in range(UIK_NUM)),
+              'update_time': pd.Series('2020-05-16 08:36:38' for _ in range(UIK_NUM)),
+              }
+# print('df_uik\n',df_uik)
 
 def insert_account(account_name):
     # print('account_name', account_name)
@@ -222,9 +232,59 @@ def insert_candidats(cand_info):
     return PK_candadats
 
 
+def insert_uik(uik_info):
+    # сверить поля с физ моделью БД
+    sql = """INSERT INTO mainapp_uik(num_uik, num_tik, population, sum_numb_votes_fin, presence,
+             perc_final_bul, bad_form, update_time)
+             VALUES(%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
+    conn = None
+    PK_uik = []
+    try:
+        # Подключение к существующей базе данных
+        conn = psycopg2.connect(user="postgres",
+                                # пароль, который указали при установке PostgreSQL
+                                password="***",
+                                host="huvalk.ru",
+                                port="8001",
+                                database="electorator")
+        # Курсор для выполнения операций с базой данных
+        cursor = conn.cursor()
+
+        # Распечатать сведения о PostgreSQL
+        print("Информация о сервере PostgreSQL")
+        print(conn.get_dsn_parameters(), "\n")
+
+        row = ''
+
+        for idx in range(len(uik_info)):
+            for key_field in uik_info.keys():
+                row += uik_info[key_field][idx]
+            print('row', row)
+            # row = (uik_info['name'][idx], uik_info['party'][idx], uik_info['info'][idx], uik_info['sum_votes'][idx], uik_info['photo'][idx])
+            # cursor.execute(sql, row)
+
+            # get the generated id back
+            candidate_id = cursor.fetchone()[0]
+            PK_uik.append(candidate_id)
+
+        # commit the changes to the database
+        conn.commit()
+        # close communication with the database
+        cursor.close()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Ошибка при работе с PostgreSQL", error)
+    finally:
+        if conn:
+            conn.close()
+    return PK_uik
+
+
 # print(insert_account('ac_name'))
 # print(insert_candidate(candidats['name'][0], candidats['party'][0], candidats['info'][0], candidats['sum_votes'][0], candidats['photo'][0]))
 
-print(insert_candidats(candidats))
+# Вставка строк в таблицу Кандидаты
+# PK_candadats = insert_candidats(candidats)
+# print('PK_candadats', PK_candadats)
 
-# PK_candadate.append(insert_candidate(***))
+PK_uik = insert_uik(uik_values)
