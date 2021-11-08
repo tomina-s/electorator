@@ -98,6 +98,7 @@ uik_values = {'num_uik': pd.Series(i for i in range(1, UIK_NUM+1)),
               }
 # print('df_uik\n',df_uik)
 
+
 def insert_account(account_name):
     # print('account_name', account_name)
     sql = """INSERT INTO accounts_account(name)
@@ -142,6 +143,7 @@ def insert_account(account_name):
             conn.close()
     return account_id
 
+
 def insert_candidate(name, party, info, sum_votes, photo):
     # print('candidate_name', candidate_name)
     sql = """INSERT INTO mainapp_candidate(name, party, info, sum_votes, photo)
@@ -184,6 +186,7 @@ def insert_candidate(name, party, info, sum_votes, photo):
         if conn:
             conn.close()
     return candidate_id
+
 
 def insert_candidats(cand_info):
     sql = """INSERT INTO mainapp_candidate(name, party, info, sum_votes, photo)
