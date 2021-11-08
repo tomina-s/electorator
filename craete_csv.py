@@ -211,7 +211,7 @@ def insert_candidats(cand_info):
         record = cursor.fetchone()
         print("Вы подключены к - ", record, "\n")
 
-        for idx in range(CANDIDATE_NUM-1):
+        for idx in range(CANDIDATE_NUM):
             row = (cand_info['name'][idx], cand_info['party'][idx], cand_info['info'][idx], cand_info['sum_votes'][idx], cand_info['photo'][idx])
             cursor.execute(sql, row)
 
