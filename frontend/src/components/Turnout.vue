@@ -4,13 +4,13 @@
       <div class="card card-container" :style="{'background-color': 'transparent !important'}">
         <Form @submit="handleTurnout" :validation-schema="schema">
           <div class="form-group">
-            <label class="font-weight-bold" for="num">Внести явку</label>
+            <label class="font-weight-bold text-white" for="num">Внести явку</label>
             <Field name="num" type="number" class="form-control" />
             <ErrorMessage name="num" class="error-feedback" />
           </div>
 
           <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled="loading || globalError">
+            <button class="btn btn-light btn-block" :disabled="loading || globalError">
               <span
                 v-show="loading"
                 class="spinner-border spinner-border-sm"
@@ -31,12 +31,14 @@
             </div>
           </div>
         </Form>
+        <switcher :key="innerNumber" :protocolNum="innerNumber > 4 ? 4 : innerNumber" :done="innerNumber > 4"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Switcher from "./Switcher"
 import { Form, Field, ErrorMessage } from "vee-validate"
 import * as yup from "yup"
 import ProtocolService from "../services/protocol.service"
@@ -48,6 +50,7 @@ export default {
     Form,
     Field,
     ErrorMessage,
+    Switcher,
   },
   data() {
     const schema = yup.object().shape({

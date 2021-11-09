@@ -1,11 +1,8 @@
 <template>
   <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
-      <div v-if="opened" class="card card-container ext-center display-3" :style="{'background-color': 'transparent !important'}">
-        Участок открыт
-      </div>
-      <div v-if="!opened" class="card card-container" :style="{'background-color': 'transparent !important'}">
-        <div class="text-center">
+      <div class="card card-container" :style="{'background-color': 'transparent !important'}">
+        <div v-if="!opened" class="text-center  text-white">
           <label v-if="!timeLeft || timeLeft < 0" class="display-3">
             Откройте участок
           </label>
@@ -15,9 +12,13 @@
             {{Math.floor((timeLeft % (1000 * 60)) / 1000)}}
           </label>
         </div>
+        <div v-if="opened" class="card card-container text-white text-center display-3"
+             :style="{'background-color': 'transparent !important'}">
+          Участок открыт
+        </div>
         <Form @submit="handleOpening" :validation-schema="schema">
           <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled="loading || globalError">
+            <button class="btn btn-light btn-block" :disabled="loading || globalError">
               <span
                 v-show="loading"
                 class="spinner-border spinner-border-sm"
@@ -38,18 +39,24 @@
             </div>
           </div>
         </Form>
+
+        <switcher :key="innerNumber" :protocolNum="1" :done="innerNumber > 1"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Switcher from "./Switcher"
 import ProtocolService from "../services/protocol.service"
 import ConfigService from "../services/config.service";
 import {getUIKPermission} from "../services/common.service";
 
 export default {
   name: "Timer",
+  components: {
+    Switcher
+  },
   data() {
     return {
       globalError: false,
@@ -73,12 +80,10 @@ export default {
     ProtocolService.GetProtocolFirstQuantity(perm)
         .then(r => {
           this.innerNumber = r.quantity + 1
-          if (r.quantity > 0 && r.quantity < 4) {
-            this.$router.push("/protocol/voters")
-          } else if (r.quantity === 4) {
-            this.$router.push("/protocol/create")
-          } else if (r.quantity !== 0) {
-            this.$router.push({ name: '/protocols', query: { uik_id: perm } })
+          if (r.quantity !== 0) {
+            // this.$router.push({ name: '/protocols', query: { uik_id: perm } })
+            this.globalError = true
+            this.opened = true
           }
         })
         .catch(e => {

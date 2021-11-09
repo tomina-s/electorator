@@ -14,6 +14,7 @@ const routes = [
     component: Demonstration,
   },
   {
+    name: "createProtocol",
     path: "/protocol/create",
     component: CreateProtocol,
   },
@@ -36,6 +37,7 @@ const routes = [
     component: Login,
   },
   {
+    name: "timer",
     path: "/timer",
     component: Timer,
   },
@@ -45,6 +47,7 @@ const routes = [
     component: ReadProtocol,
   },
   {
+    name: "turnout",
     path: "/protocol/voters",
     component: Turnout
   },
