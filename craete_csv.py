@@ -35,21 +35,14 @@ def gen_string(length):
     return rand_string
 
 
-ACCOUNTS_NUM = 10
-table_name_accounts = 'accounts_account'
 # генерация рандомных данных
-password_series = pd.Series([gen_password(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)])
-# last_login - типа данных timestamp
-last_login_series = pd.Series(['2020-05-16 08:36:38' for _ in range(ACCOUNTS_NUM)])
-name_series = pd.Series([gen_string(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)])
-username_series = pd.Series([gen_string(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)])
-
-df_accounts = pd.DataFrame({'password': password_series,
-                            'last_login': last_login_series,
-                            'name': name_series,
-                            'username': username_series,
-})
-
+ACCOUNTS_NUM = 2
+table_name_accounts = 'accounts_account'
+accounts_data = {'password': [gen_password(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
+                 'last_login': ['2020-05-16 08:36:38' for _ in range(ACCOUNTS_NUM)],
+                 'name': [gen_string(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
+                 'username': [gen_string(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
+                 }
 
 ACCOUNTS_ROLE_NUM = 10
 table_name_accounts_role = 'accounts_role'
@@ -275,8 +268,8 @@ def insert_uik(uik_info, uik_num_value):
     return PK_uik
 
 
-def insert_account(accounts_info):
-    sql = """INSERT INTO mainapp_uik(password, last_login, name, username)
+def insert_account(accounts_info, accounts_num_value):
+    sql = """INSERT INTO accounts_account(password, last_login, name, username)
             VALUES(%s,%s,%s,%s) RETURNING id;"""
     conn = None
     PK_values = []
@@ -290,7 +283,7 @@ def insert_account(accounts_info):
         print("Информация о сервере PostgreSQL")
         print(conn.get_dsn_parameters(), "\n")
 
-        for idx in range(len(accounts_info)):
+        for idx in range(accounts_num_value):
             row = []
             for key_field in accounts_info.keys():
                 row.append(accounts_info[key_field][idx])
@@ -298,9 +291,8 @@ def insert_account(accounts_info):
             print('row', row)
             cursor.execute(sql, row)
 
-            # get the generated id back
-            candidate_id = cursor.fetchone()[0]
-            PK_values.append(candidate_id)
+            new_id_as_PK = cursor.fetchone()[0]
+            PK_values.append(new_id_as_PK)
 
         conn.commit()
         cursor.close()
@@ -353,7 +345,12 @@ def show_table_by_name(table_name):
 # PK_candadats = insert_candidats(candidats)
 # print('PK_candadats', PK_candadats)
 
-PK_uik = insert_uik(uik_values, uik_num_value=UIK_NUM)
-print('PK_uik', PK_uik)
+# PK_uik = insert_uik(uik_values, uik_num_value=UIK_NUM)
+# print('PK_uik', PK_uik)
 
-show_table_by_name(table_name='mainapp_uik')
+# Вставка ACCOUNTS_NUM числа строк в таблицу Аккаунты
+# PK_account = insert_account(accounts_data, accounts_num_value=ACCOUNTS_NUM)
+# print('PK_account', PK_account)
+
+# show_table_by_name(table_name='mainapp_uik')
+show_table_by_name(table_name='accounts_account')
