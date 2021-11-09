@@ -260,6 +260,44 @@ def insert_account(accounts_info, accounts_num_value):
     return PK_values
 
 
+def insert_role(role_info, role_num_value, fk_user_id):
+    """Возможно не нужно возвращать ID, те FK в других таблццах не используются"""
+    sql = """INSERT INTO accounts_role(role_user, user_id)
+            VALUES(%s,%s) RETURNING id;"""
+    conn = None
+    PK_values = []
+    try:
+        conn = psycopg2.connect(user="postgres",
+                                password="***",
+                                host="huvalk.ru",
+                                port="8001",
+                                database="electorator")
+        cursor = conn.cursor()
+        print("Информация о сервере PostgreSQL")
+        print(conn.get_dsn_parameters(), "\n")
+
+        for idx in range(role_num_value):
+            row = []
+            for key_field in role_info.keys():
+                row.append(role_info[key_field][idx])
+            row = tuple(row)
+            print('row', row)
+            cursor.execute(sql, row)
+
+            new_id_as_PK = cursor.fetchone()[0]
+            PK_values.append(new_id_as_PK)
+
+        conn.commit()
+        cursor.close()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Ошибка при работе с PostgreSQL", error)
+    finally:
+        if conn:
+            conn.close()
+    return PK_values
+
+
 def show_table_by_name(table_name):
     try:
         connection = psycopg2.connect(user="postgres",
@@ -304,8 +342,12 @@ def show_table_by_name(table_name):
 # print('PK_uik', PK_uik)
 
 # Вставка ACCOUNTS_NUM числа строк в таблицу Аккаунты
-# PK_account = insert_account(accounts_data, accounts_num_value=ACCOUNTS_NUM)
-# print('PK_account', PK_account)
+PK_account = insert_account(accounts_data, accounts_num_value=ACCOUNTS_NUM)
+print('PK_account', PK_account)
+
+# Вставка * числа строк в таблицу Роли
+insert_role(role_info, role_num_value, fk_user_id=PK_account)
+
 
 # show_table_by_name(table_name='mainapp_uik')
 show_table_by_name(table_name='accounts_account')
