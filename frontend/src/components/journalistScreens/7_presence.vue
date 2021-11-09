@@ -1,14 +1,11 @@
 <template>
-  <div class="container">
-    <li  v-for="item in items" :key="item.num_tik,item.presence">
-       {{data.}}
-
-
-    </li>
-
- {{data}}
-
-
+  <div>
+          <img :src="`${require('../../assets/journalistScreens/7.png')}`"
+             :style="{
+          'height': '100vh'
+        }"
+      >
+    {{data}}
   </div>
 </template>
 
