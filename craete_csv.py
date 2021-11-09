@@ -88,17 +88,6 @@ table_name_uik = 'mainapp_uik'
 # UIK_NUM = 3628
 UIK_NUM = 2
 
-uik_values_old = {'num_uik': pd.Series(i for i in range(1, UIK_NUM+1)),
-              'num_tik': pd.Series(1 for _ in range(1, UIK_NUM+1)),
-              'population': pd.Series(random.randint(100, 300) for _ in range(UIK_NUM)),
-              'sum_numb_votes_fin': pd.Series(0 for _ in range(UIK_NUM)),
-              'presence': pd.Series(0 for _ in range(UIK_NUM)),
-              'perc_final_bul': pd.Series(0 for _ in range(UIK_NUM)),
-              'bad_form': pd.Series(random.randint(0, 5) for _ in range(UIK_NUM)),
-              'update_time': pd.Series('2020-05-16 08:36:38' for _ in range(UIK_NUM)),
-              }
-
-# print('df_uik\n',df_uik)
 id_uik = 6
 uik_values = {'num_uik': [i for i in range(id_uik, UIK_NUM+id_uik)],
               'population': [random.randint(100, 300) for _ in range(UIK_NUM)],
@@ -210,9 +199,7 @@ def insert_candidats(cand_info):
     PK_candadats = []
 
     try:
-        # Подключение к существующей базе данных
         conn = psycopg2.connect(user="postgres",
-                                  # пароль, который указали при установке PostgreSQL
                                   password="***",
                                   host="huvalk.ru",
                                   port="8001",
@@ -258,7 +245,6 @@ def insert_uik(uik_info, uik_num_value):
     PK_uik = []
     try:
         conn = psycopg2.connect(user="postgres",
-                                # пароль, который указали при установке PostgreSQL
                                 password="***",
                                 host="huvalk.ru",
                                 port="8001",
@@ -295,21 +281,17 @@ def insert_account(accounts_info):
     conn = None
     PK_values = []
     try:
-        # Подключение к существующей базе данных
         conn = psycopg2.connect(user="postgres",
-                                # пароль, который указали при установке PostgreSQL
                                 password="***",
                                 host="huvalk.ru",
                                 port="8001",
                                 database="electorator")
-        # Курсор для выполнения операций с базой данных
         cursor = conn.cursor()
-        # Распечатать сведения о PostgreSQL
         print("Информация о сервере PostgreSQL")
         print(conn.get_dsn_parameters(), "\n")
 
         for idx in range(len(accounts_info)):
-            row = []  # кортеж
+            row = []
             for key_field in accounts_info.keys():
                 row.append(accounts_info[key_field][idx])
             row = tuple(row)
@@ -320,9 +302,7 @@ def insert_account(accounts_info):
             candidate_id = cursor.fetchone()[0]
             PK_values.append(candidate_id)
 
-        # commit the changes to the database
         conn.commit()
-        # close communication with the database
         cursor.close()
 
     except (Exception, psycopg2.DatabaseError) as error:
@@ -336,7 +316,6 @@ def insert_account(accounts_info):
 def show_table_by_name(table_name):
     try:
         connection = psycopg2.connect(user="postgres",
-                                # пароль, который указали при установке PostgreSQL
                                 password="***",
                                 host="huvalk.ru",
                                 port="8001",
