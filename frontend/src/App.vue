@@ -46,7 +46,7 @@
           'height': '100vh'
         }"
     >
-      <router-view />
+      <router-view :key="$route.fullPath"/>
     </div>
   </div>
 </template>

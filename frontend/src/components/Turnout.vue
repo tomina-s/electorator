@@ -5,7 +5,9 @@
         <Form @submit="handleTurnout" :validation-schema="schema">
           <div class="form-group">
             <label class="font-weight-bold text-white" for="num">Внести явку</label>
-            <Field name="num" type="number" class="form-control" />
+            <Field name="num" type="number" class="form-control"
+              :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue : ''" :key="oldValue"
+            />
             <ErrorMessage name="num" class="error-feedback" />
           </div>
 
@@ -31,7 +33,7 @@
             </div>
           </div>
         </Form>
-        <switcher :key="innerNumber" :protocolNum="innerNumber > 4 ? 4 : innerNumber" :done="innerNumber > 4"/>
+        <switcher :key="innerNumber" :protocolNum="innerNumber" :done="oldValue !== undefined"/>
       </div>
     </div>
   </div>
@@ -58,8 +60,10 @@ export default {
     })
 
     return {
+      oldValue: undefined,
       globalError: false,
-      innerNumber: 0,
+      innerNumber: this.$route.query.protocolNum ? parseInt(this.$route.query.protocolNum) : 0,
+      nextProtocolNumber: 0,
       loading: false,
       message: "",
       info: "",
@@ -75,15 +79,21 @@ export default {
       this.message = "Что-то пошло не так"
       return
     }
-    ProtocolService.GetProtocolFirstQuantity(perm)
+    ProtocolService.GetProtocolFirstList(perm, 1)
         .then(r => {
-          this.innerNumber = r.quantity + 1
-          if (r.quantity === 0) {
-            this.$router.push("/timer")
-          } else  if (r.quantity === 4){
-            this.$router.push("/protocol/create")
-          } else  if (r.quantity === 5){
-            this.$router.push({ name: '/protocols', query: { uik_id: perm } })
+          const quantity = r.length
+          if (!this.innerNumber) {
+            this.innerNumber = quantity >= 4 ? 4 : quantity + 1
+          }
+          this.nextProtocolNumber = quantity + 1
+
+          if (this.innerNumber < this.nextProtocolNumber) {
+            this.info = "Протокол был успешно отправлен"
+            this.oldValue = r[this.innerNumber - 1].sum_bul
+            this.globalError = true
+          } else if (this.innerNumber > this.nextProtocolNumber) {
+            this.globalError = true
+            this.message = "Заполните предыдущий протокол"
           }
         })
         .catch(e => {
@@ -117,11 +127,13 @@ export default {
             this.info = "Явка успешно зафиксирована"
 
             console.log(this.innerNumber)
-            if (this.innerNumber === 4) {
+            this.innerNumber++
+            if (this.innerNumber === 5) {
               this.$router.push("/protocol/create")
               return
+            } else {
+              this.$router.push({ name:'turnout', query:{ protocolNum:  this.innerNumber } })
             }
-            this.innerNumber++
             this.loading = false
           })
           .catch(e => {

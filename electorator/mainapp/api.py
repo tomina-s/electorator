@@ -114,7 +114,7 @@ class ProtocolsFirstList(APIView):
         if uik_id not in perm and role != "ЦИК":
             raise exceptions.PermissionDenied()
 
-        protocols = Protocol1.objects.filter(num_uik=uik_id).order_by('-id')[(page - 1) * 10:page * 10]
+        protocols = Protocol1.objects.filter(num_uik=uik_id).order_by('id')[(page - 1) * 10:page * 10]
         serializer_class = ProtocolFirstSerializer(protocols, many=True)
 
         return Response(serializer_class.data, status=status.HTTP_200_OK)

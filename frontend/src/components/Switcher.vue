@@ -1,6 +1,6 @@
 <template>
   <button
-      :disabled="true"
+      :disabled="protocolNum < 2"
     class="btn btn-light btn-block"
     @click="$router.push({ name:namePrev, query:{ protocolNum:  protocolNum - 1 } })"
   >
@@ -20,7 +20,7 @@
 export default {
   name: "Switcher",
   props: {
-    protocolNum: Number,
+    protocolNum: String,
     done: Boolean
   },
   data() {
@@ -41,7 +41,7 @@ export default {
         namePrev = "turnout"
         break
       case 4:
-        nameNext = "turnout"
+        nameNext = "createProtocol"
         namePrev = "turnout"
         break
       case 5:
