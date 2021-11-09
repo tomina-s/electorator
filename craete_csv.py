@@ -333,6 +333,40 @@ def insert_account(accounts_info):
     return PK_values
 
 
+def show_table_by_name(table_name):
+    try:
+        connection = psycopg2.connect(user="postgres",
+                                # пароль, который указали при установке PostgreSQL
+                                password="***",
+                                host="huvalk.ru",
+                                port="8001",
+                                database="electorator")
+
+        cursor = connection.cursor()
+        postgreSQL_select_Query = "select * from " + table_name
+
+        cursor.execute(postgreSQL_select_Query)
+        # print("Selecting rows from mobile table using cursor.fetchall")
+        table_records = cursor.fetchall()
+
+        print("Print each row and it's columns values")
+        for row in table_records:
+            print('row', row)
+            # print("Id = ", row[0], )
+            # print("Model = ", row[1])
+            # print("Price  = ", row[2], "\n")
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while fetching data from PostgreSQL", error)
+
+    finally:
+        # closing database connection.
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+
 # print(insert_account('ac_name'))
 # print(insert_candidate(candidats['name'][0], candidats['party'][0], candidats['info'][0], candidats['sum_votes'][0], candidats['photo'][0]))
 
@@ -342,3 +376,5 @@ def insert_account(accounts_info):
 
 PK_uik = insert_uik(uik_values, uik_num_value=UIK_NUM)
 print('PK_uik', PK_uik)
+
+show_table_by_name(table_name='mainapp_uik')
