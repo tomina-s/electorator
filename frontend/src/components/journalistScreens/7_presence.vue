@@ -1,9 +1,11 @@
 <template>
-  <div
+  <div class="container">
+    <li  v-for="item in items" :key="item.num_tik,item.presence">
+       {{data.}}
 
 
-  >
-    привет
+    </li>
+
  {{data}}
 
 

@@ -6,7 +6,7 @@ class Tik(Model):
     num_tik = models.CharField(
         verbose_name='Номер ТИК',
         max_length=200,
-
+        default='0'
     )
     population = models.IntegerField(
         verbose_name='Численность',
@@ -47,11 +47,11 @@ class Uik(Model):
         verbose_name='Номер участка',
         unique=True
     )
-    num_tik = models.ForeignKey(
-        Tik, on_delete=models.CASCADE,
+    num_tik = models.CharField(
+        verbose_name='Номер ТИК',
+        max_length=200,
         default='0'
     )
-
     population = models.IntegerField(
         verbose_name='Численность'
     )

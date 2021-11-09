@@ -25,6 +25,7 @@ import c5_toptik from './journalistScreens/5_toptik'
 import c6_general_info_presence from './journalistScreens/6_general_info_presence'
 import c7_presence from './journalistScreens/7_presence'
 import c8_toppresence from './journalistScreens/8_top_presence'
+import c9_top24presence from './journalistScreens/9_top_24_presence'
 import c11_votespresence from './journalistScreens/11_votespresence'
 import DemonstrationService from './../services/demonstration.service'
 import ConfigService from "../services/config.service";
@@ -168,13 +169,22 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c8_toppresence
-                  this.state = 0
+                  this.state = 9
                 })
                 .catch(e =>{
                   console.log(e)
                 })
             break
           case 9:
+            DemonstrationService.Top24Presence()
+                .then(r => {
+                  this.data = r
+                  this.slide = c9_top24presence
+                  this.state = 0
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
             break
             // 21 00
           case 10:
