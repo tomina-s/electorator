@@ -85,9 +85,10 @@ candidats = df_candidats.to_dict('dict')
 
 table_name_uik = 'mainapp_uik'
 
-UIK_NUM = 3628
+# UIK_NUM = 3628
+UIK_NUM = 2
 
-uik_values = {'num_uik': pd.Series(i for i in range(1, UIK_NUM+1)),
+uik_values_old = {'num_uik': pd.Series(i for i in range(1, UIK_NUM+1)),
               'num_tik': pd.Series(1 for _ in range(1, UIK_NUM+1)),
               'population': pd.Series(random.randint(100, 300) for _ in range(UIK_NUM)),
               'sum_numb_votes_fin': pd.Series(0 for _ in range(UIK_NUM)),
@@ -96,7 +97,21 @@ uik_values = {'num_uik': pd.Series(i for i in range(1, UIK_NUM+1)),
               'bad_form': pd.Series(random.randint(0, 5) for _ in range(UIK_NUM)),
               'update_time': pd.Series('2020-05-16 08:36:38' for _ in range(UIK_NUM)),
               }
+
 # print('df_uik\n',df_uik)
+id_uik = 6
+uik_values = {'num_uik': [i for i in range(id_uik, UIK_NUM+id_uik)],
+              'population': [random.randint(100, 300) for _ in range(UIK_NUM)],
+              'status': [False for _ in range(UIK_NUM)],
+              'sum_votes': [0 for _ in range(UIK_NUM)],
+              'sum_numb_votes_fin': [0 for _ in range(UIK_NUM)],
+
+              'presence': [0 for _ in range(UIK_NUM)],
+              'perc_final_bul': [0 for _ in range(UIK_NUM)],
+              'bad_form': [random.randint(0, 5) for _ in range(UIK_NUM)],
+              'update_time': ['2020-05-16 08:36:38' for _ in range(UIK_NUM)],
+              'num_tik': [1 for _ in range(UIK_NUM)],
+              }
 
 
 def insert_account(account_name):
@@ -235,13 +250,50 @@ def insert_candidats(cand_info):
     return PK_candadats
 
 
-def insert_uik(uik_info):
-    # сверить поля с физ моделью БД
-    sql = """INSERT INTO mainapp_uik(num_uik, num_tik, population, sum_numb_votes_fin, presence,
-             perc_final_bul, bad_form, update_time)
-             VALUES(%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
+def insert_uik(uik_info, uik_num_value):
+    sql = """INSERT INTO mainapp_uik(num_uik, population, status, sum_votes, sum_numb_votes_fin,
+            presence, perc_final_bul, bad_form, update_time, num_tik)
+            VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
     conn = None
     PK_uik = []
+    try:
+        conn = psycopg2.connect(user="postgres",
+                                # пароль, который указали при установке PostgreSQL
+                                password="***",
+                                host="huvalk.ru",
+                                port="8001",
+                                database="electorator")
+        cursor = conn.cursor()
+        print("Информация о сервере PostgreSQL")
+        print(conn.get_dsn_parameters(), "\n")
+
+        for idx in range(uik_num_value):
+            row = []
+            for key_field in uik_info.keys():
+                row.append(uik_info[key_field][idx])
+            row = tuple(row)
+            print('row', row)
+            cursor.execute(sql, row)
+
+            candidate_id = cursor.fetchone()[0]
+            PK_uik.append(candidate_id)
+
+        conn.commit()
+        cursor.close()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Ошибка при работе с PostgreSQL", error)
+    finally:
+        if conn:
+            conn.close()
+    return PK_uik
+
+
+def insert_account(accounts_info):
+    sql = """INSERT INTO mainapp_uik(password, last_login, name, username)
+            VALUES(%s,%s,%s,%s) RETURNING id;"""
+    conn = None
+    PK_values = []
     try:
         # Подключение к существующей базе данных
         conn = psycopg2.connect(user="postgres",
@@ -252,23 +304,21 @@ def insert_uik(uik_info):
                                 database="electorator")
         # Курсор для выполнения операций с базой данных
         cursor = conn.cursor()
-
         # Распечатать сведения о PostgreSQL
         print("Информация о сервере PostgreSQL")
         print(conn.get_dsn_parameters(), "\n")
 
-        row = ''
-
-        for idx in range(len(uik_info)):
-            for key_field in uik_info.keys():
-                row += uik_info[key_field][idx]
+        for idx in range(len(accounts_info)):
+            row = []  # кортеж
+            for key_field in accounts_info.keys():
+                row.append(accounts_info[key_field][idx])
+            row = tuple(row)
             print('row', row)
-            # row = (uik_info['name'][idx], uik_info['party'][idx], uik_info['info'][idx], uik_info['sum_votes'][idx], uik_info['photo'][idx])
-            # cursor.execute(sql, row)
+            cursor.execute(sql, row)
 
             # get the generated id back
             candidate_id = cursor.fetchone()[0]
-            PK_uik.append(candidate_id)
+            PK_values.append(candidate_id)
 
         # commit the changes to the database
         conn.commit()
@@ -280,7 +330,7 @@ def insert_uik(uik_info):
     finally:
         if conn:
             conn.close()
-    return PK_uik
+    return PK_values
 
 
 # print(insert_account('ac_name'))
@@ -290,4 +340,5 @@ def insert_uik(uik_info):
 # PK_candadats = insert_candidats(candidats)
 # print('PK_candadats', PK_candadats)
 
-PK_uik = insert_uik(uik_values)
+PK_uik = insert_uik(uik_values, uik_num_value=UIK_NUM)
+print('PK_uik', PK_uik)
