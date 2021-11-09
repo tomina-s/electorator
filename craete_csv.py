@@ -96,51 +96,6 @@ uik_values = {'num_uik': [i for i in range(id_uik, UIK_NUM+id_uik)],
               }
 
 
-def insert_account(account_name):
-    # print('account_name', account_name)
-    sql = """INSERT INTO accounts_account(name)
-             VALUES(%s) RETURNING id;"""
-    # print('sql', sql)
-    conn = None
-    account_id = None
-    try:
-        # Подключение к существующей базе данных
-        conn = psycopg2.connect(user="postgres",
-                                  # пароль, который указали при установке PostgreSQL
-                                  password="***",
-                                  host="huvalk.ru",
-                                  port="8001",
-                                  database="electorator")
-        # Курсор для выполнения операций с базой данных
-        cursor = conn.cursor()
-
-        # Распечатать сведения о PostgreSQL
-        print("Информация о сервере PostgreSQL")
-        print(conn.get_dsn_parameters(), "\n")
-        # Выполнение SQL-запроса
-        cursor.execute("SELECT version();")
-        # Получить результат
-        record = cursor.fetchone()
-        print("Вы подключены к - ", record, "\n")
-
-        cursor.execute(sql, (account_name,))
-
-
-        # get the generated id back
-        account_id = cursor.fetchone()[0]
-        # commit the changes to the database
-        conn.commit()
-        # close communication with the database
-        cursor.close()
-
-    except (Exception, psycopg2.DatabaseError) as error:
-        print("Ошибка при работе с PostgreSQL", error)
-    finally:
-        if conn:
-            conn.close()
-    return account_id
-
-
 def insert_candidate(name, party, info, sum_votes, photo):
     # print('candidate_name', candidate_name)
     sql = """INSERT INTO mainapp_candidate(name, party, info, sum_votes, photo)
