@@ -4,11 +4,6 @@
       <div class="card card-container" :style="{'background-color': 'transparent !important'}">
         <Form @submit="handleProtocol" :validation-schema="schema">
           <div class="form-group">
-            <label class="font-weight-bold" for="status">Участок открыт</label>
-            <Field name="status" type="checkbox" :value="true" true-value="true" false-value="false" class="form-control" />
-            <ErrorMessage name="status" class="error-feedback" />
-          </div>
-          <div class="form-group">
             <label class="font-weight-bold" for="sum_bul">Проголосовало</label>
             <Field name="sum_bul" type="number" class="form-control" />
             <ErrorMessage name="sum_bul" class="error-feedback" />
@@ -140,7 +135,7 @@ export default {
   },
   methods: {
     handleProtocol(protocol) {
-      protocol.status = protocol.status === true
+      protocol.status = true
       protocol.num_protocol_1 = 0
 
       const perm = getUIKPermission()

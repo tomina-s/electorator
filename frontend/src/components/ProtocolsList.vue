@@ -1,30 +1,16 @@
 <template>
   <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
-      <div class="card card-container">
+      <div class="card card-container" :style="{'background-color': 'transparent !important'}">
           <router-link  class="btn btn-primary btn-block" to="/protocol/create" tag="button">Заполнить протокол</router-link>
 
             <div v-for="protocol in protocols" :key="protocol.id" class="card card-container">
-              <div class="form-group">
+              <router-link
+                  class="btn btn-outline-secondary btn-block"
+                  :to="{ name:'/protocol/read', query:{ protocol_id:  protocol.id } }"
+              >
                 Протокол №{{ protocol.num_protocol_1 }}
-              </div>
-              <div class="form-group">
-                Номер УИК: {{ protocol.num_uik }}
-              </div>
-              <div class="form-group">
-                Участок {{ protocol.status ? 'открыт' : 'закрыт' }}
-              </div>
-              <div class="form-group">
-                Проголосовало: {{ protocol.sum_bul }}
-              </div>
-              <div class="form-group">
-                Бюллетеней испорчено: {{ protocol.bad_form }}
-              </div>
-              <div v-for="(candidate) in protocol.candidates"
-                   :key="candidate.id"
-                   class="form-group">
-                {{ candidate.name }}:
-              </div>
+              </router-link>
             </div>
       </div>
     </div>

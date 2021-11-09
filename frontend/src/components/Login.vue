@@ -1,7 +1,7 @@
 <template>
   <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
-      <div class="card card-container">
+      <div class="card card-container" :style="{'background-color': 'transparent !important'}">
         <div class="display-4 text-center">
           Вход в систему
         </div>
