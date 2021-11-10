@@ -47,6 +47,7 @@
             </div>
           </div>
         </Form>
+        <switcher :key="innerNumber" :protocolNum="innerNumber" :done="oldValue !== undefined"/>
       </div>
     </div>
   </div>
