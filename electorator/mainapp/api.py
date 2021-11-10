@@ -277,7 +277,7 @@ class PresenceViewSet(APIView):
     def get(self, request):
         queryset = Tik.objects.values('update_time').annotate(presence=Count('id'))[:1]
         number_tik = queryset[0]['presence']
-        queryset = Tik.objects.all().order_by('-update_time', '-presence')[:number_tik]
+        queryset = Tik.objects.all().order_by('-update_time', '-presence')[:number_tik] #
         serializer_class = PresenceSerializer(queryset, many=True)
         c = 1
         return response.Response(serializer_class.data)

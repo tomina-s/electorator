@@ -76,6 +76,16 @@ export default {
         }
         return arrayOfArrays;
     },
+    splitArrayPresence(array) {
+      let arrayOfArrays = [];
+        while (array.length > 0) {
+            let arrayElement = array.splice(0,8);
+            arrayOfArrays.push(arrayElement);
+        }
+        return arrayOfArrays;
+    },
+
+
     countTimer() {
       setTimeout(() => {
         if (this.state === 0 || this.state === 5 || this.state === 10) {
@@ -88,6 +98,7 @@ export default {
             this.state = 10
           }
         }
+
 
         switch (this.state) {
           // 10 00
@@ -156,7 +167,7 @@ export default {
           case 7:
             DemonstrationService.Presence() //не могу пока вывести массив
                 .then(r => {
-                  this.data = this.splitArray(r)
+                  this.data = this.splitArrayPresence(r)
                   this.slide = c7_presence
                   this.state = 8
                 })
