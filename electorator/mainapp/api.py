@@ -117,7 +117,13 @@ class ProtocolsFirstList(APIView):
         protocols = Protocol1.objects.filter(num_uik=uik_id).order_by('id')[(page - 1) * 10:page * 10]
         serializer_class = ProtocolFirstSerializer(protocols, many=True)
 
-        return Response(serializer_class.data, status=status.HTTP_200_OK)
+        data = serializer_class.data
+        if len(data) == 5:
+            queryset = Protocol2.objects.all().filter(num_uik=uik_id).order_by('name')
+            protocol_second_serializer_class = ProtocolSecondSerializer(queryset, many=True)
+            data[4]['candidates'] = protocol_second_serializer_class.data
+
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class ProtocolsFirstListQuantity(APIView):
