@@ -1,7 +1,7 @@
 <template>
   <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
-      <div class="card card-container" :style="{'background-color': 'transparent !important'}">
+      <div class="card card-container text-white" :style="{'background-color': 'transparent !important'}">
         <Form @submit="handleProtocol" :validation-schema="schema">
           <div class="form-group">
             <label class="font-weight-bold" for="sum_bul">Проголосовало</label>
@@ -26,7 +26,7 @@
 
 
           <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled=isDisabled>
+            <button class="btn btn-light btn-block" :disabled=isDisabled>
               <span
                 v-show=isLoading
                 class="spinner-border spinner-border-sm"

@@ -43,7 +43,7 @@
     <div class="bg-image"
        :style="{
           'background-image': `url(${require('./assets/gradient.png')})`,
-          'height': '100vh'
+          'background-attachment': 'fixed',
         }"
     >
       <router-view :key="$route.fullPath"/>
