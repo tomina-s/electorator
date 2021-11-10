@@ -1,36 +1,28 @@
 <template>
-  <div>
-    <img :src="`${require('../../assets/logo_shadow.png')}`"
-         :style="{
-          'height': '100vh'
-    }">
-    <p :style="{
-        'position': 'fixed',
-        'width': '25%',
-        'color': '#FFFFFF',
-        'font-size': '96px',
-        'font-weight': 'bold',
-        'text-align': 'center',
-        'top': '25%',
-        'left': '62%'
-      }"
-    >
-      {{ data.open_uik }} открыто
-    </p>
-    <br/>
-    <p :style="{
-        'position': 'fixed',
-        'width': '25%',
-        'color': '#FFFFFF',
-        'font-size': '96px',
-        'font-weight': 'bold',
-        'text-align': 'center',
-        'top': '60%',
-        'left': '62%'
-      }">
-      {{ data.population }} избирателей
-    </p>
+  <div class ="block">
+    <div class="container-fluid mb-5">
+      <div class="row">
+        <div class="col-6">
+
+        </div>
+        <div class="col-6">
+          <div class="row row_block mb-5 display-1 text-white text-center font-weight-bold">
+            <div class="col-6">
+              {{data.open_uik}}
+            </div>
+          </div>
+          <div class="row row_block display-1 text-white text-center font-weight-bold">
+            <div class="col-6">
+              {{data.population}}
+            </div>
+          </div>
+
+
+
+        </div>
+    </div>
   </div>
+ </div>
 </template>
 
 <script>
@@ -51,5 +43,22 @@ export default {
 </script>
 
 <style scoped>
+.block {
 
+    height: 100vh;
+
+    background-image:url("../../assets/journalistScreens/1.png");
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.row_block{
+  border:5px #1b1e21;
+  height: 33vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
 </style>

@@ -1,14 +1,22 @@
 <template>
-  <div
+  <div class="block">
+    <div class="container-fluid" :style="{'background-color': 'transparent !important'}">
 
+      <div class="row row_block text-white display-1 font-weight-bold">
+        <div class ="col-12 text-center mt-5 pt-5">
+          {{data.num_tik}}
 
-  >
-    top_presence
-    {{data.num_tik}}
-    {{data.presence}}
-
+        </div>
+      </div>
+      <div class="row row_block text-white display-1 font-weight-bold">
+        <div class="col-12 text-center mt-5 pt-5">
+          {{data.presence}}%
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -28,5 +36,25 @@ export default {
 </script>
 
 <style scoped>
+.block {
+
+    height: 100vh;
+
+    background-image:url("../../assets/journalistScreens/8.png");
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.row_block{
+  border:5px #1b1e21;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
 
 </style>
+
+
