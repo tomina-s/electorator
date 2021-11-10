@@ -1,10 +1,11 @@
 <template>
   <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
-      <div class="card card-container" :style="{'background-color': 'transparent !important'}">
+      <div class="card card-container text-white" :style="{'background-color': 'transparent !important'}">
+        <span class="text-center display-3">Отчет о явке №{{innerNumber}}</span>
         <Form @submit="handleTurnout" :validation-schema="schema">
           <div class="form-group">
-            <label class="font-weight-bold text-white" for="num">Внести явку</label>
+            <label class="font-weight-bold" for="num">Внести явку</label>
             <Field name="num" type="number" class="form-control"
               :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue : ''" :key="oldValue"
             />
@@ -33,7 +34,7 @@
             </div>
           </div>
         </Form>
-        <switcher :key="innerNumber" :protocolNum="innerNumber" :done="oldValue !== undefined"/>
+        <switcher :key="innerNumber" :uik_id="perm" :protocolNum="innerNumber" :done="oldValue !== undefined"/>
       </div>
     </div>
   </div>
@@ -44,7 +45,7 @@ import Switcher from "./Switcher"
 import { Form, Field, ErrorMessage } from "vee-validate"
 import * as yup from "yup"
 import ProtocolService from "../services/protocol.service"
-import {getUIKPermission} from "../services/common.service";
+import {getRole, getUIKPermission} from "../services/common.service";
 
 export default {
   name: "Turnout",
@@ -60,6 +61,7 @@ export default {
     })
 
     return {
+      perm: undefined,
       oldValue: undefined,
       globalError: false,
       innerNumber: this.$route.query.protocolNum ? parseInt(this.$route.query.protocolNum) : 0,
@@ -73,12 +75,22 @@ export default {
   computed: {
   },
   mounted() {
-    const perm = getUIKPermission()
+    const role = getRole()
+    if (role !== "УИК") {
+      this.globalError = true
+    }
+    let perm = this.$route.query.uik_id
+    if (!perm) {
+      perm = getUIKPermission()
+    }
+
     if (!perm) {
       this.globalError = true
       this.message = "Что-то пошло не так"
       return
     }
+    this.perm = perm
+
     ProtocolService.GetProtocolFirstList(perm, 1)
         .then(r => {
           const quantity = r.length
@@ -93,7 +105,7 @@ export default {
             this.globalError = true
           } else if (this.innerNumber > this.nextProtocolNumber) {
             this.globalError = true
-            this.message = "Заполните предыдущий протокол"
+            this.message = "Предыдущий протокол еще не был отправлен"
           }
         })
         .catch(e => {

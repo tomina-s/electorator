@@ -2,6 +2,7 @@
   <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
       <div class="card card-container text-white" :style="{'background-color': 'transparent !important'}">
+        <span class="text-center display-3">Итоговый протокол</span>
         <Form @submit="handleProtocol" :validation-schema="schema">
           <div class="form-group">
             <label class="font-weight-bold" for="sum_bul">Проголосовало</label>
@@ -50,7 +51,7 @@
             </div>
           </div>
         </Form>
-        <switcher :key="innerNumber" :protocolNum="innerNumber" :done="oldValue !== undefined"/>
+        <switcher :key="innerNumber" :uik_id="perm" :protocolNum="innerNumber" :done="oldValue !== undefined"/>
       </div>
     </div>
   </div>
@@ -62,7 +63,7 @@ import { Form, Field, ErrorMessage } from "vee-validate"
 import * as yup from "yup"
 import ProtocolService from "../services/protocol.service"
 import CandidateService from "../services/candidate.service"
-import {getUIKPermission} from "../services/common.service"
+import {getRole, getUIKPermission} from "../services/common.service"
 
 export default {
   name: "Protocol",
@@ -74,6 +75,7 @@ export default {
   },
   data() {
     return {
+      perm: undefined,
       oldValue: undefined,
       innerNumber: 5,
       nextProtocolNumber: 0,
@@ -97,12 +99,22 @@ export default {
   created() {
   },
   mounted() {
-    const perm = getUIKPermission()
+    const role = getRole()
+    if (role !== "УИК") {
+      this.globalError = true
+    }
+    let perm = this.$route.query.uik_id
+    if (!perm) {
+      perm = getUIKPermission()
+    }
+
     if (!perm) {
       this.globalError = true
-      this.message = "Роль не соответствует выполняемым действиям"
+      this.message = "Что-то пошло не так"
       return
     }
+    this.perm = perm
+
     CandidateService.GetCandidatesFromUIK()
         .then(r => {
           this.candidates = r

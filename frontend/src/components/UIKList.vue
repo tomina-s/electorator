@@ -8,8 +8,8 @@
             class="form-group"
           >
             <router-link
-                class="btn btn-outline-secondary btn-block"
-                :to="{ name:'/protocols', query:{ uik_id:  uik.id } }"
+                class="btn btn-light btn-block"
+                :to="{ name:'/protocols', query:{ uik_id: uik.id } }"
             >
                  УИК №{{ uik.num_uik }}
             </router-link>

@@ -1,8 +1,8 @@
 <template>
   <div class="container" :style="{'background-color': 'transparent !important'}">
-    <div class="col-md-12">
+    <div class="col-md-12 text-white">
       <div class="card card-container" :style="{'background-color': 'transparent !important'}">
-        <div v-if="!opened" class="text-center  text-white">
+        <div v-if="!opened" class="text-center">
           <label v-if="!timeLeft || timeLeft < 0" class="display-3">
             Откройте участок
           </label>
@@ -12,7 +12,7 @@
             {{Math.floor((timeLeft % (1000 * 60)) / 1000)}}
           </label>
         </div>
-        <div v-if="opened" class="card card-container text-white text-center display-3"
+        <div v-if="opened" class="card card-container text-center display-3"
              :style="{'background-color': 'transparent !important'}">
           Участок открыт
         </div>
@@ -40,7 +40,7 @@
           </div>
         </Form>
 
-        <switcher :key="innerNumber" :protocolNum="1" :done="innerNumber > 1"/>
+        <switcher :key="innerNumber" :uik_id="perm" :protocolNum="1" :done="innerNumber > 1"/>
       </div>
     </div>
   </div>
@@ -50,7 +50,7 @@
 import Switcher from "./Switcher"
 import ProtocolService from "../services/protocol.service"
 import ConfigService from "../services/config.service";
-import {getUIKPermission} from "../services/common.service";
+import {getRole, getUIKPermission} from "../services/common.service";
 
 export default {
   name: "Timer",
@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       globalError: false,
+      perm: undefined,
       innerNumber: 0,
       timeLeft: 0,
       loading: false,
@@ -71,12 +72,22 @@ export default {
   computed: {
   },
   mounted() {
-    const perm = getUIKPermission()
+    const role = getRole()
+    if (role !== "УИК") {
+      this.globalError = true
+    }
+    let perm = this.$route.query.uik_id
+    if (!perm) {
+      perm = getUIKPermission()
+    }
+
     if (!perm) {
       this.globalError = true
       this.message = "Что-то пошло не так"
       return
     }
+    this.perm = perm
+
     ProtocolService.GetProtocolFirstQuantity(perm)
         .then(r => {
           this.innerNumber = r.quantity + 1
