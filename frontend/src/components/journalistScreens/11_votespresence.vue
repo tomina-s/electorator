@@ -49,7 +49,7 @@ export default {
 }
 .row_block{
   border:5px #1b1e21;
-  height: 50vh;
+  height: 47vh;
   display: flex;
   align-items: center;
   justify-content: center;
