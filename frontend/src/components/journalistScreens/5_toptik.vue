@@ -1,12 +1,7 @@
 <template>
-  <div
-
-
-  >
-    topUik
-    {{data.num_tik}}
+  <div>
     {{data.population}}
-
+    {{data.num_tik}}
   </div>
 </template>
 
@@ -25,6 +20,7 @@ export default {
       }
   }
 }
+
 </script>
 
 <style scoped>
