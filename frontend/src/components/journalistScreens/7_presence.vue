@@ -1,25 +1,28 @@
 <template>
 
   <div class="container">
+
       <div class="row">
-      <div class="col-sm-6" v-for="(elem, i) in presence.slice(0,8)" :key="i">
-        <div class="row" v-for="(el, j) in elem" :key="j">
+        <div class="col-sm-6" v-for="(elem, i) in presence.slice(0,8)" :key="i">
+          <div class="row" v-for="(el, j) in elem" :key="j">
 
-        {{el.num_tik}}
-        {{el.presence}}
+          {{el.num_tik}}
+          {{el.presence}}
+
+          </div>
 
         </div>
-
-      </div>
        <div class="col-sm-6" v-for="(elem, i) in presence.slice(8,16)" :key="i">
-        <div class="row" v-for="(el, j) in elem" :key="j">
+          <div class="row" v-for="(el, j) in elem" :key="j">
 
-        {{el.num_tik}}
-        {{el.presence}}
+          {{el.num_tik}}
+          {{el.presence}}
+
+          </div>
+
+
 
         </div>
-
-      </div>
       </div>
 
     </div>
