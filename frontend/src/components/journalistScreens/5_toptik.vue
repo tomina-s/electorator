@@ -2,14 +2,14 @@
   <div class="block">
     <div class="container-fluid" :style="{'background-color': 'transparent !important'}">
 
-      <div class="row row_block text-white display-2 font-weight-bold">
-        <div class ="col-12 text-center pt-5">
+      <div class="row row_block text-white display-1 font-weight-bold">
+        <div class ="col-12 text-center mt-5 pt-5">
           {{data.num_tik}}
 
         </div>
       </div>
-      <div class="row row_block text-white display-3 font-weight-bold">
-        <div class="col-12 text-center">
+      <div class="row row_block text-white display-1 font-weight-bold">
+        <div class="col-12 text-center mt-5 pt-5">
           {{data.population}}
 
         </div>

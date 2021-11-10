@@ -305,8 +305,11 @@ class Top24PresenceViewSet(APIView):  # переднлаь под другую �
     def get(self, request):
         queryset = Tik.objects.all().order_by('-update_time', '-presence')[1:4]
         serializer_class = PresenceSerializer(queryset, many=True)
-        c = 1
-        return response.Response(serializer_class.data)
+        new_list=serializer_class.data
+        new_list.append({'min_presence':new_list[-1]['presence']})
+        c = new_list
+        a=1
+        return response.Response(new_list)
 
 
 class TopPresenceViewSet(APIView):
