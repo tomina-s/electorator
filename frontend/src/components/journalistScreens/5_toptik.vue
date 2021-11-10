@@ -1,14 +1,17 @@
 <template>
   <div class="block">
     <div class="container-fluid" :style="{'background-color': 'transparent !important'}">
-      <div class="row">
-        <div class ="col-12 align-self-start">
-        {{data.population}}
+
+      <div class="row row_block text-white display-2 font-weight-bold">
+        <div class ="col-12 text-center pt-5">
+          {{data.num_tik}}
+
         </div>
       </div>
-      <div class="row">
-        <div class="col-12 align-self-end">
-          {{data.num_tik}}
+      <div class="row row_block text-white display-3 font-weight-bold">
+        <div class="col-12 text-center">
+          {{data.population}}
+
         </div>
       </div>
     </div>
@@ -43,9 +46,13 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-
-
+}
+.row_block{
+  border:5px #1b1e21;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
 }
-
 </style>
