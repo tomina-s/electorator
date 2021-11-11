@@ -1,25 +1,6 @@
 <template>
-  <div>
-      <img :src="`${require('../../assets/logo_shadow.png')}`"
-             :style="{
-          'height': '100vh'
-        }"
-      >
-      <span :style="{
-            'width': '25%',
-            'position': 'fixed',
-            'color': '#FFFFFF',
-            'font-size': '146px',
-            'font-weight': 'bold',
-            'top': '25%',
-            'right': '15%'
-          }"
-        >
-        Выборы<br/>Мэра<br/>Москвы
-      </span>
-  </div>
-
-
+  <div class ="block">
+    </div>
 
 </template>
 
@@ -38,5 +19,13 @@ export default {
 </script>
 
 <style scoped>
+.block {
+
+    height: 100vh;
+    background-image:url("../../assets/journalistScreens/0.png");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 </style>

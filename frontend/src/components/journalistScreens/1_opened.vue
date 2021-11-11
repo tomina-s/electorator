@@ -6,12 +6,12 @@
 
         </div>
         <div class="col-6">
-          <div class="row row_block mb-5 display-1 text-white text-center font-weight-bold">
+          <div class="row row_block mb-5 pb-5 display-1 text-white text-center font-weight-bold">
             <div class="col-6">
               {{data.open_uik}}
             </div>
           </div>
-          <div class="row row_block display-1 text-white text-center font-weight-bold">
+          <div class="row row_block display-1 mt-1 text-white text-center font-weight-bold">
             <div class="col-6">
               {{data.population}}
             </div>
