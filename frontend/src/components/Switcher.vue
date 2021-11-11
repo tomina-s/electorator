@@ -2,14 +2,14 @@
   <button
       :disabled="protocolNum < 2"
     class="btn btn-light btn-block"
-    @click="$router.push({ name:namePrev, query:{ protocolNum:  protocolNum - 1 } })"
+    @click="$router.push({ name:namePrev, query:{ protocolNum:  protocolNum - 1, uik_id: uik_id } })"
   >
     Предыдущий протокол
   </button>
   <button
       :disabled="protocolNum >= 5 || !done"
     class="btn btn-light btn-block"
-    @click="$router.push({ name:nameNext, query:{ protocolNum:  protocolNum + 1 } })"
+    @click="$router.push({ name:nameNext, query:{ protocolNum:  protocolNum + 1, uik_id: uik_id } })"
   >
     Следующий протокол
   </button>
@@ -20,6 +20,7 @@
 export default {
   name: "Switcher",
   props: {
+    uik_id: Number,
     protocolNum: String,
     done: Boolean
   },

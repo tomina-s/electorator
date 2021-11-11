@@ -4,19 +4,15 @@
         class="navbar navbar-expand navbar-dark bg-dark"
         v-if="$route.path!=='/demonstration'"
     >
-      <a href="/" class="navbar-brand">Main</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
-          <router-link v-if="currentUser" to="/protocol/create" class="nav-link">Протокол</router-link>
+          <router-link v-if="isUIK" to="/protocols" class="nav-link">Протоколы</router-link>
         </li>
         <li class="nav-item">
-          <router-link v-if="currentUser" to="/protocol/voters" class="nav-link">Внести явку</router-link>
+          <router-link v-if="isTIK || isCIK" to="/uiks" class="nav-link">УИКи</router-link>
         </li>
         <li class="nav-item">
-          <router-link v-if="ableToOpen" to="/timer" class="nav-link">Открыть участок</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link  to="/demonstration" class="nav-link">Демонстрация</router-link>
+          <router-link v-if="isCIK" to="/demonstration" class="nav-link">Демонстрация</router-link>
         </li>
       </div>
 
@@ -43,7 +39,11 @@
     <div class="bg-image"
        :style="{
           'background-image': `url(${require('./assets/gradient.png')})`,
-          'height': '100vh'
+          'background-repeat': 'no-repeat',
+          'background-attachment': 'fixed',
+          'background-position': 'center',
+          'background-size': 'cover',
+          'min-height': '100vh'
         }"
     >
       <router-view :key="$route.fullPath"/>
@@ -54,14 +54,17 @@
 <script>
 export default {
   computed: {
-    ableToOpen() {
-      const currentTime = new Date().getTime()
-      const openUpTo = 11
-      const timeLeft = currentTime - currentTime % (1000 * 60 * 60 * 24) + openUpTo * 1000 * 60 * 60
-      return timeLeft > 0
-    },
     currentUser() {
       return this.$store.state.auth.account
+    },
+    isUIK() {
+      return this.$store.state.auth.account && this.$store.state.auth.account.role === "УИК"
+    },
+    isTIK() {
+      return this.$store.state.auth.account && this.$store.state.auth.account.role === "ТИК"
+    },
+    isCIK() {
+      return this.$store.state.auth.account && this.$store.state.auth.account.role === "ЦИК"
     },
   },
   methods: {
