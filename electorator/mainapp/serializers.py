@@ -82,8 +82,13 @@ class TopTikSerializer(serializers.ModelSerializer):
         fields = ['num_tik', 'population']
 
 
-
 class TopTikSerializer1(serializers.ModelSerializer):
     class Meta:
         model = Tik
         fields = ['num_tik', 'population']
+
+
+class TikSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tik
+        fields = '__all__'

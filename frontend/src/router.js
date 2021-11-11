@@ -4,7 +4,8 @@ import CreateProtocol from "./components/CreateProtocol";
 import Timer from "./components/Timer";
 import ProtocolsList from "./components/ProtocolsList";
 import UIKList from "./components/UIKList";
-import ReadProtocol from "./components/ReadProtocol";
+import TIKList from "./components/TIKList";
+import ReadTIK from "./components/ReadTik";
 import Turnout from "./components/Turnout";
 import Demonstration from "./components/Demonstration";
 
@@ -29,6 +30,11 @@ const routes = [
     component: UIKList,
   },
   {
+    name: "/tiks",
+    path: "/tiks",
+    component: TIKList,
+  },
+  {
     path: "/home",
     component: ProtocolsList,
   },
@@ -42,9 +48,9 @@ const routes = [
     component: Timer,
   },
   {
-    name: "/protocol/read",
-    path: "/protocol/read",
-    component: ReadProtocol,
+    name: "/tik/read",
+    path: "/tik/read",
+    component: ReadTIK,
   },
   {
     name: "turnout",
