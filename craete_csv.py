@@ -2,11 +2,8 @@
 import pandas as pd
 import random
 import string
-from sqlalchemy import create_engine
 
 import psycopg2
-from psycopg2 import Error
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 
 '''
