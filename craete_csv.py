@@ -37,8 +37,9 @@ def gen_string(length):
 
 # генерация рандомных данных
 ACCOUNTS_NUM = 2
+start_acc_id = 6
 table_name_accounts = 'accounts_account'
-accounts_data = {'password': [gen_password(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
+accounts_data = {'password': [gen_password(random.randint(start_acc_id, 15)) for _ in range(ACCOUNTS_NUM+start_acc_id)],
                  'last_login': ['2020-05-16 08:36:38' for _ in range(ACCOUNTS_NUM)],
                  'name': [gen_string(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
                  'username': [gen_string(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
@@ -48,13 +49,7 @@ ACCOUNTS_ROLE_NUM = 10
 table_name_accounts_role = 'accounts_role'
 USER_ROLE_MGIK = 'МГИК'
 USER_ROLE = ['ТИК', 'УИК']
-user_series = pd.Series([idx for idx in range(5, 5+ACCOUNTS_ROLE_NUM)])
-role_user_series = pd.Series(USER_ROLE[random.randint(0, 1)] for _ in range(ACCOUNTS_ROLE_NUM))
-df_account_role = pd.DataFrame({'user_id': user_series,
-                               'role_user': role_user_series
-                                })
-# print('role_user_series\n', type(role_user_series))
-# print('df_account_role', df_account_role)
+roles_info = {'role_user': [USER_ROLE[random.randint(0, 1)] for _ in range(ACCOUNTS_ROLE_NUM)]}
 
 
 CANDIDATE_NUM = 8
@@ -260,12 +255,10 @@ def insert_account(accounts_info, accounts_num_value):
     return PK_values
 
 
-def insert_role(role_info, role_num_value, fk_user_id):
-    """Возможно не нужно возвращать ID, те FK в других таблццах не используются"""
+def insert_roles(roles_info, roles_num_value, fk_user_id):
     sql = """INSERT INTO accounts_role(role_user, user_id)
-            VALUES(%s,%s) RETURNING id;"""
+            VALUES(%s,%s)"""  # RETURNING id;
     conn = None
-    PK_values = []
     try:
         conn = psycopg2.connect(user="postgres",
                                 password="***",
@@ -276,16 +269,10 @@ def insert_role(role_info, role_num_value, fk_user_id):
         print("Информация о сервере PostgreSQL")
         print(conn.get_dsn_parameters(), "\n")
 
-        for idx in range(role_num_value):
-            row = []
-            for key_field in role_info.keys():
-                row.append(role_info[key_field][idx])
-            row = tuple(row)
-            print('row', row)
+        for idx in range(roles_num_value):
+            row = (roles_info['role_user'][idx], fk_user_id[idx])
             cursor.execute(sql, row)
-
-            new_id_as_PK = cursor.fetchone()[0]
-            PK_values.append(new_id_as_PK)
+            print('row', row)
 
         conn.commit()
         cursor.close()
@@ -295,7 +282,6 @@ def insert_role(role_info, role_num_value, fk_user_id):
     finally:
         if conn:
             conn.close()
-    return PK_values
 
 
 def show_table_by_name(table_name):
@@ -342,12 +328,13 @@ def show_table_by_name(table_name):
 # print('PK_uik', PK_uik)
 
 # Вставка ACCOUNTS_NUM числа строк в таблицу Аккаунты
-PK_account = insert_account(accounts_data, accounts_num_value=ACCOUNTS_NUM)
-print('PK_account', PK_account)
+# PK_account = insert_account(accounts_data, accounts_num_value=ACCOUNTS_NUM)
+# print('PK_account', PK_account)
 
-# Вставка * числа строк в таблицу Роли
-insert_role(role_info, role_num_value, fk_user_id=PK_account)
+# Вставка ACCOUNTS_NUM числа строк в таблицу Роли
+# insert_roles(roles_info, roles_num_value=ACCOUNTS_NUM, fk_user_id=PK_account)
 
 
-# show_table_by_name(table_name='mainapp_uik')
+show_table_by_name(table_name='mainapp_uik')
 show_table_by_name(table_name='accounts_account')
+show_table_by_name(table_name='accounts_role')
