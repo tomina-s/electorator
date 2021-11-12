@@ -37,7 +37,7 @@ export default {
   data() {
     console.log('presence',this.data)
       return {
-        presence: this.data
+        presence: this.data.slice().splice(0,16)
       }
   }
 }

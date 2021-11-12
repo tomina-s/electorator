@@ -9,10 +9,13 @@
           <router-link v-if="isUIK" to="/protocols" class="nav-link">Протоколы</router-link>
         </li>
         <li class="nav-item">
-          <router-link v-if="isTIK || isCIK" to="/uiks" class="nav-link">УИКи</router-link>
+          <router-link v-if="isTIK || isCIK" to="/uiks" class="nav-link">Перейти к списку УИК</router-link>
         </li>
         <li class="nav-item">
           <router-link v-if="isCIK" to="/demonstration" class="nav-link">Демонстрация</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link v-if="isCIK" to="/tiks" class="nav-link">Перейти к списку ТИК</router-link>
         </li>
       </div>
 
