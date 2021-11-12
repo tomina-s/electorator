@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.db.models import Model
 
@@ -105,6 +107,37 @@ class Candidate(Model):
     photo = models.ImageField(
         verbose_name='Фото',
         upload_to='media/'
+    )
+    birthday = models.DateField(
+        verbose_name='Дата рождения',
+        blank=True,
+        default=datetime.now()
+    )
+    birthday_place=models.CharField(
+        verbose_name='Место рождения',
+        max_length=100,
+        blank=True
+
+    )
+    education=models.CharField(
+        verbose_name='Образование',
+        max_length=200,
+        blank=True
+    )
+    work=models.CharField(
+        verbose_name='Место работы',
+        max_length=200,
+        blank=True
+    )
+    position=models.CharField(
+        verbose_name='Должность',
+        max_length=200,
+        blank=True
+    )
+    polit_position=models.CharField(
+        verbose_name='Политическая дожность',
+        max_length=200,
+        blank=True
     )
 
 

@@ -16,12 +16,14 @@
 import c0_screen from './journalistScreens/0_screen'
 import c1_opened from './journalistScreens/1_opened'
 import c2_candidates from './journalistScreens/2_candidates'
+import c4_two_candidates from './journalistScreens/4_two_candidates'
 import c5_toptik from './journalistScreens/5_toptik'
 import c6_general_info_presence from './journalistScreens/6_general_info_presence'
 import c7_presence from './journalistScreens/7_presence'
 import c8_toppresence from './journalistScreens/8_top_presence'
 import c9_top24presence from './journalistScreens/9_top_24_presence'
 import c11_votespresence from './journalistScreens/11_votespresence'
+import c12_one_candidate from './journalistScreens/12_one_candidate'
 import DemonstrationService from './../services/demonstration.service'
 import ConfigService from "../services/config.service";
 
@@ -33,6 +35,7 @@ export default {
     c2_candidates,
     c5_toptik,
     c6_general_info_presence,
+
 
   },
   data() {
@@ -87,7 +90,7 @@ export default {
         if (this.state === 0 || this.state === 5 || this.state === 10) {
           const currentTime = new Date().getTime()
           if (currentTime > this.config.firstConference * 1000) {
-            this.state = 0 //0
+            this.state = 10 //0
           } else if (currentTime > this.config.secondConference * 1000) {
             this.state = 5
           } else if (currentTime > this.config.thirdConference * 1000) {
@@ -127,10 +130,12 @@ export default {
               console.log("after", this.data)
             } else {
               this.slide = c0_screen
-              this.state = 4
+              this.state = 3
             }
             break
           case 3:
+              this.slide = c4_two_candidates
+              this.state = 4
 
             break
           case 4:
@@ -138,7 +143,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c5_toptik
-                  this.state = 5
+                  this.state = 0
                 })
                 .catch(e =>{
                   console.log(e)
@@ -203,13 +208,22 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c11_votespresence
-                  this.state = 13
+                  this.state = 12
                 })
                 .catch(e =>{
                   console.log(e)
                 })
             break
           case 12:
+            DemonstrationService.ListCandidatesInfo()
+                .then(r => {
+                  this.data = r
+                  this.slide = c12_one_candidate
+                  this.state = 13
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
             break
           case 13://
             DemonstrationService.TopTik() //самая многочисленная тик москвы

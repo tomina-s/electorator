@@ -67,13 +67,14 @@ class PresenceSerializer(serializers.ModelSerializer):
 class PresenceSerializer1(serializers.ModelSerializer):
     class Meta:
         model = Uik
-        fields = ['num_tik', 'sum_votes', 'population','presence']
+        fields = ['num_tik', 'sum_votes', 'population', 'presence']
 
 
 class VotesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
-        fields = ["id", "name", "party", "info", "photo", "sum_votes"]
+        fields = ["id", "name", "party", "info", "photo", "sum_votes", "birthday", "birthday_place", "education",
+                  "polit_position", "position", "work"]
 
 
 class TopTikSerializer(serializers.ModelSerializer):
