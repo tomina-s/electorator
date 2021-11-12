@@ -34,10 +34,11 @@ def gen_string(length):
 
 # генерация рандомных данных
 ACCOUNTS_NUM = 2
-start_acc_id = 6
+# start_acc_id = 6
 table_name_accounts = 'accounts_account'
-accounts_data = {'password': [gen_password(random.randint(start_acc_id, 15)) for _ in range(ACCOUNTS_NUM+start_acc_id)],
-                 'last_login': ['2020-05-16 08:36:38' for _ in range(ACCOUNTS_NUM)],
+
+accounts_data = {'password': [gen_password(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
+                 'last_login': ['2020-05-20 12:36:38' for _ in range(ACCOUNTS_NUM)],
                  'name': [gen_string(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
                  'username': [gen_string(random.randint(5, 15)) for _ in range(ACCOUNTS_NUM)],
                  }
