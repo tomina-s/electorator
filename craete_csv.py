@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import os
 import pandas as pd
+import hashlib
 import random
 import string
-
 import psycopg2
 
 
@@ -16,6 +17,7 @@ import psycopg2
     mainapp_uik.
     
 '''
+salt = os.urandom(32)
 
 
 def gen_password(length):
@@ -23,6 +25,15 @@ def gen_password(length):
     letters_and_digits = string.ascii_letters + string.digits
     rand_string = ''.join(random.sample(letters_and_digits, length))
     return rand_string
+
+
+def gen_password(length):
+    """Создать случайную буквенно-цифровую строку длиной length."""
+    letters_and_digits = string.ascii_letters + string.digits
+    rand_string = ''.join(random.sample(letters_and_digits, length))
+
+    key = hashlib.pbkdf2_hmac('sha256', rand_string.encode('utf-8'), salt, 100000)
+    return key
 
 
 def gen_string(length):
