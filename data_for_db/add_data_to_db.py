@@ -120,21 +120,30 @@ def insert_protocol_2(protocol_2_info, num_value):
     return PK_values
 
 
-df = pd.read_excel(file_name, sheet_name='protocol1')
-colums_names = list(df.columns.values)
-dict_protocol_1 = {name: df[name].tolist() for name in colums_names}
 
-df = pd.read_excel(file_name, sheet_name='protocol2')
-colums_names = list(df.columns.values)
-dict_protocol_2 = {name: df[name].tolist() for name in colums_names}
+
+df_pr_1 = pd.read_excel(file_name, sheet_name='protocol1')
+colums_names = list(df_pr_1.columns.values)
+dict_protocol_1 = {name: df_pr_1[name].tolist() for name in colums_names}
+
+df_pr_2 = pd.read_excel(file_name, sheet_name='protocol2')
+colums_names = list(df_pr_2.columns.values)
+dict_protocol_2 = {name: df_pr_2[name].tolist() for name in colums_names}
+
+df_tik = pd.read_excel(file_name, sheet_name='tik')
+colums_names = list(df_tik.columns.values)
+dict_tik = {name: df_tik[name].tolist() for name in colums_names}
 
 
 # Вставка в Протокол 1 из экселя и захардкоденные FK
 # FK_num_uik = ['1', '2']
-# PK_protocol_1 = insert_protocol_1_fk_in(dict_protocol_1, len(df), FK_num_uik)
+# PK_protocol_1 = insert_protocol_1_fk_in(dict_protocol_1, len(df_pr_1), FK_num_uik)
 
 # Вставка в Протокол 1 из экселя (FK заносится в эксле)
-# PK_protocol_1 = insert_protocol_1(dict_protocol_1, len(df))
+# PK_protocol_1 = insert_protocol_1(dict_protocol_1, len(df_pr_1))
 
 # Вставка в Протокол 2 из экселя (FK заносится в эксле)
-PK_protocol_2 = insert_protocol_2(dict_protocol_2, len(df))
+# PK_protocol_2 = insert_protocol_2(dict_protocol_2, len(df_pr_2))
+
+# Вставка в ТИК из экселя
+PK_tik = insert_tik(dict_tik, len(df_tik))
