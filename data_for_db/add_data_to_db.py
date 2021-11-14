@@ -10,6 +10,7 @@ import psycopg2
 Заоплняются таблицы:
     протокол 1
     протокол 2
+    ТИК
 
 '''
 
@@ -120,6 +121,38 @@ def insert_protocol_2(protocol_2_info, num_value):
     return PK_values
 
 
+def insert_tik(tik_info, num_value):
+    sql = """INSERT INTO mainapp_tik(population, open_uik, sum_votes, sum_numb_votes_fin, presence,
+    perc_final_bul, bad_form, update_time, num_tik) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
+    conn = None
+    PK_values = []
+    try:
+        conn = psycopg2.connect(user="postgres",
+                                password=os.environ.get('POSTGRES_PASSWORD'),
+                                host="huvalk.ru",
+                                port="8001",
+                                database="electorator")
+        cursor = conn.cursor()
+
+        for idx in range(num_value):
+            row = []
+            for key_field in tik_info.keys():
+                row.append(tik_info[key_field][idx])
+            print('row', tuple(row))
+            cursor.execute(sql, tuple(row))
+
+            new_id_as_PK = cursor.fetchone()[0]
+            PK_values.append(new_id_as_PK)
+
+        conn.commit()
+        cursor.close()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Ошибка при работе с PostgreSQL", error)
+    finally:
+        if conn:
+            conn.close()
+    return PK_values
 
 
 df_pr_1 = pd.read_excel(file_name, sheet_name='protocol1')
