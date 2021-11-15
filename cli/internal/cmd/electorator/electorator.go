@@ -62,6 +62,8 @@ func New(env *Env) *cobra.Command {
 	}
 
 	cmd.AddCommand(env.NewCreateUserCmd())
+	cmd.AddCommand(env.NewCreateUikCmd())
+	cmd.AddCommand(env.NewCreateCandidateCmd())
 
 	return cmd
 }

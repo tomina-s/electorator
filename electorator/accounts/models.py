@@ -72,8 +72,8 @@ class Account(AbstractBaseUser):
 
 class Permission(models.Model):
     """Permission table"""
-    user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    uik = models.OneToOneField(Uik, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    uik = models.ForeignKey(Uik, on_delete=models.CASCADE)
 
 
 class Role(models.Model):
