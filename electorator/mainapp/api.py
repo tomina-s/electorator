@@ -1,6 +1,6 @@
 from .models import Protocol2, Tik
 from .serializers import RoleSerializer, UikSerializer, PresenceSerializer, \
-    VotesSerializer, TopTikSerializer1, TikSerializer, CandidatInfoSerializer
+    VotesSerializer, TopTikSerializer1, TikSerializer, CandidatInfoSerializer, PresenceSerializer1
 
 from django.core import exceptions
 from django.db.models import F
@@ -340,14 +340,13 @@ class PresenceViewSet(APIView):
     #        result_list.append({'num_tik': serializer_class.data[i]['num_tik'],
     #                           'presence': f"{round((serializer_class.data[i]['sum_votes'] / serializer_class.data[i]['population']) * 100)}%"})
     #    result_list = sorted(result_list, key=lambda k: k['presence'], reverse=True)
-
+    #
     #    return response.Response(result_list)
     def get(self, request):
         queryset = Tik.objects.values('update_time').annotate(presence=Count('id'))[:1]
         number_tik = queryset[0]['presence']
         queryset = Tik.objects.all().order_by('-update_time', '-presence')[:number_tik] #
         serializer_class = PresenceSerializer(queryset, many=True)
-        c = 1
         return response.Response(serializer_class.data)
 
 

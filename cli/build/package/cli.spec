@@ -9,6 +9,7 @@ Version:        %{_version}
 Release:        %{_release}
 Source0:        %{name}-%{_major}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}
+License:        Open
 Vendor:         Huvalk
 Summary:        CLI - CLI
 
@@ -23,7 +24,7 @@ Commit: %(git rev-parse HEAD)
 %prep
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 %setup -q -n %{name}
-mkdir configs/tmp
+mkdir -p configs/tmp
 go run cli/cmd/main.go completion bash > configs/tmp/bash
 
 %build

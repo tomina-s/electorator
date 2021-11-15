@@ -67,37 +67,27 @@ export default {
     this.countTimer()
   },
   methods: {
-    splitArray(array) {
+    splitArray(array, by) {
       let arrayOfArrays = [];
         while (array.length > 0) {
-            let arrayElement = array.splice(0,4);
+            let arrayElement = array.splice(0,by);
             arrayOfArrays.push(arrayElement);
         }
         return arrayOfArrays;
     },
-    splitArrayPresence(array) {
-      let arrayOfArrays = [];
-        while (array.length > 0) {
-            let arrayElement = array.splice(0,8);
-            arrayOfArrays.push(arrayElement);
-        }
-        return arrayOfArrays;
-    },
-
-
     countTimer() {
       setTimeout(() => {
-        if (this.state === 0 || this.state === 5 || this.state === 10) {
-          const currentTime = new Date().getTime()
-          if (currentTime > this.config.firstConference * 1000) {
-            this.state = 10 //0
-          } else if (currentTime > this.config.secondConference * 1000) {
-            this.state = 5
-          } else if (currentTime > this.config.thirdConference * 1000) {
-            this.state = 10
-          }
-        }
-
+        // if (this.state === 0 || this.state === 5 || this.state === 10) {
+        //   const currentTime = new Date().getTime()
+        //   if (currentTime > this.config.firstConference * 1000) {
+        //     this.state = 10 //0
+        //   } else if (currentTime > this.config.secondConference * 1000) {
+        //     this.state = 5
+        //   } else if (currentTime > this.config.thirdConference * 1000) {
+        //     this.state = 10
+        //   }
+        // }
+        console.log("state", this.state)
 
         switch (this.state) {
           // 10 00
@@ -115,7 +105,7 @@ export default {
           case 1:
             DemonstrationService.ListCandidatesInfo()
                 .then(r => {
-                  this.data = this.splitArray(r)
+                  this.data = this.splitArray(r, 4)
                   this.slide = c2_candidates
                   this.state = 2
                 })
@@ -124,11 +114,8 @@ export default {
                 })
             break
           case 2:
-            if (this.data.length !== 0) {
-              console.log("before", this.data)
-              this.data.splice(0, 2)
-              console.log("after", this.data)
-            } else {
+            this.data.splice(0, 2)
+            if (this.data.length === 0) {
               this.slide = c0_screen
               this.state = 3
             }
@@ -143,7 +130,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c5_toptik
-                  this.state = 0
+                  this.state = 5
                 })
                 .catch(e =>{
                   console.log(e)
@@ -168,7 +155,8 @@ export default {
           case 7:
             DemonstrationService.Presence() //не могу пока вывести массив
                 .then(r => {
-                  this.data = this.splitArrayPresence(r)
+                  console.log("presence", r)
+                  this.data = this.splitArray(r, 8)
                   this.slide = c7_presence
                   this.state = 8
                 })
@@ -177,22 +165,25 @@ export default {
                 })
             break
           case 8:
-            DemonstrationService.TopPresence()
-                .then(r => {
-                  this.data = r
-                  this.slide = c8_toppresence
-                  this.state = 9
-                })
-                .catch(e =>{
-                  console.log(e)
-                })
+            this.data.splice(0, 2)
+            if (this.data.length === 0) {
+              DemonstrationService.TopPresence()
+                  .then(r => {
+                    this.data = r
+                    this.slide = c8_toppresence
+                    this.state = 9
+                  })
+                  .catch(e =>{
+                    console.log(e)
+                  })
+            }
             break
           case 9:
             DemonstrationService.Top24Presence()
                 .then(r => {
                   this.data = r
                   this.slide = c9_top24presence
-                  this.state = 0
+                  this.state = 10
                 })
                 .catch(e =>{
                   console.log(e)
@@ -230,7 +221,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c5_toptik
-                  this.state = 10
+                  this.state = 16
                 })
                 .catch(e =>{
                   console.log(e)
@@ -245,7 +236,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c8_toppresence
-                  this.state = 10
+                  this.state = 18
                 })
                 .catch(e =>{
                   console.log(e)
@@ -255,7 +246,9 @@ export default {
           case 17:
             break
           case 18:
-             break
+            this.slide = c0_screen
+            this.state = 0
+            break
        }
         this.counter++
         this.countTimer()
