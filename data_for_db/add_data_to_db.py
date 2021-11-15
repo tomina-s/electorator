@@ -223,6 +223,44 @@ def insert_candidate(candidate_info, num_value):
     return PK_values
 
 
+def insert_uik(uik_info, num_value):
+    sql = """INSERT INTO mainapp_uik(num_uik, population, status, sum_votes, sum_numb_votes_fin, presence,
+    perc_final_bul, bad_form, update_time, num_tik)
+    VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
+    conn = None
+    PK_values = []
+    try:
+        conn = psycopg2.connect(user="postgres",
+                                password=os.environ.get('POSTGRES_PASSWORD'),
+                                host="huvalk.ru",
+                                port="8001",
+                                database="electorator")
+        cursor = conn.cursor()
+        print("Информация о сервере PostgreSQL")
+        print(conn.get_dsn_parameters(), "\n")
+
+
+        for idx in range(num_value):
+            row = []
+            for key_field in uik_info.keys():
+                row.append(uik_info[key_field][idx])
+            print('row', tuple(row))
+            cursor.execute(sql, tuple(row))
+
+            new_id_as_PK = cursor.fetchone()[0]
+            PK_values.append(new_id_as_PK)
+
+        conn.commit()
+        cursor.close()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Ошибка при работе с PostgreSQL", error)
+    finally:
+        if conn:
+            conn.close()
+    return PK_values
+
+
 df_candidate = pd.read_excel(file_name, sheet_name='candidate')
 colums_names = list(df_candidate.columns.values)
 dict_candidate = {name: df_candidate[name].tolist() for name in colums_names}
@@ -244,6 +282,11 @@ colums_names = list(df_uikprotocol1.columns.values)
 dict_uikprotocol1 = {name: df_uikprotocol1[name].tolist() for name in colums_names}
 
 
+df_uik = pd.read_excel(file_name, sheet_name='uik')
+colums_names = list(df_uik.columns.values)
+dict_uik = {name: df_uik[name].tolist() for name in colums_names}
+
+
 # Вставка в candidate
 # PK_tik = insert_candidate(dict_candidate, len(df_candidate))
 
@@ -253,7 +296,8 @@ dict_uikprotocol1 = {name: df_uikprotocol1[name].tolist() for name in colums_nam
 # PK_protocol_1 = insert_protocol_1_fk_in(dict_protocol_1, len(df_pr_1), FK_num_uik)
 
 # Вставка в Протокол 1 из экселя (FK заносится в эксле)
-# PK_protocol_1 = insert_protocol_1(dict_protocol_1, len(df_pr_1))
+PK_protocol_1 = insert_protocol_1(dict_protocol_1, len(df_pr_1))
+print(PK_protocol_1)
 
 # Вставка в Протокол 2 из экселя (FK заносится в эксле)
 # PK_protocol_2 = insert_protocol_2(dict_protocol_2, len(df_pr_2))
@@ -263,5 +307,7 @@ dict_uikprotocol1 = {name: df_uikprotocol1[name].tolist() for name in colums_nam
 # print(PK_tik)
 
 # Вставка в uikprotocol1 - таблица связей из экселя
-# PK_tik = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1))
+# PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1))
 
+# Вставка в УИК
+# PK_uik = insert_uik(dict_uik, len(df_uik))
