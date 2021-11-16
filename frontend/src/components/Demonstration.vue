@@ -106,7 +106,7 @@ export default {
           case 1:
             DemonstrationService.ListCandidatesInfo()
                 .then(r => {
-                  this.data = this.splitArray(r, 4)
+                  this.data = this.splitArray(r, 5)
                   this.slide = c2_candidates
                   this.state = 2
                 })
