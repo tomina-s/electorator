@@ -87,7 +87,7 @@ export default {
         //     this.state = 10
         //   }
         // }
-        console.log("state", this.state)
+        if (this.state === 1) return
 
         switch (this.state) {
           // 10 00

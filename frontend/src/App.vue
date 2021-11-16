@@ -4,6 +4,9 @@
         class="navbar navbar-expand navbar-dark bg-dark"
         v-if="$route.path!=='/demonstration'"
     >
+      <span v-if="isUIK" class="navbar-brand">УИК</span>
+      <span v-if="isTIK" class="navbar-brand">ТИК</span>
+      <span v-if="isCIK" class="navbar-brand">МГИК</span>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
           <router-link v-if="isUIK" to="/protocols" class="nav-link">Протоколы</router-link>
