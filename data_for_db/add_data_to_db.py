@@ -211,29 +211,16 @@ def insert_uik(uik_info, num_value):
     sql = """INSERT INTO mainapp_uik(num_uik, population, status, sum_votes, sum_numb_votes_fin, presence,
     perc_final_bul, bad_form, update_time, num_tik)
     VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
-    conn = None
     PK_values = []
-    try:
-        conn, cursor = connect_to_db()
+    for idx in range(num_value):
+        row = []
+        for key_field in uik_info.keys():
+            row.append(uik_info[key_field][idx])
+        print('row', tuple(row))
+        cursor.execute(sql, tuple(row))
 
-        for idx in range(num_value):
-            row = []
-            for key_field in uik_info.keys():
-                row.append(uik_info[key_field][idx])
-            print('row', tuple(row))
-            cursor.execute(sql, tuple(row))
-
-            new_id_as_PK = cursor.fetchone()[0]
-            PK_values.append(new_id_as_PK)
-
-        conn.commit()
-        cursor.close()
-
-    except (Exception, psycopg2.DatabaseError) as error:
-        print("Ошибка при работе с PostgreSQL", error)
-    finally:
-        if conn:
-            conn.close()
+        new_id_as_PK = cursor.fetchone()[0]
+        PK_values.append(new_id_as_PK)
     return PK_values
 
 
@@ -272,8 +259,8 @@ dict_uik = {name: df_uik[name].tolist() for name in colums_names}
 # PK_protocol_1 = insert_protocol_1_fk_in(dict_protocol_1, len(df_pr_1), FK_num_uik)
 
 # Вставка в Протокол 1 из экселя (FK заносится в эксле)
-PK_protocol_1 = insert_protocol_1(dict_protocol_1, len(df_pr_1))
-print(PK_protocol_1)
+# PK_protocol_1 = insert_protocol_1(dict_protocol_1, len(df_pr_1))
+# print(PK_protocol_1)
 
 # Вставка в Протокол 2 из экселя (FK заносится в эксле)
 # PK_protocol_2 = insert_protocol_2(dict_protocol_2, len(df_pr_2))
@@ -285,5 +272,21 @@ print(PK_protocol_1)
 # Вставка в uikprotocol1 - таблица связей из экселя
 # PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1))
 # print(PK_uikpr_1)
-# Вставка в УИК
-# PK_uik = insert_uik(dict_uik, len(df_uik))
+
+
+try:
+    conn = None
+    conn, cursor = connect_to_db()
+
+    # Вставка в УИК
+    PK_uik = insert_uik(dict_uik, len(df_uik))
+    print(PK_uik)
+
+
+except (Exception, psycopg2.DatabaseError) as error:
+    print("Ошибка при работе с PostgreSQL", error)
+finally:
+    if conn:
+        conn.commit()
+
+        conn.close()
