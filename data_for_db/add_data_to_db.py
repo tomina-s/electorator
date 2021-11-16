@@ -20,6 +20,17 @@ import psycopg2
 
 file_name = 'electorator_data_many_2.xlsx'
 
+def connect_to_db():
+    conn = psycopg2.connect(user="postgres",
+                            password=os.environ.get('POSTGRES_PASSWORD'),
+                            host="huvalk.ru",
+                            port="8001",
+                            database="electorator")
+    cursor = conn.cursor()
+    print("Информация о сервере PostgreSQL")
+    print(conn.get_dsn_parameters(), "\n")
+    return conn, cursor
+
 
 def insert_protocol_1_fk_in(protocol_1_info, num_value, FK_num_uik):
     sql = """INSERT INTO mainapp_protocol1(num_protocol_1, status, sum_bul, sum_final_bul, bad_form, transfer_time,
@@ -27,12 +38,7 @@ def insert_protocol_1_fk_in(protocol_1_info, num_value, FK_num_uik):
     conn = None
     PK_values = []
     try:
-        conn = psycopg2.connect(user="postgres",
-                                password=os.environ.get('POSTGRES_PASSWORD'),
-                                host="huvalk.ru",
-                                port="8001",
-                                database="electorator")
-        cursor = conn.cursor()
+        conn, cursor = connect_to_db()
 
         for idx in range(num_value):
             row = []
@@ -62,12 +68,7 @@ def insert_protocol_1(protocol_1_info, num_value):
     conn = None
     PK_values = []
     try:
-        conn = psycopg2.connect(user="postgres",
-                                password=os.environ.get('POSTGRES_PASSWORD'),
-                                host="huvalk.ru",
-                                port="8001",
-                                database="electorator")
-        cursor = conn.cursor()
+        conn, cursor = connect_to_db()
 
         for idx in range(num_value):
             row = []
@@ -96,12 +97,7 @@ def insert_protocol_2(protocol_2_info, num_value):
     conn = None
     PK_values = []
     try:
-        conn = psycopg2.connect(user="postgres",
-                                password=os.environ.get('POSTGRES_PASSWORD'),
-                                host="huvalk.ru",
-                                port="8001",
-                                database="electorator")
-        cursor = conn.cursor()
+        conn, cursor = connect_to_db()
 
         for idx in range(num_value):
             row = []
@@ -130,12 +126,7 @@ def insert_tik(tik_info, num_value):
     conn = None
     PK_values = []
     try:
-        conn = psycopg2.connect(user="postgres",
-                                password=os.environ.get('POSTGRES_PASSWORD'),
-                                host="huvalk.ru",
-                                port="8001",
-                                database="electorator")
-        cursor = conn.cursor()
+        conn, cursor = connect_to_db()
 
         for idx in range(num_value):
             row = []
@@ -163,12 +154,7 @@ def insert_uikpr_1(tik_info, num_value):
     conn = None
     PK_values = []
     try:
-        conn = psycopg2.connect(user="postgres",
-                                password=os.environ.get('POSTGRES_PASSWORD'),
-                                host="huvalk.ru",
-                                port="8001",
-                                database="electorator")
-        cursor = conn.cursor()
+        conn, cursor = connect_to_db()
 
         for idx in range(num_value):
             row = []
@@ -198,12 +184,7 @@ def insert_candidate(candidate_info, num_value):
     conn = None
     PK_values = []
     try:
-        conn = psycopg2.connect(user="postgres",
-                                password=os.environ.get('POSTGRES_PASSWORD'),
-                                host="huvalk.ru",
-                                port="8001",
-                                database="electorator")
-        cursor = conn.cursor()
+        conn, cursor = connect_to_db()
 
         for idx in range(num_value):
             row = []
@@ -233,15 +214,7 @@ def insert_uik(uik_info, num_value):
     conn = None
     PK_values = []
     try:
-        conn = psycopg2.connect(user="postgres",
-                                password=os.environ.get('POSTGRES_PASSWORD'),
-                                host="huvalk.ru",
-                                port="8001",
-                                database="electorator")
-        cursor = conn.cursor()
-        print("Информация о сервере PostgreSQL")
-        print(conn.get_dsn_parameters(), "\n")
-
+        conn, cursor = connect_to_db()
 
         for idx in range(num_value):
             row = []
