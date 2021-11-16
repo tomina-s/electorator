@@ -111,7 +111,7 @@ def insert_candidate(name, party, info, sum_votes, photo):
         # Подключение к существующей базе данных
         conn = psycopg2.connect(user="postgres",
                                   # пароль, который указали при установке PostgreSQL
-                                  password="***",
+                                  password=os.environ.get('POSTGRES_PASSWORD'),
                                   host="huvalk.ru",
                                   port="8001",
                                   database="electorator")
@@ -152,7 +152,7 @@ def insert_candidats(cand_info):
 
     try:
         conn = psycopg2.connect(user="postgres",
-                                  password="***",
+                                  password=os.environ.get('POSTGRES_PASSWORD'),
                                   host="huvalk.ru",
                                   port="8001",
                                   database="electorator")
@@ -197,7 +197,7 @@ def insert_uik(uik_info, uik_num_value):
     PK_uik = []
     try:
         conn = psycopg2.connect(user="postgres",
-                                password="***",
+                                password=os.environ.get('POSTGRES_PASSWORD'),
                                 host="huvalk.ru",
                                 port="8001",
                                 database="electorator")
@@ -234,7 +234,7 @@ def insert_account(accounts_info, accounts_num_value):
     PK_values = []
     try:
         conn = psycopg2.connect(user="postgres",
-                                password="***",
+                                password=os.environ.get('POSTGRES_PASSWORD'),
                                 host="huvalk.ru",
                                 port="8001",
                                 database="electorator")
@@ -270,7 +270,7 @@ def insert_roles(roles_info, roles_num_value, fk_user_id):
     conn = None
     try:
         conn = psycopg2.connect(user="postgres",
-                                password="***",
+                                password=os.environ.get('POSTGRES_PASSWORD'),
                                 host="huvalk.ru",
                                 port="8001",
                                 database="electorator")
@@ -296,7 +296,7 @@ def insert_roles(roles_info, roles_num_value, fk_user_id):
 def show_table_by_name(table_name):
     try:
         connection = psycopg2.connect(user="postgres",
-                                password="***",
+                                password=os.environ.get('POSTGRES_PASSWORD'),
                                 host="huvalk.ru",
                                 port="8001",
                                 database="electorator")
