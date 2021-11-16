@@ -1,18 +1,32 @@
 <template>
-  <div class="container">
-    <div class="row" v-for="(pair, i) in candidates" :key="i">
-      <div class="col-sm" v-for="(can, j) in pair" :key="j">
-        <div  class="">
+<div class ="block">
+    <div class="container-fluid align-items-end">
+    <div class="row justify-content-center " v-for="(pair, i) in candidates" :key="i">
+      <div class="col-2" v-for="(can, j) in pair" :key="j">
+        <div  class="text-white text-center h3">
+          <div class="d-flex justify-content-center img-fluid">
           <img class="ans_avatar rounded-circle" :src="can.photo"/>
+          </div>
+            <br>
+          <div class="font-weight-bold">
+            {{can.name}}
+          </div>
           <br>
-          <p>{{can.party}}</p>
-          <br>
-          <p>{{ can.name }}</p>
+          <div class="">
+            {{can.party}}
+          </div>
         </div>
       </div>
     </div>
   </div>
+  </div>
 </template>
+
+
+
+
+
+
 
 <script>
 export default {
@@ -30,8 +44,18 @@ export default {
 
 <style scoped>
 .ans_avatar {
-    height: 90px;
-    width: 90px;
+    height: 180px;
+    width: 170px;
 }
+.block {
 
+    height: 100vh;
+  background-image:url("../../assets/journalistScreens/2.png");
+
+
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>

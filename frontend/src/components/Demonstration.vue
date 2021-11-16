@@ -89,6 +89,7 @@ export default {
         // }
         // if (this.state === 1) return
 
+
         switch (this.state) {
           // 10 00
           case 0:
@@ -105,7 +106,7 @@ export default {
           case 1:
             DemonstrationService.ListCandidatesInfo()
                 .then(r => {
-                  this.data = this.splitArray(r, 4)
+                  this.data = this.splitArray(r, 5)
                   this.slide = c2_candidates
                   this.state = 2
                 })
