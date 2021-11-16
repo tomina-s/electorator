@@ -168,16 +168,16 @@
 
 Стоимость бесперебойного источника питания [Dell EMC SmartUPS 1000W] составляет `56 000` руб.
 
-[Dell EMC SmartUPS 1000W]: https://www.dell.com/en-us/work/shop/servers-storage-and-networking/poweredge-r6515-rack-server/spd/poweredge-r6515/pe_r6515_13732a_vi_vp
+[Dell EMC SmartUPS 1000W]: https://www.dell.com/en-us/work/shop/dell-emc-smartups-1500-smartconnect-120v-rm/apd/aa839559/power-cooling-data-center-infrastructure
 
 Рассчитаем стоимость серверов:
-Выбрана платформа [PowerEdge R6515]. Конкретные цены получены после конфигурации по ссылке.
+Выбрана платформа [PowerEdge R240]. Конкретные цены получены после конфигурации по ссылке.
 
 Cores|RAM (ГБ.)|Стоимость (руб./шт.) | кол-во (шт.)
 ---|---|---|---
 4|8| 70 000 | 2
 
-[PowerEdge R6515]: https://www.dell.com/en-us/work/shop/servers-storage-and-networking/poweredge-r6515-rack-server/spd/poweredge-r6515/pe_r6515_13732a_vi_vp
+[PowerEdge R240]: https://www.dell.com/ru-ru/work/shop/cty/pdp/spd/poweredge-r240
 
 Итого, общая стоимость оборудования составит `256` т. руб.
 
