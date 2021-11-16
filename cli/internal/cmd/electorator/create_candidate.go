@@ -23,7 +23,7 @@ func (e *Env) NewCreateCandidateCmd() *cobra.Command {
 	photo := cmd.Flags().StringP("photo", "p", "", "candidates photo")
 	birthday := cmd.Flags().StringP("birthday", "b", "", "candidates birthday")
 	birthplace := cmd.Flags().String("birthplace", "", "candidates birthplace")
-	education := cmd.Flags().StringP("education", "e", "", "candidates education")
+	education := cmd.Flags().String("education", "", "candidates education")
 	work := cmd.Flags().StringP("work", "w", "", "candidates work")
 	position := cmd.Flags().String("position", "", "candidates work")
 	politPosition := cmd.Flags().String("polit_position", "", "candidates work")
