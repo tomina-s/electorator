@@ -30,7 +30,7 @@
     <div class="row">
       <div class="col-1 display-1 text-right" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
               <div class="col-1 text-left">
-              {{el.sum_votes}}
+              {{el.sum_votes}}%
               </div>
       </div>
     </div>

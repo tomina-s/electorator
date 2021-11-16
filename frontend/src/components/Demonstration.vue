@@ -24,6 +24,7 @@ import c8_toppresence from './journalistScreens/8_top_presence'
 import c9_top24presence from './journalistScreens/9_top_24_presence'
 import c11_votespresence from './journalistScreens/11_votespresence'
 import c12_one_candidate from './journalistScreens/12_one_candidate'
+import c17_votes from './journalistScreens/17_votes'
 import DemonstrationService from './../services/demonstration.service'
 import ConfigService from "../services/config.service";
 
@@ -118,11 +119,11 @@ export default {
             this.data.splice(0, 2)
             if (this.data.length === 0) {
               this.slide = c0_screen
-              this.state = 3
+              this.state = 4
             }
             break
           case 3:
-              this.slide = c4_two_candidates
+              this.slide = c4_two_candidates //НЕ ДОДЕЛАНО!!!
               this.state = 4
 
             break
@@ -200,14 +201,14 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c11_votespresence
-                  this.state = 12
+                  this.state = 13
                 })
                 .catch(e =>{
                   console.log(e)
                 })
             break
           case 12:
-            DemonstrationService.ListCandidatesInfo()
+            DemonstrationService.ListCandidatesInfo() //НЕ ДОДЕЛАНО!!!
                 .then(r => {
                   this.data = r
                   this.slide = c12_one_candidate
@@ -217,8 +218,8 @@ export default {
                   console.log(e)
                 })
             break
-          case 13://
-            DemonstrationService.TopTik() //самая многочисленная тик москвы
+          case 13:
+            DemonstrationService.TopTik()
                 .then(r => {
                   this.data = r
                   this.slide = c5_toptik
@@ -237,7 +238,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c8_toppresence
-                  this.state = 18
+                  this.state = 17
                 })
                 .catch(e =>{
                   console.log(e)
@@ -245,6 +246,15 @@ export default {
 
             break
           case 17:
+            DemonstrationService.ListCandidatesInfo()
+                .then(r => {
+                  this.data = this.splitArray(r, 5)
+                  this.slide = c17_votes
+                  this.state = 18
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
             break
           case 18:
             this.slide = c0_screen
