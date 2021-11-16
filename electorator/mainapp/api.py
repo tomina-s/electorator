@@ -1,12 +1,6 @@
-import math
-
-from electorator.settings import MEDIA_ROOT
-from .models import Candidate, Uik, Protocol2, Tik
-from accounts.models import Account, Permission, Role
-from rest_framework import viewsets, permissions, response
-from .serializers import CandidateSerializer, CandidatInfoSerializer, RoleSerializer, UikSerializer, PresenceSerializer, \
-    VotesSerializer, TopTikSerializer, PresenceSerializer1, TopTikSerializer1
-from rest_framework.decorators import action
+from .models import Protocol2, Tik
+from .serializers import RoleSerializer, UikSerializer, PresenceSerializer, \
+    VotesSerializer, TopTikSerializer1, TikSerializer, CandidatInfoSerializer, PresenceSerializer1
 
 from django.core import exceptions
 from django.db.models import F
@@ -17,14 +11,11 @@ from .models import Candidate, UikCandidate, Uik, Protocol1
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, permissions, response, status
 from .serializers import (
-    CandidateSerializer,
-    CandidatInfoSerializer,
     ProtocolFirstSerializer,
     ProtocolSecondSerializer, UIKSerializer
 )
 from accounts.models import Account, Permission, Role
 from django.db.models import Sum, Count
-from PIL import Image
 
 
 def get_permissions(user_id):
@@ -178,6 +169,77 @@ class UikAvailableQuantity(APIView):
         }, status=status.HTTP_200_OK)
 
 
+class TikAvailableList(APIView):
+    """tik api"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, page):
+        """get list of tiks"""
+        perm, role = get_permissions(request.user.id)
+        if role != "ЦИК":
+            raise exceptions.PermissionDenied()
+
+        queryset = Tik.objects.order_by('id').values('num_tik').distinct()[(page - 1) * 10:page * 10]
+
+        return Response(list(queryset), status=status.HTTP_200_OK)
+
+
+class TikAvailableQuantity(APIView):
+    """uik api"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """get quantity of tiks"""
+        perm, role = get_permissions(request.user.id)
+        if role != "ЦИК":
+            raise exceptions.PermissionDenied()
+
+        queryset = Tik.objects.values('num_tik').distinct().count()
+
+        return Response({
+            'quantity': queryset
+        }, status=status.HTTP_200_OK)
+
+
+class TikInfo(APIView):
+    """tik api"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, name):
+        """get quantity of tiks"""
+        perm, role = get_permissions(request.user.id)
+        if role != "ЦИК":
+            raise exceptions.PermissionDenied()
+
+        queryset = Tik.objects.filter(num_tik=name)
+        serializer_class = TikSerializer(queryset, many=True)
+
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+
+class TikCandidates(APIView):
+    """tik candidates api"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, name):
+        """get candidates from tiks"""
+        perm, role = get_permissions(request.user.id)
+        if role != "ЦИК":
+            raise exceptions.PermissionDenied()
+
+        queryset = Candidate.objects.raw("""
+        select c.id, c.name, c.party, c.info, sum(p.candidate_votes) as sum_votes, c.photo
+            from mainapp_protocol2 as p
+            inner join mainapp_candidate as c on p.name_id=c.id
+            inner join mainapp_uik as u on p.num_uik_id=u.id
+            where u.num_tik=%s
+            group by c.id
+        """, params=[name])
+        serializer_class = CandidatInfoSerializer(queryset, many=True)
+
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+
 class ProtocolSecondCreate(APIView):
     """protocol api"""
     permission_classes = [IsAuthenticated]
@@ -278,14 +340,13 @@ class PresenceViewSet(APIView):
     #        result_list.append({'num_tik': serializer_class.data[i]['num_tik'],
     #                           'presence': f"{round((serializer_class.data[i]['sum_votes'] / serializer_class.data[i]['population']) * 100)}%"})
     #    result_list = sorted(result_list, key=lambda k: k['presence'], reverse=True)
-
+    #
     #    return response.Response(result_list)
     def get(self, request):
         queryset = Tik.objects.values('update_time').annotate(presence=Count('id'))[:1]
         number_tik = queryset[0]['presence']
         queryset = Tik.objects.all().order_by('-update_time', '-presence')[:number_tik] #
         serializer_class = PresenceSerializer(queryset, many=True)
-        c = 1
         return response.Response(serializer_class.data)
 
 

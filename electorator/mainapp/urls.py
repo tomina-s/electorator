@@ -9,8 +9,9 @@ from .api import (
     ProtocolSecondCreate,
     AccountPermissionsViewSet, PresenceViewSet, TopPresenceViewSet, TopTikViewSet,
     GeneralInfoViewSet,
-    UikAvailableList,
-    UikAvailableQuantity, GeneralInfoPresenceViewSet, VotesPresenceViewSet, Top24PresenceViewSet,
+    UikAvailableList, UikAvailableQuantity,
+    TikAvailableList, TikAvailableQuantity, TikInfo, TikCandidates,
+    GeneralInfoPresenceViewSet, VotesPresenceViewSet, Top24PresenceViewSet,
     CandidateDescVotesViewSet
 
 )
@@ -22,6 +23,10 @@ urlpatterns = [
     path('protocols/second/', ProtocolSecondCreate.as_view()),
     path('uiks/available/list/<int:page>/', UikAvailableList.as_view()),
     path('uiks/available/quantity/', UikAvailableQuantity.as_view()),
+    path('tiks/available/list/<int:page>/', TikAvailableList.as_view()),
+    path('tiks/available/quantity/', TikAvailableQuantity.as_view()),
+    path('tiks/name/<str:name>/', TikInfo.as_view()),
+    path('tiks/name/<str:name>/candidates/', TikCandidates.as_view()),
 
     path('uiks/candidates/short/list/', CandidateViewSet.as_view()),
     path('uiks/candidates/short/list/desc/', CandidateDescVotesViewSet.as_view()),

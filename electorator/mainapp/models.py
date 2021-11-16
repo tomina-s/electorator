@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import django
 from django.db import models
 from django.db.models import Model
 
@@ -86,7 +87,6 @@ class Uik(Model):
     )
 
 
-
 class Candidate(Model):
     name = models.CharField(
         verbose_name='ФИО кандидата',
@@ -111,30 +111,30 @@ class Candidate(Model):
     birthday = models.DateField(
         verbose_name='Дата рождения',
         blank=True,
-        default=datetime.now()
+        default=django.utils.timezone.now
     )
-    birthday_place=models.CharField(
+    birthday_place = models.CharField(
         verbose_name='Место рождения',
         max_length=100,
         blank=True
 
     )
-    education=models.CharField(
+    education = models.CharField(
         verbose_name='Образование',
         max_length=200,
         blank=True
     )
-    work=models.CharField(
+    work = models.CharField(
         verbose_name='Место работы',
         max_length=200,
         blank=True
     )
-    position=models.CharField(
+    position = models.CharField(
         verbose_name='Должность',
         max_length=200,
         blank=True
     )
-    polit_position=models.CharField(
+    polit_position = models.CharField(
         verbose_name='Политическая дожность',
         max_length=200,
         blank=True
