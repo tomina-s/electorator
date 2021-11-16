@@ -25,7 +25,7 @@ def insert_protocol_1_fk_in(protocol_1_info, num_value, FK_num_uik):
     PK_values = []
     try:
         conn = psycopg2.connect(user="postgres",
-                                password="***",
+                                password=os.environ.get('POSTGRES_PASSWORD'),
                                 host="huvalk.ru",
                                 port="8001",
                                 database="electorator")
@@ -60,7 +60,7 @@ def insert_protocol_1(protocol_1_info, num_value):
     PK_values = []
     try:
         conn = psycopg2.connect(user="postgres",
-                                password="***",
+                                password=os.environ.get('POSTGRES_PASSWORD'),
                                 host="huvalk.ru",
                                 port="8001",
                                 database="electorator")
@@ -308,6 +308,6 @@ print(PK_protocol_1)
 
 # Вставка в uikprotocol1 - таблица связей из экселя
 # PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1))
-
+# print(PK_uikpr_1)
 # Вставка в УИК
 # PK_uik = insert_uik(dict_uik, len(df_uik))
