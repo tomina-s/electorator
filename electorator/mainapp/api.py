@@ -298,7 +298,7 @@ class CandidateDescVotesViewSet(APIView):
         queryset = Candidate.objects.all()
         serializer_class = VotesSerializer(queryset, many=True)
         for el in serializer_class.data:
-            el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
+            el['sum_votes'] = round((el['sum_votes'] / a) * 100, 1)
         result_list = sorted(serializer_class.data, key=lambda k: k['sum_votes'], reverse=True)
 
         return response.Response(result_list)
