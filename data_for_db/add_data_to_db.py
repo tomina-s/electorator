@@ -23,9 +23,9 @@ file_name = 'electorator_data_many_2.xlsx'
 def connect_to_db():
     conn = psycopg2.connect(user="postgres",
                             password=os.environ.get('POSTGRES_PASSWORD'),
-                            host="huvalk.ru",
-                            port="8001",
-                            database="electorator")
+                            host=os.environ.get('POSTGRES_HOST'),
+                            port=os.environ.get('POSTGRES_PORT'),
+                            database=os.environ.get('POSTGRES_DB'))
     cursor = conn.cursor()
     print("Информация о сервере PostgreSQL")
     print(conn.get_dsn_parameters(), "\n")
