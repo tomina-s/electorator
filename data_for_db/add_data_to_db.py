@@ -33,7 +33,7 @@ def connect_to_db():
     return conn, cursor
 
 
-def insert_protocol_1_fk_in(protocol_1_info, num_value, FK_num_uik):
+def insert_protocol_1_fk_in(protocol_1_info, num_value, FK_num_uik, cursor):
     sql = """INSERT INTO mainapp_protocol1(num_protocol_1, status, sum_bul, sum_final_bul, bad_form, transfer_time,
      num_uik_id) VALUES(%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
     PK_values = []
@@ -50,7 +50,7 @@ def insert_protocol_1_fk_in(protocol_1_info, num_value, FK_num_uik):
     return PK_values
 
 
-def insert_protocol_1(protocol_1_info, num_value):
+def insert_protocol_1(protocol_1_info, num_value, cursor):
     sql = """INSERT INTO mainapp_protocol1(num_protocol_1, status, sum_bul, sum_final_bul, bad_form, transfer_time,
      num_uik_id) VALUES(%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
     PK_values = []
@@ -67,7 +67,7 @@ def insert_protocol_1(protocol_1_info, num_value):
     return PK_values
 
 
-def insert_protocol_2(protocol_2_info, num_value):
+def insert_protocol_2(protocol_2_info, num_value, cursor):
     sql = """INSERT INTO mainapp_protocol2(num_protocol_2, candidate_votes,	transfer_time, name_id,	num_uik_id)
     VALUES(%s,%s,%s,%s,%s) RETURNING id;"""
     PK_values = []
@@ -84,7 +84,7 @@ def insert_protocol_2(protocol_2_info, num_value):
     return PK_values
 
 
-def insert_tik(tik_info, num_value):
+def insert_tik(tik_info, num_value, cursor):
     sql = """INSERT INTO mainapp_tik(population, open_uik, sum_votes, sum_numb_votes_fin, presence,
     perc_final_bul, bad_form, update_time, num_tik) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
     PK_values = []
@@ -101,7 +101,7 @@ def insert_tik(tik_info, num_value):
     return PK_values
 
 
-def insert_uikpr_1(tik_info, num_value):
+def insert_uikpr_1(tik_info, num_value, cursor):
     sql = """INSERT INTO mainapp_uikprotocol1(id_protocol1_id, id_uik_id) VALUES(%s,%s) RETURNING id;"""
     PK_values = []
     for idx in range(num_value):
@@ -117,7 +117,7 @@ def insert_uikpr_1(tik_info, num_value):
     return PK_values
 
 
-def insert_candidate(candidate_info, num_value):
+def insert_candidate(candidate_info, num_value, cursor):
     sql = """INSERT INTO mainapp_candidate(name, party, info, sum_votes, photo, birthday, birthday_place, education,
     polit_position, position, work)
     VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
@@ -135,7 +135,7 @@ def insert_candidate(candidate_info, num_value):
     return PK_values
 
 
-def insert_uik(uik_info, num_value):
+def insert_uik(uik_info, num_value, cursor):
     sql = """INSERT INTO mainapp_uik(num_uik, population, status, sum_votes, sum_numb_votes_fin, presence,
     perc_final_bul, bad_form, update_time, num_tik)
     VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id;"""
@@ -179,31 +179,31 @@ dict_uik = {name: df_uik[name].tolist() for name in colums_names}
 
 try:
     conn = None
-    conn, cursor = connect_to_db()
+    conn, db_cursor = connect_to_db()
     # Вставка в candidate
-    # PK_tik = insert_candidate(dict_candidate, len(df_candidate))
+    # PK_tik = insert_candidate(dict_candidate, len(df_candidate), db_cursor)
 
     # Вставка в Протокол 1 из экселя и захардкоденные FK
     # FK_num_uik = ['1', '2']
-    # PK_protocol_1 = insert_protocol_1_fk_in(dict_protocol_1, len(df_pr_1), FK_num_uik)
+    # PK_protocol_1 = insert_protocol_1_fk_in(dict_protocol_1, len(df_pr_1), FK_num_uik, db_cursor)
 
     # Вставка в Протокол 1 из экселя (FK заносится в эксле)
-    # PK_protocol_1 = insert_protocol_1(dict_protocol_1, len(df_pr_1))
+    # PK_protocol_1 = insert_protocol_1(dict_protocol_1, len(df_pr_1), db_cursor)
     # print(PK_protocol_1)
 
     # Вставка в Протокол 2 из экселя (FK заносится в эксле)
-    # PK_protocol_2 = insert_protocol_2(dict_protocol_2, len(df_pr_2))
+    # PK_protocol_2 = insert_protocol_2(dict_protocol_2, len(df_pr_2), db_cursor)
 
     # Вставка в ТИК из экселя
-    # PK_tik = insert_tik(dict_tik, len(df_tik))
+    # PK_tik = insert_tik(dict_tik, len(df_tik), db_cursor)
     # print(PK_tik)
 
     # Вставка в uikprotocol1 - таблица связей из экселя
-    # PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1))
+    # PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1), db_cursor)
     # print(PK_uikpr_1)
 
     # Вставка в УИК
-    PK_uik = insert_uik(dict_uik, len(df_uik))
+    PK_uik = insert_uik(dict_uik, len(df_uik), db_cursor)
     print(PK_uik)
 
 
