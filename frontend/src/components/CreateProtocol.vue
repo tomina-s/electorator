@@ -158,7 +158,7 @@ export default {
   },
   methods: {
     handleProtocol(protocol) {
-      protocol.status = true
+      protocol.status = false
       protocol.num_protocol_1 = 0
 
       const perm = getUIKPermission()
