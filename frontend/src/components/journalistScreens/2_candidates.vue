@@ -11,10 +11,10 @@
           <div class="font-weight-bold">
             {{can.name}}
           </div>
-          <br>
-          <div class="">
+          <div class="font-weight-light">
             {{can.party}}
           </div>
+          <br>
         </div>
       </div>
     </div>
@@ -50,10 +50,7 @@ export default {
 .block {
 
     height: 100vh;
-  background-image:url("../../assets/journalistScreens/2.png");
-
-
-
+    background-image:url("../../assets/journalistScreens/2.png");
     display: flex;
     align-items: center;
     justify-content: center;

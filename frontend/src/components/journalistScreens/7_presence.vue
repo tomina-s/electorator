@@ -2,13 +2,13 @@
 <div class ="block">
   <div class="container-fluid mt-5" :style="{'background-color': 'transparent !important'}">
 
-      <div class="row text-white h1 ml-3 mt-5">
+      <div class="row text-white display-4 ml-3 mt-5">
         <div class="col-6" v-for="(elem, i) in presence" :key="i">
           <div class="row" v-for="(el, j) in elem" :key="j">
-            <div class="col text-left">
+            <div class="col-10 text-left">
               {{el.num_tik}}
             </div>
-            <div class="col text-right">
+            <div class="col-2 text-right">
               {{el.presence}}%
             </div>
           </div>
