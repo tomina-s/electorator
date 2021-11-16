@@ -177,8 +177,8 @@ df_uik = pd.read_excel(file_name, sheet_name='uik')
 colums_names = list(df_uik.columns.values)
 dict_uik = {name: df_uik[name].tolist() for name in colums_names}
 
+conn = None
 try:
-    conn = None
     conn, db_cursor = connect_to_db()
     # Вставка в candidate
     # PK_tik = insert_candidate(dict_candidate, len(df_candidate), db_cursor)
