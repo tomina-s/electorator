@@ -98,7 +98,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c1_opened
-                  this.state = 1
+                  this.state = 12//1
                 })
                 .catch(e =>{
                   console.log(e)
@@ -201,7 +201,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c11_votespresence
-                  this.state = 13
+                  this.state = 12
                 })
                 .catch(e =>{
                   console.log(e)
@@ -212,7 +212,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c12_one_candidate
-                  this.state = 13
+                  this.state = 0 //13
                 })
                 .catch(e =>{
                   console.log(e)

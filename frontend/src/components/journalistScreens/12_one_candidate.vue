@@ -1,8 +1,9 @@
 <template>
   <div class="block">
-  <div class="container-fluid text-white">
+  <div class="container-fluid text-white align-self-start mt-5">
     <div class="row">
-        <div class="col-7 display-1 text-right align-self-start" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
+        <div class="col-7 display-1 text-right " v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
+
               <div class="col">
                 {{el.name}}
               </div >
@@ -13,24 +14,39 @@
               <div class="col">
                 {{el.party}}
               </div>
-              <div class="col h1">
-                Место рождения
+              <div class="col display-4">
+                <p>Место рождения
+                <br>
               {{el.birthday_place}}
+                <br>
+                </p>
               </div>
-              <div class="col h1">
+              <div class="col display-4">
+                <p>
                 Образование
+                <br>
                 {{el.education}}
+                <br>
+                </p>
               </div>
-              <div class="col h1">
+              <div class="col display-4">
+                <p>
                 Основное место работы
+                <br>
                 {{el.work}}
+                <br>
+                </p>
               </div>
         </div>
     </div>
     <div class="row">
-      <div class="col-1 display-1 text-right" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
+      <div class="col-1 display-1 text-right align-self-end" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
               <div class="col-1 text-left">
+                <p>
+
               {{el.sum_votes}}%
+                  <br>
+                </p>
               </div>
       </div>
     </div>
@@ -67,5 +83,6 @@ export default {
     align-items: center;
    justify-content: center;
 }
+
 
 </style>

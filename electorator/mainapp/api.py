@@ -285,7 +285,7 @@ class CandidateViewSet(APIView):
 
 class CandidateDescVotesViewSet(APIView):
     '''
-    вся информация по кандидатам в порядке следования в бюллетенях
+    вся информация по кандидатам в порядке убывания голосов
     '''
     permission_classes = [
         permissions.IsAuthenticated
@@ -299,6 +299,10 @@ class CandidateDescVotesViewSet(APIView):
         serializer_class = VotesSerializer(queryset, many=True)
         for el in serializer_class.data:
             el['sum_votes'] = round((el['sum_votes'] / a) * 100, 1)
+            birthday = el['birthday'].split('-')
+            birthday[0], birthday[2] = birthday[2], birthday[0]
+            el['birthday'] = '.'.join(birthday)
+
         result_list = sorted(serializer_class.data, key=lambda k: k['sum_votes'], reverse=True)
 
         return response.Response(result_list)
