@@ -120,11 +120,11 @@ export default {
           this.candidates = r
 
           let requiredFields = {
-            sum_bul: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
-            bad_form: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+            sum_bul: yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+            bad_form: yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
           }
           this.candidates.forEach(candidate => {
-            requiredFields[`can:${candidate.id}`] = yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0")
+            requiredFields[`can:${candidate.id}`] = yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0")
           })
 
           this.schema = yup.object().shape(

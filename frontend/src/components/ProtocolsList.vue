@@ -1,6 +1,6 @@
 <template>
   <div class="container" :style="{'background-color': 'transparent !important'}">
-    <div class="col-md-12">
+    <div class="col-md-12" :style="{'background-color': 'transparent !important'}">
       <div class="card card-container" :style="{'background-color': 'transparent !important'}">
         <router-link v-if="isUIK" class="btn btn-primary btn-block" tag="button"
           :to="{
@@ -10,9 +10,9 @@
           }"
         >Заполнить протокол</router-link>
 
-        <div v-for="protocol in protocols" :key="protocol.id" class="card card-container">
+        <div v-for="protocol in protocols" :key="protocol.id" class="form-group">
           <router-link
-            class="btn btn-outline-secondary btn-block"
+            class="btn btn-light btn-block"
             :to="{
               name: protocol.num_protocol_1 === 1 ? 'timer' :
                 (protocol.num_protocol_1 > 1 && protocol.num_protocol_1 < 5) ? 'turnout' : 'createProtocol',

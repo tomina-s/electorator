@@ -57,7 +57,7 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      num: yup.number().required("Укажите явку").min(0, "Значение не может быть меньше 0"),
+      num: yup.number().typeError('Ожидается число').required("Укажите явку").min(0, "Значение не может быть меньше 0"),
     })
 
     return {
