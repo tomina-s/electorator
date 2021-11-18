@@ -98,7 +98,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c1_opened
-                  this.state = 1
+                  this.state = 1//1
                 })
                 .catch(e =>{
                   console.log(e)
@@ -119,12 +119,19 @@ export default {
             this.data.splice(0, 2)
             if (this.data.length === 0) {
               this.slide = c0_screen
-              this.state = 4
+              this.state = 3
             }
             break
           case 3:
-              this.slide = c4_two_candidates //НЕ ДОДЕЛАНО!!!
-              this.state = 4
+            DemonstrationService.ListCandidatesInfo()
+                .then(r => {
+                  this.data = r
+                  this.slide = c4_two_candidates
+                  this.state = 4 //4
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
 
             break
           case 4:
@@ -201,18 +208,18 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c11_votespresence
-                  this.state = 13
+                  this.state = 12
                 })
                 .catch(e =>{
                   console.log(e)
                 })
             break
           case 12:
-            DemonstrationService.ListCandidatesInfo() //НЕ ДОДЕЛАНО!!!
+            DemonstrationService.ListCandidatesInfo()
                 .then(r => {
                   this.data = r
                   this.slide = c12_one_candidate
-                  this.state = 13
+                  this.state = 13 //13
                 })
                 .catch(e =>{
                   console.log(e)
