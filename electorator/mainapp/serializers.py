@@ -9,7 +9,7 @@ class ProtocolFirstSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Protocol1
-        fields = ['id', 'num_uik', 'num_protocol_1', 'status', 'sum_bul', 'sum_bul_final', 'bad_form', 'transfer_time']
+        fields = ['id', 'num_uik', 'num_protocol_1', 'status', 'sum_bul', 'sum_final_bul', 'bad_form', 'transfer_time']
 
     def get_validation_exclusions(self):
         exclusions = super(ProtocolFirstSerializer, self).get_validation_exclusions()

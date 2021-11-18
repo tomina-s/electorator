@@ -5,7 +5,7 @@
         <span class="text-center display-3">Итоговый протокол</span>
         <Form @submit="handleProtocol" :validation-schema="schema">
           <div class="form-group">
-            <label class="font-weight-bold" for="sum_bul_fin">Число обработанных бюллетеней</label>
+            <label class="font-weight-bold" for="sum_final_bul">Число обработанных бюллетеней</label>
             <Field name="sum_bul" type="number" class="form-control"
               :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.sum_bul : ''" :key="oldValue"/>
             <ErrorMessage name="sum_bul" class="error-feedback" />
@@ -120,7 +120,7 @@ export default {
           this.candidates = r
 
           let requiredFields = {
-            sum_bul_fin: yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+            sum_final_bul: yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
             bad_form: yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
           }
           this.candidates.forEach(candidate => {
