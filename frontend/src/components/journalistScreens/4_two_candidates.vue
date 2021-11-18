@@ -1,6 +1,6 @@
 <template>
   <div class = "block align-items-start ">
-    <div class = "container-fluid text-white mt-4 pl-5 pr-5">
+    <div class = "container-fluid text-white mt-5 pl-5 pr-5">
       <div class = "row ">
         <div class = "col-3 " v-for="(el, i) in candidates.slice(0,1)" :key="i">
           <img class="photo" :src="el.photo"/>
@@ -107,8 +107,9 @@ export default {
     justify-content: center;
 }
 .photo{
-  height: 56vh;
+  height: 54.5vh;
   width: 43vh;
+
 }
 
 
