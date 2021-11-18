@@ -5,13 +5,13 @@
         <span class="text-center display-3">Итоговый протокол</span>
         <Form @submit="handleProtocol" :validation-schema="schema">
           <div class="form-group">
-            <label class="font-weight-bold" for="sum_bul">Проголосовало</label>
+            <label class="font-weight-bold" for="sum_bul">Число обработанных бюллетеней</label>
             <Field name="sum_bul" type="number" class="form-control"
               :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.sum_bul : ''" :key="oldValue"/>
             <ErrorMessage name="sum_bul" class="error-feedback" />
           </div>
           <div class="form-group">
-            <label class="font-weight-bold" for="bad_form">Бюллетеней испорчено</label>
+            <label class="font-weight-bold" for="bad_form">Число испорченных бюллетеней</label>
             <Field name="bad_form" type="number" class="form-control"
               :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.bad_form : ''" :key="oldValue"/>
             <ErrorMessage name="bad_form" class="error-feedback" />
