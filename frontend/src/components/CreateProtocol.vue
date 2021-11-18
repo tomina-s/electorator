@@ -181,6 +181,25 @@ export default {
             console.log(e)
           })
 
+      const sum_votes = this.candidates.reduce((sum_bul, c) => {
+        if (protocol[`can:${c.id}`] === "") {
+          return
+        }
+        const votes = parseInt(protocol[`can:${c.id}`])
+
+        if (!votes) {
+          console.log("Не число в поле")
+          return sum_bul
+        }
+
+        return sum_bul + votes
+      }, 0)
+      if (sum_votes !== protocol.sum_final_bul - protocol.bad_form) {
+        this.loading = false
+        this.message = "Общая сумма голосов не совпадает с введенными голосами за кандидатов"
+        return
+      }
+
       this.candidates.forEach(v => {
         if (protocol[`can:${v.id}`] === "") {
           return
@@ -195,7 +214,7 @@ export default {
         ProtocolService.SendProtocolSecond(protocolSecond)
             .then(() => {
               this.loading = false
-              this.info = "Явка успешно отправлена"
+              this.info = "Протокол успешно отправлен"
               this.message = ""
 
               this.$router.push({ name: '/protocols', query: { uik_id: perm } })
