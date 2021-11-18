@@ -131,6 +131,7 @@ export default {
         num_protocol_1: 0,
         status: true,
         sum_bul: num.num,
+        sum_bul_final: 0,
         bad_form: 0,
       }
 

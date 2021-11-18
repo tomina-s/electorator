@@ -74,6 +74,9 @@ class ProtocolFirst(APIView):
                 presence=(protocol['sum_bul'] / uik_table.data[0]['population']) * 100,
                 sum_votes=protocol['sum_bul']
             )
+        Uik.objects.filter(id=uik.id).update(
+            sum_numb_votes_fin=protocol['sum_bul_fin']
+        )
         if protocol['bad_form'] != 0:
             Uik.objects.filter(id=uik.id).update(bad_form=F("bad_form") + protocol['bad_form'])
 
