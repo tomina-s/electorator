@@ -5,7 +5,7 @@
         <span class="text-center display-3">Отчет о явке №{{innerNumber}}</span>
         <Form @submit="handleTurnout" :validation-schema="schema">
           <div class="form-group">
-            <label class="font-weight-bold" for="num">Внести явку</label>
+            <label class="font-weight-bold" for="num">Внести явку<span style="color: orange">*</span></label>
             <Field name="num" type="number" class="form-control"
               :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue : ''" :key="oldValue"
             />
@@ -57,7 +57,8 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      num: yup.number().typeError('Ожидается число').required("Укажите явку").min(0, "Значение не может быть меньше 0"),
+      num: yup.number().integer("Ожидается целое число").typeError('Ожидается число').required("Укажите явку")
+          .min(0, "Значение не может быть меньше 0").max(30000000, "Значение не может быть меньше 30000000"),
     })
 
     return {

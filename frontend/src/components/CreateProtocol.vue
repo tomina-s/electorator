@@ -5,13 +5,13 @@
         <span class="text-center display-3">Итоговый протокол</span>
         <Form @submit="handleProtocol" :validation-schema="schema">
           <div class="form-group">
-            <label class="font-weight-bold" for="sum_final_bul">Число обработанных бюллетеней</label>
+            <label class="font-weight-bold" for="sum_final_bul">Число обработанных бюллетеней<span style="color: orange">*</span></label>
             <Field name="sum_final_bul" type="number" class="form-control"
               :aria-readonly="globalError" :value="oldValue !== undefined ? (oldValue.sum_final_bul === undefined ? '0' : oldValue.sum_final_bul) : ''" :key="oldValue"/>
             <ErrorMessage name="sum_final_bul" class="error-feedback" />
           </div>
           <div class="form-group">
-            <label class="font-weight-bold" for="bad_form">Число испорченных бюллетеней</label>
+            <label class="font-weight-bold" for="bad_form">Число испорченных бюллетеней<span style="color: orange">*</span></label>
             <Field name="bad_form" type="number" class="form-control"
               :aria-readonly="globalError" :value="oldValue !== undefined ? (oldValue.bad_form === undefined ? '0' : oldValue.bad_form) : ''" :key="oldValue"/>
             <ErrorMessage name="bad_form" class="error-feedback" />
@@ -22,7 +22,7 @@
             :key="candidate.id"
             class="form-group"
           >
-            <label class="font-weight-bold" :for="`can:${candidate.id}`">{{candidate.name}}</label>
+            <label class="font-weight-bold" :for="`can:${candidate.id}`">{{candidate.name}}<span style="color: orange">*</span></label>
             <Field :name="`can:${candidate.id}`" type="number" class="form-control" :key="oldValue"
               :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.candidates[i].candidate_votes : ''"/>
             <ErrorMessage :name="`can:${candidate.id}`" class="error-feedback" />
@@ -120,11 +120,15 @@ export default {
           this.candidates = r
 
           let requiredFields = {
-            sum_final_bul: yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
-            bad_form: yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+            sum_final_bul: yup.number().integer("Ожидается целое число").typeError('Ожидается число').required("Поле обязательно")
+                .min(0, "Значение не может быть меньше 0").max(30000000, "Значение не может быть меньше 30000000"),
+            bad_form: yup.number().integer("Ожидается целое число").typeError('Ожидается число').required("Поле обязательно")
+                .min(0, "Значение не может быть меньше 0").max(30000000, "Значение не может быть меньше 30000000"),
           }
           this.candidates.forEach(candidate => {
-            requiredFields[`can:${candidate.id}`] = yup.number().typeError('Ожидается число').required("Поле обязательно").min(0, "Значение не может быть меньше 0")
+            requiredFields[`can:${candidate.id}`] = yup.number().integer("Ожидается целое число")
+                .typeError('Ожидается число').required("Поле обязательно")
+                .min(0, "Значение не может быть меньше 0").max(30000000, "Значение не может быть меньше 30000000")
           })
 
           this.schema = yup.object().shape(
