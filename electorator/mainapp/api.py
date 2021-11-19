@@ -279,7 +279,7 @@ class CandidateViewSet(APIView):
         a = sum_votes['sum_votes__sum']
         queryset = Candidate.objects.all().order_by('id')
         serializer_class = VotesSerializer(queryset, many=True)
-        c = 1
+
         for el in serializer_class.data:
             el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
 
@@ -351,6 +351,9 @@ class PresenceViewSet(APIView):
     #    return response.Response(result_list)
     def get(self, request):
         queryset = Tik.objects.values('update_time').annotate(presence=Count('id'))[:1]
+        if len(queryset) == 0:
+            return response.Response("[]")
+
         number_tik = queryset[0]['presence']
         queryset = Tik.objects.all().order_by('-update_time', '-presence')[:number_tik] #
         serializer_class = PresenceSerializer(queryset, many=True)
@@ -380,9 +383,11 @@ class Top24PresenceViewSet(APIView):  # переднлаь под другую �
         queryset = Tik.objects.all().order_by('-update_time', '-presence')[1:4]
         serializer_class = PresenceSerializer(queryset, many=True)
         new_list=serializer_class.data
+        if len(new_list) == 0:
+            return response.Response("[]")
+
         new_list.append({'min_presence':new_list[-1]['presence']})
-        c = new_list
-        a=1
+
         return response.Response(new_list)
 
 
@@ -405,8 +410,9 @@ class TopPresenceViewSet(APIView):
     def get(self, request):
         queryset = Tik.objects.all().order_by('-presence')[:1]
         seralizer = PresenceSerializer(queryset, many=True)
-        c = 1
 
+        if len(seralizer.data) == 0:
+            return response.Response("{}")
         return response.Response(seralizer.data[0])
 
     # class TopTikViewSet(APIView):
@@ -440,7 +446,8 @@ class TopTikViewSet(APIView):
     def get(self, request):
         queryset = Tik.objects.all().order_by('-population')[:1]
         seralizer = TopTikSerializer1(queryset, many=True)
-        c = 1
+        if len(seralizer.data) == 0:
+            return response.Response("{}")
 
         return response.Response(seralizer.data[0])
 
