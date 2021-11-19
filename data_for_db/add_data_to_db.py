@@ -199,12 +199,12 @@ try:
     # print(PK_tik)
 
     # Вставка в uikprotocol1 - таблица связей из экселя
-    # PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1), db_cursor)
-    # print(PK_uikpr_1)
+    PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1), db_cursor)
+    print(PK_uikpr_1)
 
     # Вставка в УИК
-    PK_uik = insert_uik(dict_uik, len(df_uik), db_cursor)
-    print(PK_uik)
+    # PK_uik = insert_uik(dict_uik, len(df_uik), db_cursor)
+    # print(PK_uik)
 
 
 except (Exception, psycopg2.DatabaseError) as error:
