@@ -6,14 +6,14 @@
         <Form @submit="handleProtocol" :validation-schema="schema">
           <div class="form-group">
             <label class="font-weight-bold" for="sum_final_bul">Число обработанных бюллетеней</label>
-            <Field name="sum_bul" type="number" class="form-control"
-              :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.sum_bul : ''" :key="oldValue"/>
-            <ErrorMessage name="sum_bul" class="error-feedback" />
+            <Field name="sum_final_bul" type="number" class="form-control"
+              :aria-readonly="globalError" :value="oldValue !== undefined ? (oldValue.sum_final_bul === undefined ? '0' : oldValue.sum_final_bul) : ''" :key="oldValue"/>
+            <ErrorMessage name="sum_final_bul" class="error-feedback" />
           </div>
           <div class="form-group">
             <label class="font-weight-bold" for="bad_form">Число испорченных бюллетеней</label>
             <Field name="bad_form" type="number" class="form-control"
-              :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.bad_form : ''" :key="oldValue"/>
+              :aria-readonly="globalError" :value="oldValue !== undefined ? (oldValue.bad_form === undefined ? '0' : oldValue.bad_form) : ''" :key="oldValue"/>
             <ErrorMessage name="bad_form" class="error-feedback" />
           </div>
 
@@ -158,8 +158,27 @@ export default {
   },
   methods: {
     handleProtocol(protocol) {
+      const sum_votes = this.candidates.reduce((sum_bul, c) => {
+        if (protocol[`can:${c.id}`] === "") {
+          return
+        }
+        const votes = parseInt(protocol[`can:${c.id}`])
+
+        if (!votes) {
+          console.log("Не число в поле")
+          return sum_bul
+        }
+
+        return sum_bul + votes
+      }, 0)
+      if (sum_votes !== protocol.sum_final_bul - protocol.bad_form) {
+        this.loading = false
+        this.message = "Общая сумма голосов не совпадает с введенными голосами за кандидатов"
+        return
+      }
       protocol.status = false
       protocol.num_protocol_1 = 0
+      protocol.sum_bul = 0
 
       const perm = getUIKPermission()
       if (!perm) {
@@ -180,25 +199,6 @@ export default {
             this.loading = false
             console.log(e)
           })
-
-      const sum_votes = this.candidates.reduce((sum_bul, c) => {
-        if (protocol[`can:${c.id}`] === "") {
-          return
-        }
-        const votes = parseInt(protocol[`can:${c.id}`])
-
-        if (!votes) {
-          console.log("Не число в поле")
-          return sum_bul
-        }
-
-        return sum_bul + votes
-      }, 0)
-      if (sum_votes !== protocol.sum_final_bul - protocol.bad_form) {
-        this.loading = false
-        this.message = "Общая сумма голосов не совпадает с введенными голосами за кандидатов"
-        return
-      }
 
       this.candidates.forEach(v => {
         if (protocol[`can:${v.id}`] === "") {

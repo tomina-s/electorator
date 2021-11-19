@@ -61,6 +61,8 @@ class ProtocolFirst(APIView):
             raise exceptions.PermissionDenied()
 
         inner_num = Protocol1.objects.filter(num_uik=uik.id).count() + 1
+        if inner_num > 5:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer.validated_data['num_protocol_1'] = inner_num
 
         serializer.is_valid(raise_exception=True)
@@ -74,11 +76,13 @@ class ProtocolFirst(APIView):
                 presence=(protocol['sum_bul'] / uik_table.data[0]['population']) * 100,
                 sum_votes=protocol['sum_bul']
             )
-        Uik.objects.filter(id=uik.id).update(
-            sum_numb_votes_fin=protocol['sum_bul_fin']
-        )
         if protocol['bad_form'] != 0:
             Uik.objects.filter(id=uik.id).update(bad_form=F("bad_form") + protocol['bad_form'])
+
+        if inner_num == 5:
+            Uik.objects.filter(id=uik.id).update(
+                sum_numb_votes_fin=protocol['sum_final_bul']
+            )
 
         return Response(status=status.HTTP_200_OK)
 
