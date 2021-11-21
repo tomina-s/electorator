@@ -1,34 +1,31 @@
-from .models import Protocol2, Tik
-from .serializers import RoleSerializer, UikSerializer, PresenceSerializer, \
-    VotesSerializer, TopTikSerializer1, TikSerializer, CandidatInfoSerializer, PresenceSerializer1
-
+"""Main app API"""
 from django.core import exceptions
-from django.db.models import F
+from django.db.models import Sum, Count, F
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from .models import Candidate, UikCandidate, Uik, Protocol1
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, permissions, response, status
-from .serializers import (
-    ProtocolFirstSerializer,
-    ProtocolSecondSerializer, UIKSerializer
-)
-from accounts.models import Account, Permission, Role
-from django.db.models import Sum, Count
+
+from accounts.models import Permission, Role
+from .models import Protocol2, Tik, Candidate, Uik, Protocol1
+from .serializers import RoleSerializer, UikSerializer, PresenceSerializer, \
+    VotesSerializer, TopTikSerializer1, TikSerializer, CandidateInfoSerializer, \
+    ProtocolFirstSerializer, ProtocolSecondSerializer, UIKSerializer
 
 
 def get_permissions(user_id):
-    """Поулчить роль и доступы пользователя по id"""
+    """get user permission and role"""
+    # pylint: disable=no-member
+    # """Поулчить роль и доступы пользователя по id"""
     try:
         perms = Permission.objects.filter(user=user_id).all().values_list('uik', flat=True)
-    except Permission.DoesNotExist:  # pylint: disable=no-member
+    except Permission.DoesNotExist:
         msg = f"No permissions" \
               f" for {user_id} on uik"
         raise exceptions.PermissionDenied(msg) from Permission.DoesNotExist  # pylint: disable=no-member
     try:
         role = Role.objects.filter(user=user_id).first()
-    except Permission.DoesNotExist:  # pylint: disable=no-member
+    except Permission.DoesNotExist:
         msg = f"No role" \
               f" for user {user_id}"
         raise exceptions.PermissionDenied(msg) from Role.DoesNotExist  # pylint: disable=no-member
@@ -48,6 +45,7 @@ class ProtocolFirst(APIView):
     serializer_class = ProtocolFirstSerializer
 
     def post(self, request):
+        # pylint: disable=no-member
         """Создать новый протокол первого типа"""
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -88,6 +86,7 @@ class ProtocolFirst(APIView):
 
     @staticmethod
     def get(request, prot_id):
+        # pylint: disable=no-member
         """Получить протокол по id"""
         protocol = Protocol1.objects.filter(id=prot_id).first()
         num_uik = protocol.num_uik
@@ -107,12 +106,14 @@ class ProtocolsFirstList(APIView):
 
     @staticmethod
     def get(request, uik_id, page):
+        # pylint: disable=no-member
         """Все протоколы с данного участка"""
         perm, role = get_permissions(request.user.id)
         if uik_id not in perm and role != "ЦИК":
             raise exceptions.PermissionDenied()
 
-        protocols = Protocol1.objects.filter(num_uik=uik_id).order_by('id')[(page - 1) * 10:page * 10]
+        protocols = Protocol1.objects.filter(num_uik=uik_id). \
+                        order_by('id')[(page - 1) * 10:page * 10]
         serializer_class = ProtocolFirstSerializer(protocols, many=True)
 
         data = serializer_class.data
@@ -130,6 +131,7 @@ class ProtocolsFirstListQuantity(APIView):
 
     @staticmethod
     def get(request, uik_id):
+        # pylint: disable=no-member
         """Количество протоколов"""
         perm, role = get_permissions(request.user.id)
         if uik_id not in perm and role != "ЦИК":
@@ -147,7 +149,9 @@ class UikAvailableList(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UIKSerializer
 
-    def get(self, request, page):
+    @staticmethod
+    def get(request, page):
+        # pylint: disable=no-member
         """get list of the first protocols"""
         perm, role = get_permissions(request.user.id)
         if role == "ЦИК":
@@ -164,7 +168,9 @@ class UikAvailableQuantity(APIView):
     """uik api"""
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
+        # pylint: disable=no-member
         """Получить количество доступных УИК"""
         perm, role = get_permissions(request.user.id)
         quantity = len(perm)
@@ -180,13 +186,16 @@ class TikAvailableList(APIView):
     """tik api"""
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, page):
+    @staticmethod
+    def get(request, page):
+        # pylint: disable=no-member
         """get list of tiks"""
-        perm, role = get_permissions(request.user.id)
+        _, role = get_permissions(request.user.id)
         if role != "ЦИК":
             raise exceptions.PermissionDenied()
 
-        queryset = Tik.objects.order_by('id').values('num_tik').distinct()[(page - 1) * 10:page * 10]
+        queryset = Tik.objects.order_by('id').values('num_tik'). \
+                       distinct()[(page - 1) * 10:page * 10]
 
         return Response(list(queryset), status=status.HTTP_200_OK)
 
@@ -195,9 +204,11 @@ class TikAvailableQuantity(APIView):
     """uik api"""
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
+        # pylint: disable=no-member
         """get quantity of tiks"""
-        perm, role = get_permissions(request.user.id)
+        _, role = get_permissions(request.user.id)
         if role != "ЦИК":
             raise exceptions.PermissionDenied()
 
@@ -212,9 +223,11 @@ class TikInfo(APIView):
     """tik api"""
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, name):
+    @staticmethod
+    def get(request, name):
+        # pylint: disable=no-member
         """get quantity of tiks"""
-        perm, role = get_permissions(request.user.id)
+        _, role = get_permissions(request.user.id)
         if role != "ЦИК":
             raise exceptions.PermissionDenied()
 
@@ -228,9 +241,11 @@ class TikCandidates(APIView):
     """tik candidates api"""
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, name):
+    @staticmethod
+    def get(request, name):
+        # pylint: disable=no-member
         """get candidates from tiks"""
-        perm, role = get_permissions(request.user.id)
+        _, role = get_permissions(request.user.id)
         if role != "ЦИК":
             raise exceptions.PermissionDenied()
 
@@ -242,7 +257,7 @@ class TikCandidates(APIView):
             where u.num_tik=%s
             group by c.id
         """, params=[name])
-        serializer_class = CandidatInfoSerializer(queryset, many=True)
+        serializer_class = CandidateInfoSerializer(queryset, many=True)
 
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
@@ -253,6 +268,7 @@ class ProtocolSecondCreate(APIView):
     serializer_class = ProtocolSecondSerializer
 
     def post(self, request):
+        # pylint: disable=no-member
         """create new second protocol"""
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -271,56 +287,69 @@ class ProtocolSecondCreate(APIView):
 
 
 class CandidateViewSet(APIView):
-    '''
+    """
     вся информация по кандидатам в порядке следования в бюллетенях
-    '''
+    """
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def get(self, request):
+    @staticmethod
+    def get(_):
+        # pylint: disable=no-member
+        """
+        вся информация по кандидатам в порядке следования в бюллетенях
+        """
         sum_votes = Uik.objects.aggregate(Sum('sum_votes'))
-        a = sum_votes['sum_votes__sum']
+        sum_votes_sum = sum_votes['sum_votes__sum']
         queryset = Candidate.objects.all().order_by('id')
         serializer_class = VotesSerializer(queryset, many=True)
 
-        for el in serializer_class.data:
-            el['sum_votes'] = f"{round((el['sum_votes'] / a) * 100, 1)}%"
+        for element in serializer_class.data:
+            element['sum_votes'] = f"{round((element['sum_votes'] / sum_votes_sum) * 100, 1)}%"
 
         return response.Response(serializer_class.data)
 
 
 class CandidateDescVotesViewSet(APIView):
-    '''
+    """
     вся информация по кандидатам в порядке убывания голосов
-    '''
+    """
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def get(self, request):
-        result_list = []
+    @staticmethod
+    def get(_):
+        """
+        вся информация по кандидатам в порядке убывания голосов
+        """
+        # pylint: disable=no-member
         sum_votes = Uik.objects.aggregate(Sum('sum_votes'))
-        a = sum_votes['sum_votes__sum']
+        sum_votes_sum = sum_votes['sum_votes__sum']
         queryset = Candidate.objects.all()
         serializer_class = VotesSerializer(queryset, many=True)
-        for el in serializer_class.data:
-            el['sum_votes'] = round((el['sum_votes'] / a) * 100, 1)
-            birthday = el['birthday'].split('-')
+        for element in serializer_class.data:
+            element['sum_votes'] = round((element['sum_votes'] / sum_votes_sum) * 100, 1)
+            birthday = element['birthday'].split('-')
             birthday[0], birthday[2] = birthday[2], birthday[0]
-            el['birthday'] = '.'.join(birthday)
+            element['birthday'] = '.'.join(birthday)
 
         result_list = sorted(serializer_class.data, key=lambda k: k['sum_votes'], reverse=True)
 
         return response.Response(result_list)
 
 
-class AccountPermissionsViewSet(viewsets.ModelViewSet):
+class AccountPermissionsViewSet(viewsets.ModelViewSet):  # pylint: disable = too-many-ancestors
+    """Уики доступные аккаунту"""
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def list_of_role_uik(self, request):
+    @staticmethod
+    def list_of_role_uik(request):
+        # pylint: disable = no-member
+        """Уики доступные аккаунту"""
         user = request.user
         user_role = Role.objects.get(user_id=user.id)
         role = RoleSerializer(user_role)
@@ -336,135 +365,112 @@ class AccountPermissionsViewSet(viewsets.ModelViewSet):
 
 
 class PresenceViewSet(APIView):
-    '''
+    """
     информация о явке в процентах
-    '''
+    """
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    # def get(self, request):
-    #    queryset = Uik.objects.values('num_tik').annotate(sum_votes=Sum('sum_votes'), population=Sum('population'))
-    #    serializer_class = PresenceSerializer1(queryset, many=True)
-    #    result_list = []
-    #    for i in range(len(serializer_class.data)):
-    #        result_list.append({'num_tik': serializer_class.data[i]['num_tik'],
-    #                           'presence': f"{round((serializer_class.data[i]['sum_votes'] / serializer_class.data[i]['population']) * 100)}%"})
-    #    result_list = sorted(result_list, key=lambda k: k['presence'], reverse=True)
-    #
-    #    return response.Response(result_list)
-    def get(self, request):
+    @staticmethod
+    def get(_):
+        # pylint: disable = no-member
+        """
+        информация о явке в процентах
+        """
         queryset = Tik.objects.values('update_time').annotate(presence=Count('id'))[:1]
         if len(queryset) == 0:
             return response.Response("[]")
 
         number_tik = queryset[0]['presence']
-        queryset = Tik.objects.all().order_by('-update_time', '-presence')[:number_tik] #
+        queryset = Tik.objects.all().order_by('-update_time', '-presence')[:number_tik]  #
         serializer_class = PresenceSerializer(queryset, many=True)
         return response.Response(serializer_class.data)
 
 
 class Top24PresenceViewSet(APIView):  # переднлаь под другую таблицу
-    '''
+    """
     топ2-4 УИКов по явке
     'top_presence' список тиков с явкой
     'min_presence' на табло - На этих участках знаение явки привысело 'min_presence' процентов
-    '''
+    """
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    # def get(self, request):
-    #    queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'), count=Count('id'))
-    #    serializer_class = PresenceSerializer(queryset, many=True)
-    #    for i in range(len(serializer_class.data)):
-    #        serializer_class.data[i]['presence'] = serializer_class.data[i]['presence'] / queryset[i]['count']
-    #    new_list = sorted(serializer_class.data, key=lambda x: x['presence'], reverse=True)
-    #    rez_dict = {'top_presence': new_list[1:4], 'min_presence': math.floor(new_list[3]['presence'])}
-
-    #    return response.Response(rez_dict)
-    def get(self, request):
+    @staticmethod
+    def get(_):
+        # pylint: disable = no-member
+        """
+        топ2-4 УИКов по явке
+        'top_presence' список тиков с явкой
+        'min_presence' на табло - На этих участках знаение явки привысело 'min_presence' процентов
+        """
         queryset = Tik.objects.all().order_by('-update_time', '-presence')[1:4]
         serializer_class = PresenceSerializer(queryset, many=True)
-        new_list=serializer_class.data
+        new_list = serializer_class.data
         if len(new_list) == 0:
             return response.Response("[]")
 
-        new_list.append({'min_presence':new_list[-1]['presence']})
+        new_list.append({'min_presence': new_list[-1]['presence']})
 
         return response.Response(new_list)
 
 
 class TopPresenceViewSet(APIView):
-    '''
+    """
     топ ТИКов по явке
-    '''
+    """
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    # def get(self, request):
-    #    queryset = Uik.objects.values('num_tik').annotate(presence=Sum('presence'), count=Count('id'))
-    #    serializer_class = PresenceSerializer(queryset, many=True)
-    #    for i in range(len(serializer_class.data)):
-    #        serializer_class.data[i]['presence'] = serializer_class.data[i]['presence'] / queryset[i]['count']
-    #    new_list = sorted(serializer_class.data, key=lambda x: x['presence'], reverse=True)
-
-    #    return response.Response(new_list[0])
-    def get(self, request):
+    @staticmethod
+    def get(_):
+        # pylint: disable = no-member
+        """
+        топ ТИКов по явке
+        """
         queryset = Tik.objects.all().order_by('-presence')[:1]
-        seralizer = PresenceSerializer(queryset, many=True)
+        serializer = PresenceSerializer(queryset, many=True)
 
-        if len(seralizer.data) == 0:
+        if len(serializer.data) == 0:
             return response.Response("{}")
-        return response.Response(seralizer.data[0])
+        return response.Response(serializer.data[0])
 
-    # class TopTikViewSet(APIView):
-    '''
-    Выводит тик с самым большим числом избирателей
-    '''
-
-
-#    permission_classes = [
-#        permissions.IsAuthenticated
-#    ]
-
-#   def get(self, request):
-
-#       queryset = Uik.objects.values('num_tik').annotate(population=Sum('population'))
-
-#     c=1
-
-
-#     top_tik = sorted(serializer_class.data, key=lambda x: x['population'], reverse=True)[
-#            0]
-
-
-#    return response.Response(top_tik)
 
 class TopTikViewSet(APIView):
+    """Информация о топе тиков по времени"""
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def get(self, request):
+    @staticmethod
+    def get(_):
+        # pylint: disable = no-member
+        """Информация о топе тиков по времени"""
         queryset = Tik.objects.all().order_by('-population')[:1]
-        seralizer = TopTikSerializer1(queryset, many=True)
-        if len(seralizer.data) == 0:
+        serializer = TopTikSerializer1(queryset, many=True)
+        if len(serializer.data) == 0:
             return response.Response("{}")
 
-        return response.Response(seralizer.data[0])
+        return response.Response(serializer.data[0])
 
 
 class GeneralInfoViewSet(APIView):
+    """
+    количество открытых участков и избирателей
+    """
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    '''
-    количество открытых участков и избирателей
-    '''
 
-    def get(self, request):
+    @staticmethod
+    def get(_):
+        # pylint: disable = no-member
+        """
+        количество открытых участков и избирателей
+        """
         result_dict = {}
         result_dict.update(Uik.objects.aggregate(population=Sum('population')))
         result_dict.update(Uik.objects.filter(status=True).aggregate(open_uik=Count('id')))
@@ -472,19 +478,28 @@ class GeneralInfoViewSet(APIView):
 
 
 class GeneralInfoPresenceViewSet(APIView):
-    '''
+    """
     количество открытых участков,охваченных избирателей и явка
-    '''
+    """
 
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def get(self, request):
+    @staticmethod
+    def get(_):
+        # pylint: disable = no-member
+        """
+        количество открытых участков,охваченных избирателей и явка
+        """
         result_dict = {}
-        result_dict.update(Uik.objects.filter(status=True).aggregate(open=Count('id')))
-        result_dict.update(Uik.objects.filter(status=True).aggregate(sum_electorators=Sum('population')))
-        presence = Uik.objects.filter(status=True).aggregate(sum_vot=Sum('sum_votes'), sum_pop=Sum('population'))
+        result_dict.update(Uik.objects.filter(status=True). \
+                           aggregate(open=Count('id')))
+        result_dict.update(Uik.objects.filter(status=True). \
+                           aggregate(sum_electorators=Sum('population')))
+        presence = Uik.objects.filter(status=True). \
+            aggregate(sum_vot=Sum('sum_votes'),
+                      sum_pop=Sum('population'))
         presence = f"{round((presence['sum_vot'] / presence['sum_pop']) * 100, 1)}%"
         result_dict.update({'presence': presence})
 
@@ -492,20 +507,31 @@ class GeneralInfoPresenceViewSet(APIView):
 
 
 class VotesPresenceViewSet(APIView):
-    '''
+    """
     явка и процент обработанных бюллетеней
-    '''
+    """
 
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def get(self, request):
+    @staticmethod
+    def get(_):
+        # pylint: disable = no-member
+        """
+        явка и процент обработанных бюллетеней
+        """
         result_dict = {}
-        percent = Uik.objects.aggregate(sum_votes_fin=Sum('sum_numb_votes_fin'), sum_votes=Sum('sum_votes'))
-        result_dict.update({'percent_votes': f"{round((percent['sum_votes_fin'] / percent['sum_votes']) * 100)}%"})
+        percent = Uik.objects. \
+            aggregate(sum_votes_fin=Sum('sum_numb_votes_fin'),
+                      sum_votes=Sum('sum_votes'))
+        result_dict. \
+            update({'percent_votes':
+                        f"{round((percent['sum_votes_fin'] / percent['sum_votes']) * 100)}%"})
 
-        presence = Uik.objects.filter(status=True).aggregate(population=Sum('population'), sum_votes=Sum('sum_votes'))
-        result_dict.update({'presence': f"{round((presence['sum_votes'] / presence['population']) * 100)}%"})
+        presence = Uik.objects.filter(status=True). \
+            aggregate(population=Sum('population'), sum_votes=Sum('sum_votes'))
+        result_dict.update({'presence':
+                            f"{round((presence['sum_votes'] / presence['population']) * 100)}%"})
 
         return response.Response(result_dict)
