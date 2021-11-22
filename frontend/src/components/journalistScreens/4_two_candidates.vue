@@ -1,78 +1,70 @@
 <template>
   <div class = "block align-items-start ">
-    <div class = "container-fluid text-white mt-5 pl-4 pr-5">
+    <div class = "container-fluid text-white mt-2 pl-4 pr-5">
       <div class = "row ">
         <div class = "col-3 " v-for="(el, i) in candidates.slice(0,1)" :key="i">
           <img class="photo" :src="el.photo"/>
         </div>
         <div class = "col-3 pl-4" v-for="(el, i) in candidates.slice(0,1)" :key="i">
-          <p class = "h1 font-weight-light">{{el.birthday}} г.р.</p>
-          <br>
-          <p class = "h2">
+          <p class = "h3 font-weight-light">{{el.birthday}} г.р.</p>
+          <div class = "h4">
             Место рождения:
             <br>
-            {{el.birthday_place}}</p>
-          <br>
-          <p class = "h2">
+            {{el.birthday_place}}</div>
+
+          <div class = "h4">
             Образование:
             <br>
              {{el.education}}
-          </p>
-          <br>
-          <p class = "h2">
+          </div>
+         <div class = "h4">
             Основное место работы:
             <br>
-            {{el.work}}</p>
-          <br>
-
-          <br>
-          <p class = "h2">
+            {{el.work}}</div>
+          <div class = "h4">
              Занимаемая должность:
             <br>
-            {{el.position}}</p>
+            {{el.position}}</div>
         </div>
         <div class = "col-3 text-right " v-for="(el, i) in candidates.slice(1,2)" :key="i">
-          <p class = "h1 font-weight-light">{{el.birthday}} г.р.
-          </p>
-          <br>
-         <p class = "h2">
+          <div class = "h3 font-weight-light">{{el.birthday}} г.р.
+          </div>
+         <div class = "h4">
             Место рождения:
             <br>
-            {{el.birthday_place}}</p>
-          <br>
-          <p class = "h2">
+            {{el.birthday_place}}</div>
+          <div class = "h4">
             Образование:
             <br>
              {{el.education}}
-          </p>
-          <br>
-          <p class = "h2">
+          </div>
+          <div class = "h4">
             Основное место работы:
             <br>
-            {{el.work}}</p>
-          <br>
-
-          <br>
-          <p class = "h2">
+            {{el.work}}</div>
+          <div class = "h4">
              Занимаемая должность:
             <br>
-            {{el.position}}</p>
+            {{el.position}}</div>
         </div>
         <div class = "col-3" v-for="(el, i) in candidates.slice(1,2)" :key="i">
            <img class="photo ml=0" :src="el.photo"/>
         </div>
       </div>
-      <div class="row mt-4">
+      <br>
+      <div class="row mt-3">
           <div class="col-6 " v-for="(el, i) in candidates.slice(0,1)" :key="i">
-            <p class="display-3">{{el.name}}</p>
-            <p class ="h1 font-weight-bold">{{el.party}}</p>
-            <p class ="h1">{{el.polit_position}}</p>
+            <div class="h1">{{el.name}}</div>
+            <br>
+            <div class ="h3 font-weight-bold">{{el.party}}</div>
+            <div class ="h3">{{el.polit_position}}</div>
           </div>
           <div class="col-6 text-right " v-for="(el, i) in candidates.slice(1,2)" :key="i">
 
-            <p class="display-3">{{el.name}}</p>
-            <p class="h1 font-weight-bold">{{el.party}}</p>
-            <p class = "h1">{{el.polit_position}}</p>
+            <div class="h1">{{el.name}}</div>
+            <br>
+            <div class="h3 font-weight-bold">{{el.party}}</div>
+            <div class = "h3">{{el.polit_position}}</div>
 
           </div>
         </div>
@@ -101,6 +93,7 @@ export default {
     height: 100vh;
 
     background-image:url("../../assets/journalistScreens/4.png");
+    background-size: 100% auto;
 
     display: flex;
     align-items: center;

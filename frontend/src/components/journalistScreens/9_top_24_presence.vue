@@ -1,6 +1,6 @@
 <template>
   <div class ="block">
-    <div class="container-fluid mt-5 text-white text-center font-weight-bold display-3" :style="{'background-color': 'transparent !important'}">
+    <div class="container-fluid mt-5 text-white text-center font-weight-bold h1" :style="{'background-color': 'transparent !important'}">
      <div class="row_block_25">
      </div>
       <div class="row row_block_25">
@@ -40,13 +40,14 @@ export default {
     height: 100vh;
 
     background-image:url("../../assets/journalistScreens/9.png");
+    background-size: 100% auto;
 
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .row_block{
-  border:5px #1b1e21;
+
   height: 45vh;
   display: flex;
   align-items: center;
@@ -54,8 +55,8 @@ export default {
 
 }
 .row_block_25{
-  border:5px #1b1e21;
-  height: 25vh;
+
+  height: 24vh;
   display: flex;
   align-items: center;
   justify-content: center;

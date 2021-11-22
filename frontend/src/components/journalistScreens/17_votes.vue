@@ -1,7 +1,7 @@
 <template>
   <div class ="block align-items-center">
     <div class="container-fluid mt-5 pt-5">
-      <div class ="row justify-content-center text-white h3">
+      <div class ="row justify-content-center text-white h5">
         <div class = "col-5 ml-5 pl-5" v-for="(elem, i) in candidates" :key="i">
           <div class="row" v-for="(el, j) in elem" :key="j">
             <p>
@@ -15,7 +15,7 @@
                 </div>
               </div>
 
-              <div class="col  font-weight-bold text-right display-4">
+              <div class="col  font-weight-bold text-center h3">
                 {{el.sum_votes}}%
               </div>
 
@@ -46,12 +46,13 @@ export default {
 <style scoped>
 
 .ans_avatar {
-    height: 150px;
-    width: 140px;
+    height: 14vh;/*150px*/
+    width: 14vh;/*140px*/
 }
 .block {
   height: 100vh;
-  background-image: url("../../assets/journalistScreens/17.png");
+  background-image: url("../../assets/journalistScreens/17_1.png");
+  background-size: 100% auto;
   display: flex;
   align-items: center;
   justify-content: center;

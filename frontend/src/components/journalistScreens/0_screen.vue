@@ -23,6 +23,7 @@ export default {
 
     height: 100vh;
     background-image:url("../../assets/journalistScreens/0.png");
+    background-size: 100% auto;
     display: flex;
     align-items: center;
     justify-content: center;
