@@ -160,7 +160,6 @@ export default {
           case 7:
             DemonstrationService.Presence()
                 .then(r => {
-                  console.log("presence", r)
                   this.data = this.splitArray(r, 8)
                   this.slide = c7_presence
                   this.state = 8
@@ -260,7 +259,7 @@ export default {
                 })
             break
           case 18:
-            this.data.splice(0, 1)
+            this.data.splice(0, 2)
             if (this.data.length === 0) {
               this.slide = c0_screen
               this.state = 0
