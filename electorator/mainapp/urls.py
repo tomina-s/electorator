@@ -1,4 +1,5 @@
-from django.urls import path, include
+"""Main app urls"""
+from django.urls import path
 from .api import (
     CandidateViewSet,
 

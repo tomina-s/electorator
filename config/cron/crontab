@@ -1,1 +1,1 @@
-0 3 */1 * * . /home/team/cron.env; psql -h huvalk.ru -p 8001 -U postgres -d electorator -f /home/team/electorator/docs/Tik_table.sql >/dev/null 2>&1
+0 3 */1 * * . /home/team/cron.env; psql -h huvalk.ru -p 8001 -U postgres -d electorator -f /home/team/electorator/cron/Tik_table.sql >/dev/null 2>&1

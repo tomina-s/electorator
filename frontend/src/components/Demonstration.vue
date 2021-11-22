@@ -30,17 +30,7 @@ import ConfigService from "../services/config.service";
 
 export default {
   name: "Demonstration",
-  components: {
-    c0_screen,
-    c1_opened,
-    c2_candidates,
-    c5_toptik,
-    c6_general_info_presence,
-
-
-  },
   data() {
-
     return {
       counter: 0,
       slide: c0_screen,
@@ -69,12 +59,15 @@ export default {
   },
   methods: {
     splitArray(array, by) {
+      if (!(array instanceof Array)) {
+        return []
+      }
       let arrayOfArrays = [];
-        while (array.length > 0) {
-            let arrayElement = array.splice(0,by);
-            arrayOfArrays.push(arrayElement);
-        }
-        return arrayOfArrays;
+      while (array.length > 0) {
+        let arrayElement = array.splice(0,by);
+        arrayOfArrays.push(arrayElement);
+      }
+      return arrayOfArrays;
     },
     countTimer() {
       setTimeout(() => {
@@ -119,16 +112,25 @@ export default {
             this.data.splice(0, 2)
             if (this.data.length === 0) {
               this.slide = c0_screen
-              this.state = 4
+              this.state = 3
             }
             break
           case 3:
-              this.slide = c4_two_candidates //НЕ ДОДЕЛАНО!!!
-              this.state = 4
+            DemonstrationService.ListCandidatesInfo()
+                .then(r => {
+                  this.data = r
+                  this.slide = c4_two_candidates
+                  this.state = 4
+                })
+                .catch(e =>{
+                  console.log(e)
+                })
 
             break
           case 4:
-             DemonstrationService.TopTik()
+            this.data.splice(0, 2)
+            if (this.data.length === 0) {
+              DemonstrationService.TopTik()
                 .then(r => {
                   this.data = r
                   this.slide = c5_toptik
@@ -137,6 +139,7 @@ export default {
                 .catch(e =>{
                   console.log(e)
                 })
+            }
             break
             // 12 00, 15 00, 18 00
           case 5:
@@ -155,7 +158,7 @@ export default {
                 })
             break
           case 7:
-            DemonstrationService.Presence() //не могу пока вывести массив
+            DemonstrationService.Presence()
                 .then(r => {
                   console.log("presence", r)
                   this.data = this.splitArray(r, 8)
@@ -201,18 +204,18 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c11_votespresence
-                  this.state = 13
+                  this.state = 12
                 })
                 .catch(e =>{
                   console.log(e)
                 })
             break
           case 12:
-            DemonstrationService.ListCandidatesInfo() //НЕ ДОДЕЛАНО!!!
+            DemonstrationService.ListCandidatesInfo()
                 .then(r => {
                   this.data = r
                   this.slide = c12_one_candidate
-                  this.state = 13
+                  this.state = 13 //13
                 })
                 .catch(e =>{
                   console.log(e)
@@ -257,8 +260,11 @@ export default {
                 })
             break
           case 18:
-            this.slide = c0_screen
-            this.state = 0
+            this.data.splice(0, 1)
+            if (this.data.length === 0) {
+              this.slide = c0_screen
+              this.state = 0
+            }
             break
        }
         this.counter++
