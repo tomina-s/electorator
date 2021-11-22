@@ -5,15 +5,15 @@
         <span class="text-center display-3">Итоговый протокол</span>
         <Form @submit="handleProtocol" :validation-schema="schema">
           <div class="form-group">
-            <label class="font-weight-bold" for="sum_bul">Проголосовало</label>
-            <Field name="sum_bul" type="number" class="form-control"
-              :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.sum_bul : ''" :key="oldValue"/>
-            <ErrorMessage name="sum_bul" class="error-feedback" />
+            <label class="font-weight-bold" for="sum_final_bul">Число обработанных бюллетеней<span style="color: orange">*</span></label>
+            <Field name="sum_final_bul" type="number" class="form-control"
+              :aria-readonly="globalError" :value="oldValue !== undefined ? (oldValue.sum_final_bul === undefined ? '0' : oldValue.sum_final_bul) : ''" :key="oldValue"/>
+            <ErrorMessage name="sum_final_bul" class="error-feedback" />
           </div>
           <div class="form-group">
-            <label class="font-weight-bold" for="bad_form">Бюллетеней испорчено</label>
+            <label class="font-weight-bold" for="bad_form">Число испорченных бюллетеней<span style="color: orange">*</span></label>
             <Field name="bad_form" type="number" class="form-control"
-              :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.bad_form : ''" :key="oldValue"/>
+              :aria-readonly="globalError" :value="oldValue !== undefined ? (oldValue.bad_form === undefined ? '0' : oldValue.bad_form) : ''" :key="oldValue"/>
             <ErrorMessage name="bad_form" class="error-feedback" />
           </div>
 
@@ -22,7 +22,7 @@
             :key="candidate.id"
             class="form-group"
           >
-            <label class="font-weight-bold" :for="`can:${candidate.id}`">{{candidate.name}}</label>
+            <label class="font-weight-bold" :for="`can:${candidate.id}`">{{candidate.name}}<span style="color: orange">*</span></label>
             <Field :name="`can:${candidate.id}`" type="number" class="form-control" :key="oldValue"
               :aria-readonly="globalError" :value="oldValue !== undefined ? oldValue.candidates[i].candidate_votes : ''"/>
             <ErrorMessage :name="`can:${candidate.id}`" class="error-feedback" />
@@ -120,11 +120,15 @@ export default {
           this.candidates = r
 
           let requiredFields = {
-            sum_bul: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
-            bad_form: yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0"),
+            sum_final_bul: yup.number().integer("Ожидается целое число").typeError('Ожидается число').required("Поле обязательно")
+                .min(0, "Значение не может быть меньше 0").max(30000000, "Значение не может быть меньше 30000000"),
+            bad_form: yup.number().integer("Ожидается целое число").typeError('Ожидается число').required("Поле обязательно")
+                .min(0, "Значение не может быть меньше 0").max(30000000, "Значение не может быть меньше 30000000"),
           }
           this.candidates.forEach(candidate => {
-            requiredFields[`can:${candidate.id}`] = yup.number().required("Поле обязательно").min(0, "Значение не может быть меньше 0")
+            requiredFields[`can:${candidate.id}`] = yup.number().integer("Ожидается целое число")
+                .typeError('Ожидается число').required("Поле обязательно")
+                .min(0, "Значение не может быть меньше 0").max(30000000, "Значение не может быть меньше 30000000")
           })
 
           this.schema = yup.object().shape(
@@ -158,8 +162,27 @@ export default {
   },
   methods: {
     handleProtocol(protocol) {
+      const sum_votes = this.candidates.reduce((sum_bul, c) => {
+        if (protocol[`can:${c.id}`] === "") {
+          return
+        }
+        const votes = parseInt(protocol[`can:${c.id}`])
+
+        if (!votes) {
+          console.log("Не число в поле")
+          return sum_bul
+        }
+
+        return sum_bul + votes
+      }, 0)
+      if (sum_votes !== protocol.sum_final_bul - protocol.bad_form) {
+        this.loading = false
+        this.message = "Общая сумма голосов не совпадает с введенными голосами за кандидатов"
+        return
+      }
       protocol.status = false
       protocol.num_protocol_1 = 0
+      protocol.sum_bul = 0
 
       const perm = getUIKPermission()
       if (!perm) {
@@ -195,7 +218,7 @@ export default {
         ProtocolService.SendProtocolSecond(protocolSecond)
             .then(() => {
               this.loading = false
-              this.info = "Явка успешно отправлена"
+              this.info = "Протокол успешно отправлен"
               this.message = ""
 
               this.$router.push({ name: '/protocols', query: { uik_id: perm } })

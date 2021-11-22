@@ -15,6 +15,7 @@ class Login(APIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
+        # pylint: disable=no-member
         """login handler"""
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -43,6 +44,7 @@ class Permissions(APIView):
 
     @staticmethod
     def get(request):
+        # pylint: disable=no-member
         """read user permissions"""
         user_id = request.user.id
         permissions = Permission.objects.filter(user=user_id).all().values_list('uik', flat=True)
@@ -58,6 +60,7 @@ class Roles(APIView):
 
     @staticmethod
     def get(request):
+        # pylint: disable=no-member
         """read user role"""
         user_id = request.user.id
         role = Role.objects.filter(user=user_id).first()

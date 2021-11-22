@@ -1,11 +1,12 @@
-from datetime import datetime
-
+"""Mainapp model"""
 import django
 from django.db import models
 from django.db.models import Model
 
 
 class Tik(Model):
+    """Tik model"""
+
     num_tik = models.CharField(
         verbose_name='Номер ТИК',
         max_length=200,
@@ -46,6 +47,7 @@ class Tik(Model):
 
 
 class Uik(Model):
+    """Uik model"""
     num_uik = models.IntegerField(
         verbose_name='Номер участка',
         unique=True
@@ -88,6 +90,7 @@ class Uik(Model):
 
 
 class Candidate(Model):
+    """Candidate model"""
     name = models.CharField(
         verbose_name='ФИО кандидата',
         max_length=200,
@@ -142,6 +145,7 @@ class Candidate(Model):
 
 
 class Protocol1(Model):
+    """Protocol1 model"""
     num_protocol_1 = models.IntegerField(
         verbose_name='Номер протокола 1го типа',
         default=0
@@ -174,6 +178,7 @@ class Protocol1(Model):
 
 
 class Protocol2(Model):
+    """Protocol2 model"""
     num_protocol_2 = models.IntegerField(
         verbose_name='Номер протокола 2го типа',
         default=0
@@ -196,10 +201,12 @@ class Protocol2(Model):
 
 
 class UikCandidate(Model):
+    """UikCandidate assist model"""
     id_uik = models.ForeignKey(Uik, on_delete=models.CASCADE)
     id_candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
 
 class UikProtocol1(Model):
+    """UikProtocol1 assist model"""
     id_uik = models.ForeignKey(Uik, on_delete=models.CASCADE)
     id_protocol1 = models.ForeignKey(Protocol1, on_delete=models.CASCADE)

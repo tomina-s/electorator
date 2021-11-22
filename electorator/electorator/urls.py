@@ -19,7 +19,6 @@ from django.shortcuts import render
 from django.conf.urls.static import static
 
 from . import settings
-from .view import MockView
 
 static_url = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 static_url += [
@@ -31,8 +30,6 @@ api_url = [
     path('', include('accounts.urls')),
 
     path('config/', include('configuration.urls')),
-    path('mockview', MockView.as_view(), name='mock_view')
-
 ]
 
 urlpatterns = [
