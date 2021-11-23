@@ -45,7 +45,7 @@
           <br>
           <br>
          <div class="row align-items-end mt-5">
-      <div class="col-1 display-4 text-right align-self-end mt-5" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
+      <div class="col-1 display-2 text-right align-self-end mt-5" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
               <div class="col-1 text-left font-weight-bold">
                 <p>
               {{el.sum_votes}}%

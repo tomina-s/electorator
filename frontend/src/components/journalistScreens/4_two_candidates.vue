@@ -1,8 +1,8 @@
 <template>
   <div class = "block align-items-start ">
-    <div class = "container-fluid text-white mt-2 pl-4 pr-5">
+    <div class = "container-fluid text-white">
       <div class = "row ">
-        <div class = "col-3 " v-for="(el, i) in candidates.slice(0,1)" :key="i">
+        <div class = "col-3 pl-0 pr-0" v-for="(el, i) in candidates.slice(0,1)" :key="i" style="overflow: hidden">
           <img class="photo" :src="el.photo"/>
         </div>
         <div class = "col-3 pl-4" v-for="(el, i) in candidates.slice(0,1)" :key="i">
@@ -26,7 +26,7 @@
             <br>
             {{el.position}}</div>
         </div>
-        <div class = "col-3 text-right " v-for="(el, i) in candidates.slice(1,2)" :key="i">
+        <div class = "col-3 text-right pr-4" v-for="(el, i) in candidates.slice(1,2)" :key="i">
           <div class = "h1 font-weight-light">{{el.birthday}} г.р.
           </div>
          <div class = "h2">
@@ -47,8 +47,8 @@
             <br>
             {{el.position}}</div>
         </div>
-        <div class = "col-3" v-for="(el, i) in candidates.slice(1,2)" :key="i">
-           <img class="photo " :src="el.photo"/>
+        <div class = "col-3 pl-0 pr-0" v-for="(el, i) in candidates.slice(1,2)" :key="i" style="overflow: hidden">
+           <img class="photo" :src="el.photo"/>
         </div>
       </div>
       <div class="row mt-3">
@@ -91,7 +91,6 @@ export default {
 
 <style scoped>
 .block {
-
     height: 100vh;
 
     background-image:url("../../assets/journalistScreens/4.png");
@@ -104,9 +103,5 @@ export default {
 .photo{
   height: 60vh;
   width: 45vh;
-
 }
-
-
-
 </style>
