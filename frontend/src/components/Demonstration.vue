@@ -221,15 +221,19 @@ export default {
                 })
             break
           case 13:
-            DemonstrationService.TopTik()
-                .then(r => {
-                  this.data = r
-                  this.slide = c5_toptik
-                  this.state = 16
-                })
-                .catch(e =>{
-                  console.log(e)
-                })
+            this.data.splice(0, 1)
+            if (this.data.length === 0) {
+              DemonstrationService.TopTik()
+                  .then(r => {
+                    this.data = r
+                    this.slide = c5_toptik
+                    this.state = 16
+                  })
+                  .catch(e =>{
+                    console.log(e)
+                  })
+            }
+
             break
           case 14:
             break
