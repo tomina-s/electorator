@@ -51,8 +51,7 @@
            <img class="photo ml=0" :src="el.photo"/>
         </div>
       </div>
-      <br>
-      <div class="row mt-3">
+      <div class="row mt-1">
           <div class="col-6 " v-for="(el, i) in candidates.slice(0,1)" :key="i">
             <div class="h1">{{el.name}}</div>
             <br>
@@ -100,7 +99,7 @@ export default {
     justify-content: center;
 }
 .photo{
-  height: 54.5vh;
+  height: 57.6vh;
   width: 43vh;
 
 }

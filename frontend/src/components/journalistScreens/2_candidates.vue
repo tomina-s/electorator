@@ -1,6 +1,6 @@
 <template>
 <div class ="block">
-    <div class="container-fluid align-items-end mt-3">
+    <div class="container-fluid align-items-end mt-5">
     <div class="row justify-content-center " v-for="(pair, i) in candidates" :key="i">
       <div class="col-2" v-for="(can, j) in pair" :key="j">
         <div  class="text-white text-center h5">
@@ -44,8 +44,8 @@ export default {
 
 <style scoped>
 .ans_avatar {
-    height: 15vh; /*180px;*/
-    width: 15vh;/*170px;*/
+    height: 17vh; /*180px;*/
+    width: 17vh;/*170px;*/
 }
 .block {
 
