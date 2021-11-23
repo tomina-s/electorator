@@ -93,8 +93,8 @@ export default {
    justify-content: center;
 }
 .photo{
-  height: 99vh;
-  width: 71vh;
+  height: 100vh;
+  width: 71.5vh;
 }
 
 </style>

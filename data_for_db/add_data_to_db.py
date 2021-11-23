@@ -181,7 +181,7 @@ conn = None
 try:
     conn, db_cursor = connect_to_db()
     # Вставка в candidate
-    # PK_tik = insert_candidate(dict_candidate, len(df_candidate), db_cursor)
+    PK_tik = insert_candidate(dict_candidate, len(df_candidate), db_cursor)
 
     # Вставка в Протокол 1 из экселя и захардкоденные FK
     # FK_num_uik = ['1', '2']
@@ -199,8 +199,8 @@ try:
     # print(PK_tik)
 
     # Вставка в uikprotocol1 - таблица связей из экселя
-    PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1), db_cursor)
-    print(PK_uikpr_1)
+    # PK_uikpr_1 = insert_uikpr_1(dict_uikprotocol1, len(df_uikprotocol1), db_cursor)
+    # print(PK_uikpr_1)
 
     # Вставка в УИК
     # PK_uik = insert_uik(dict_uik, len(df_uik), db_cursor)
