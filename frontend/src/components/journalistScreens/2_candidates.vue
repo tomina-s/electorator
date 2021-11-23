@@ -4,7 +4,7 @@
     <div class="row justify-content-center " v-for="(pair, i) in candidates" :key="i">
       <div class="col-2" v-for="(can, j) in pair" :key="j">
 
-        <div  class="text-white text-center h5">
+        <div  class="text-white justify-content-center text-center h5">
           <pic class="justify-content-center" :src="can.photo"/>
 
             <br>
