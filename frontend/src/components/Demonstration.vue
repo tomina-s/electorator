@@ -71,22 +71,15 @@ export default {
     },
     countTimer() {
       setTimeout(() => {
-        // if (this.state === 0 || this.state === 5 || this.state === 10) {
-        //   const currentTime = new Date().getTime()
-        //   if (currentTime > this.config.firstConference * 1000) {
-        //     this.state = 10 //0
-        //   } else if (currentTime > this.config.secondConference * 1000) {
-        //     this.state = 5
-        //   } else if (currentTime > this.config.thirdConference * 1000) {
-        //     this.state = 10
-        //   }
-        // }
-<<<<<<< HEAD
-        // if (this.state === 1) return
-=======
-        if (this.state === 2) return
->>>>>>> dev
-
+        if (this.state === 0 || this.state === 5 || this.state === 10) {
+          const currentTime = new Date().getTime()
+          this.state = 0
+          if (currentTime > this.config.secondConference * 1000) {
+            this.state = 5
+          } else if (currentTime > this.config.thirdConference * 1000) {
+            this.state = 10
+          }
+        }
 
         switch (this.state) {
           // 10 00

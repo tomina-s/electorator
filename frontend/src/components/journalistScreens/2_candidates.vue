@@ -3,10 +3,12 @@
     <div class="container-fluid align-items-end mt-5">
     <div class="row justify-content-center " v-for="(pair, i) in candidates" :key="i">
       <div class="col-2" v-for="(can, j) in pair" :key="j">
-
-        <div  class="text-white justify-content-center text-center h5">
-          <pic class="justify-content-center" :src="can.photo"/>
-
+        <div  class="text-white text-center h5">
+          <div class="d-flex justify-content-center img-fluid">
+            <div class="rounded-circle wrap_avatar">
+              <img class="ans_avatar" :src="can.photo">
+            </div>
+          </div>
             <br>
           <div class="font-weight-bold">
             {{can.name}}
@@ -22,12 +24,8 @@
   </div>
 </template>
 <script>
-import pic from './Pic'
 export default {
   name: "2_candidates",
-  components: {
-    pic
-  },
   props: {
     data: []
   },
@@ -51,5 +49,14 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.ans_avatar {
+    width: 15vh; /*180px;*/
+}
+.wrap_avatar {
+    position: relative;
+    height: 15vh; /*180px;*/
+    width: 15vh;/*170px;*/
+    overflow: hidden;
 }
 </style>
