@@ -2,9 +2,9 @@
   <div class="block">
   <div class="container-fluid text-white align-self-start mr-0">
     <div class="row">
-        <div class="col-7 h1 text-right  pt-2 mt-5" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
+        <div class="col-7 display-4 text-right  pt-2 mt-5" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
 
-              <div class="col h1 font-weight-bold">
+              <div class="col display-4 font-weight-bold">
                 {{el.name}}
               </div >
           <br>
@@ -14,7 +14,7 @@
               <div class="col">
                 {{el.party}}
               </div>
-              <div class="col h3">
+              <div class="col h2">
                 <br>
                 <p>
                 Место рождения:
@@ -23,7 +23,7 @@
                 <br>
                 </p>
               </div>
-              <div class="col h3">
+              <div class="col h2">
                 <p>
 
                 Образование:
@@ -32,7 +32,7 @@
                 <br>
                 </p>
               </div>
-              <div class="col h3">
+              <div class="col h2">
                 <p>
                 Основное место работы:
                 <br>
@@ -42,8 +42,9 @@
 
               </div>
           <br>
-
-         <div class="row align-items-end mt-2">
+          <br>
+          <br>
+         <div class="row align-items-end mt-5">
       <div class="col-1 display-4 text-right align-self-end mt-5" v-for="(el, i) in one_candidate.slice(0,1)" :key="i">
               <div class="col-1 text-left font-weight-bold">
                 <p>

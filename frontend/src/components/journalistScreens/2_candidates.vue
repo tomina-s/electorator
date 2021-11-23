@@ -3,7 +3,7 @@
     <div class="container-fluid align-items-end mt-5">
     <div class="row justify-content-center " v-for="(pair, i) in candidates" :key="i">
       <div class="col-2" v-for="(can, j) in pair" :key="j">
-        <div  class="text-white text-center h5">
+        <div  class="text-white text-center h3">
           <div class="d-flex justify-content-center img-fluid">
           <img class="ans_avatar rounded-circle" :src="can.photo"/>
           </div>

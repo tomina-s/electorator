@@ -91,7 +91,7 @@ export default {
                 .then(r => {
                   this.data = r
                   this.slide = c1_opened
-                  this.state = 12
+                  this.state = 1
                 })
                 .catch(e =>{
                   console.log(e)
