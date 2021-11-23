@@ -73,16 +73,13 @@ export default {
       setTimeout(() => {
         if (this.state === 0 || this.state === 5 || this.state === 10) {
           const currentTime = new Date().getTime()
-          if (currentTime > this.config.firstConference * 1000) {
-            this.state = 10 //0
-          } else if (currentTime > this.config.secondConference * 1000) {
+          this.state = 0
+          if (currentTime > this.config.secondConference * 1000) {
             this.state = 5
           } else if (currentTime > this.config.thirdConference * 1000) {
             this.state = 10
           }
         }
-        if (this.state === 1) return
-
 
         switch (this.state) {
           // 10 00
@@ -221,15 +218,19 @@ export default {
                 })
             break
           case 13:
-            DemonstrationService.TopTik()
-                .then(r => {
-                  this.data = r
-                  this.slide = c5_toptik
-                  this.state = 16
-                })
-                .catch(e =>{
-                  console.log(e)
-                })
+            this.data.splice(0, 1)
+            if (this.data.length === 0) {
+              DemonstrationService.TopTik()
+                  .then(r => {
+                    this.data = r
+                    this.slide = c5_toptik
+                    this.state = 16
+                  })
+                  .catch(e =>{
+                    console.log(e)
+                  })
+            }
+
             break
           case 14:
             break

@@ -1,6 +1,6 @@
 <template>
   <div class ="block">
-    <div class="container-fluid mt-5 text-white text-center font-weight-bold h1" :style="{'background-color': 'transparent !important'}">
+    <div class="container-fluid mt-5 text-white text-center font-weight-bold display-4" :style="{'background-color': 'transparent !important'}">
      <div class="row_block_25">
      </div>
       <div class="row row_block_25">
