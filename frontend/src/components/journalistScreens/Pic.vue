@@ -14,13 +14,4 @@ export default {
 </script>
 
 <style scoped>
-.ans_avatar {
-    height: 20vh; /*180px;*/
-    width: 20vh;/*170px;*/
-}
-.wrap_avatar {
-    height: 15vh; /*180px;*/
-    width: 15vh;/*170px;*/
-    overflow: hidden;
-}
 </style>
