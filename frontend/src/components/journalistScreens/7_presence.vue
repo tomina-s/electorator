@@ -2,7 +2,7 @@
 <div class ="block">
   <div class="container-fluid mt-5" :style="{'background-color': 'transparent !important'}">
 
-      <div class="row text-white h2 ml-3 mt-5">
+      <div class="row text-white h1 ml-3 mt-5">
         <div class="col-6" v-for="(elem, i) in presence" :key="i">
           <div class="row" v-for="(el, j) in elem" :key="j">
             <div class="col-10 text-left">
