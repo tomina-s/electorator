@@ -1,6 +1,8 @@
 <template>
-  <div class="d-flex rounded-circle wrap_avatar justify-content-center img-fluid">
-    <img class="ans_avatar" :src="src"/>
+  <div class="d-flex justify-content-center img-fluid">
+    <div class="rounded-circle wrap_avatar">
+      <img class="ans_avatar" :src="src">
+    </div>
   </div>
 </template>
 
@@ -14,4 +16,13 @@ export default {
 </script>
 
 <style scoped>
+.ans_avatar {
+    width: 15vh; /*180px;*/
+}
+.wrap_avatar {
+    position: relative;
+    height: 15vh; /*180px;*/
+    width: 15vh;/*170px;*/
+    overflow: hidden;
+}
 </style>
