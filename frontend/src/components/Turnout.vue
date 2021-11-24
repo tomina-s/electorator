@@ -2,7 +2,7 @@
   <div class="container" :style="{'background-color': 'transparent !important'}">
     <div class="col-md-12">
       <div class="card card-container text-white" :style="{'background-color': 'transparent !important'}">
-        <span class="text-center display-3">Отчет о явке №{{innerNumber}}</span>
+        <span class="text-center display-3">Отчет о явке №{{innerNumber - 1}}</span>
         <Form @submit="handleTurnout" :validation-schema="schema">
           <div class="form-group">
             <label class="font-weight-bold" for="num">Внести явку<span style="color: orange">*</span></label>
